@@ -4,6 +4,7 @@
 # Interpreter version: python 2.7
 #
 #= Imports ====================================================================
+import time
 from string import Template
 from collections import namedtuple
 
@@ -18,9 +19,12 @@ STEP = 50
 
 
 class Blogpost(namedtuple("Blogpost", ["title",
-                                       "intro",
+                                       "comments_n",
+                                       "rel_link",
+                                       "timestamp",
                                        "link",
-                                       "comments_n"])):
+                                       "rating",
+                                       "intro"])):
     pass
 
 
@@ -29,15 +33,54 @@ class Rating(namedtuple("Rating", ["rating", "base"])):
 
 
 #= Functions & objects ========================================================
+def _parse_timestamp(meta):
+    date = filter(
+        lambda x: ":" in x and "." in x,
+        str(meta).splitlines()
+    )[0].strip()
+    return time.mktime(time.strptime(date, "%d.%m.%Y %H:%M"))
+
+
+def _parse_comments_n(meta):
+    comments = meta.find("a")[-1].getContent()
+    comments = comments.split("&nbsp;")[1]
+    return int(comments)
+
+
+def _parse_rating(meta):
+    rating = filter(
+        lambda x: "Hodnocení:" in x,
+        str(meta).splitlines()
+    )
+
+    if rating:
+        rating = rating[0].strip().replace("(", "")
+        rating = rating.split("&nbsp;")
+        return Rating(rating[1], rating[3])
+    # None is returned automatically
+
+
+def _parse_intro(blog, meta, title_tag):
+    intro = blog.getContent().replace(str(meta), "")
+    intro = intro.replace(str(title_tag), "")
+
+    signature = blog.find("div", {"class": "signature"})
+    if signature:
+        intro = intro.replace(str(signature[0]), "")
+
+    return d.removeTags(intro.strip()).strip()
+
+
 def get_posts(username):
     posts = []
 
     cnt = 0
-    parsed = [1]
+    parsed = [1]  # just placeholder for while
     downer = Downloader()
     while parsed:
         parsed = []
 
+        # download data from BASE_URL template
         data = downer.download(
             Template(BASE_URL).substitute(
                 USERNAME=username,
@@ -45,6 +88,7 @@ def get_posts(username):
             )
         )
 
+        # clean crap, get just content
         data = data.split(
             '<div class="s_nadpis linkbox_nadpis">Píšeme jinde</div>'
         )[0]
@@ -52,64 +96,34 @@ def get_posts(username):
 
         dom = d.parseString(data)
         for blog in dom.find("div", {"class": "cl"}):
-            # print blog
-
             # parse link and title
             title_tag = blog.find("h2", {"class": "st_nadpis"})[0]
-            link = ABCLINUXU_URL + title_tag.find("a")[0].params["href"]
+            rel_link = title_tag.find("a")[0].params["href"]
+            link = ABCLINUXU_URL + rel_link
             title = d.removeTags(title_tag).strip()
 
-            print "title:", title
-            print "link:", link
-
+            # get meta
             meta = blog.find("p", {"class": "meta-vypis"})[0]
-            date = filter(
-                lambda x: ":" in x and "." in x,
-                str(meta).splitlines()
-            )[0].strip()
-            print "date:", date
 
-            comments = meta.find("a")[-1].getContent()
-            comments = comments.split("&nbsp;")[1]
-            comments = int(comments)
-            print "comments:", comments
-
-            rating = filter(
-                lambda x: "Hodnocení:" in x,
-                str(meta).splitlines()
+            parsed.append(
+                Blogpost(
+                    title=title,
+                    comments_n=_parse_comments_n(meta),
+                    rel_link=rel_link,
+                    link=link,
+                    timestamp=_parse_timestamp(meta),
+                    rating=_parse_rating(meta),
+                    intro=_parse_intro(blog, meta, title_tag)
+                )
             )
-            if rating:
-                rating = rating[0].strip().replace("(", "")
-                rating = rating.split("&nbsp;")
-                rating = Rating(rating[1], rating[3])
-            else:
-                rating = None
-            print "rating:", rating
 
-            print meta
-
-            # parse intro
-            intro = blog.getContent().replace(str(meta), "")
-            intro = intro.replace(str(title_tag), "")
-            intro = intro.replace(
-                str(blog.find("div", {"class": "signature"})[0]),
-                ""
-            )
-            intro = d.removeTags(intro.strip()).strip()
-
-            print intro
-            print "----"
-
-            # print intro[0].getContent()
-
-        # print data
-        break
-
+        posts.extend(parsed)
         cnt += STEP
 
-
+    return posts
 
 
 #= Main program ===============================================================
 if __name__ == '__main__':
-    get_posts("bystroushaak")
+    posts = get_posts("bystroushaak")
+    print len(posts)
