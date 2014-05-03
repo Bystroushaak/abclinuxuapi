@@ -39,6 +39,9 @@ class Blogpost(namedtuple("Blogpost", ["title",
     def get_comments(self):
         raise NotImplementedError("Not implemented yet.")
 
+    def edit(self):
+        raise NotImplementedError("Not implemented yet.")
+
 
 class User(object):
     def __init__(self, username, password=None):
@@ -46,6 +49,7 @@ class User(object):
         self.password = password
 
         self.downer = Downloader()
+        self.blog_url = Template(BLOG_URL).substitute(USERNAME=self.username)
 
     def _parse_timestamp(self, meta):
         date = filter(
@@ -83,6 +87,11 @@ class User(object):
 
     def get_blogposts(self):
         """
+        Lists all of users PUBLISHED blogposts.
+
+        Warning:
+            Concepts are NOT icluded.
+
         Return: sorted (old->new) list of Blogpost objects.
         """
         posts = []
@@ -135,6 +144,12 @@ class User(object):
         return sorted(posts, key=lambda x: x.timestamp)
 
     def login(self):
+        """
+        Logs the user in, tests, if the user is really logged.
+
+        Raises:
+            UserWarning: if there was some error during login.
+        """
         assert self.password is not None, "Invalid password."
 
         data = self.downer.download(
@@ -165,12 +180,20 @@ class User(object):
         if not logged_in or logged_in.getContent() != "Odhlásit":
             raise UserWarning("Bad username/password!")
 
-    def add_blogpost(self, title, text, timestamp_of_pub):
+    def add_blogpost(self, title, text, timestamp_of_pub=None):
+        """
+        Adds new blogpost into your concepts.
+
+        Args:
+            title (str): Title of your contept. Do not use HTML in title!
+            text (str): Text of your concept.
+            timestamp_of_pub (int/float, default None): Timestamp of the
+                publication date.
+        """
         self.login()
 
-        blog_url = Template(BLOG_URL).substitute(USERNAME=self.username)
         dom = d.parseString(
-            self.downer.download(blog_url)
+            self.downer.download(self.blog_url)
         )
 
         # get section with links to new blog
@@ -193,8 +216,42 @@ class User(object):
 
         # get "add blog" page
         data = self.downer.download(ABCLINUXU_URL + add_blog_link)
+        dom = d.parseString(data)
 
-        print data
+        form_action = dom.find("form", {"name": "form"})[0].params["action"]
+
+        self.downer.download(
+            ABCLINUXU_URL + form_action,
+            post={
+                "cid": 1,
+                "publish": "",  # TODO: timestamp_of_pub
+                "content": text,
+                "title": d.removeTags(title),
+                "delay": "Do konceptů",
+                "action": "add2"
+            }
+        )
+
+    def list_concepts(self):
+        self.login()
+
+        # get the fucking untagged part of the site, where the links to the
+        # concepts are stored
+        data = self.downer.download(self.blog_url)
+
+        if '<div class="s_nadpis">Rozepsané zápisy</div>' not in data:
+            return []
+
+        data = data.split(' <div class="s_nadpis">Rozepsané zápisy</div>')[1]
+
+        dom = d.parseString(data)
+        concept_list = dom.find("div", {"class": "s_sekce"})[0]
+
+        for li in concept_list.find("li"):
+            a = li.find("a")[0]
+
+            print a
+
 
 #= Main program ===============================================================
 if __name__ == '__main__':
@@ -203,5 +260,6 @@ if __name__ == '__main__':
     assert posts[0].title == "Google vyhledávání"
     assert posts[55].title == "Dogecoin"
 
-    u = User("bystroushaak", "")
-    u.add_blogpost("test", "just test text")
+    u = User("bystroushaak", open("pass").read().strip())
+    # u.add_blogpost("test", "just test text")
+    u.list_concepts()
