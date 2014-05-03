@@ -165,10 +165,35 @@ class User(object):
         if not logged_in or logged_in.getContent() != "Odhlásit":
             raise UserWarning("Bad username/password!")
 
-    def add_blogpost(self, title, text):
+    def add_blogpost(self, title, text, timestamp_of_pub):
         self.login()
 
-        data = self.downer.download(BLOG_URL)
+        blog_url = Template(BLOG_URL).substitute(USERNAME=self.username)
+        dom = d.parseString(
+            self.downer.download(blog_url)
+        )
+
+        # get section with links to new blog
+        s_sekce = filter(
+            lambda x: "Vlož nový zápis" in x.getContent(),
+            dom.find("div", {"class": "s_sekce"})
+        )
+        if not s_sekce:
+            raise ValueError("Can't resolve right div tag!")
+
+        # get link to "add blog" page
+        add_blog_link = filter(
+            lambda x: "href" in x.params and
+                      x.params["href"].endswith("action=add"),
+            s_sekce[0].find("a")
+        )
+        if not add_blog_link:
+            raise ValueError("Can't resolve user number!")
+        add_blog_link = add_blog_link[0].params["href"]
+
+        # get "add blog" page
+        data = self.downer.download(ABCLINUXU_URL + add_blog_link)
+
         print data
 
 #= Main program ===============================================================
