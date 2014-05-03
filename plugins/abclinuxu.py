@@ -25,7 +25,11 @@ class Blogpost(namedtuple("Blogpost", ["title",
                                        "link",
                                        "rating",
                                        "intro"])):
-    pass
+    def get_full_text(self):
+        raise NotImplementedError("Not implemented yet.")
+
+    def get_comments(self):
+        raise NotImplementedError("Not implemented yet.")
 
 
 class Rating(namedtuple("Rating", ["rating", "base"])):
@@ -120,10 +124,11 @@ def get_posts(username):
         posts.extend(parsed)
         cnt += STEP
 
-    return posts
+    return sorted(posts, key=lambda x: x.timestamp)
 
 
 #= Main program ===============================================================
 if __name__ == '__main__':
     posts = get_posts("bystroushaak")
-    print len(posts)
+    assert(len(posts) >= 56)
+    assert(posts[0].title == "Google vyhledávání")
