@@ -232,7 +232,7 @@ class User(object):
             }
         )
 
-    def list_concepts(self):
+    def get_concepts(self):
         self.login()
 
         # get the fucking untagged part of the site, where the links to the
@@ -242,7 +242,7 @@ class User(object):
         if '<div class="s_nadpis">Rozepsané zápisy</div>' not in data:
             return []
 
-        data = data.split(' <div class="s_nadpis">Rozepsané zápisy</div>')[1]
+        data = data.split('<div class="s_nadpis">Rozepsané zápisy</div>')[1]
 
         dom = d.parseString(data)
         concept_list = dom.find("div", {"class": "s_sekce"})[0]
