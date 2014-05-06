@@ -6,43 +6,15 @@
 #= Imports ====================================================================
 import time
 from string import Template
-from collections import namedtuple
 
 import dhtmlparser as d
 from httpkie import Downloader
 
+from config import *
+
 
 #= Variables ==================================================================
-ABCLINUXU_URL = "https://www.abclinuxu.cz"
-BLOG_URL = ABCLINUXU_URL + "/blog/$USERNAME"
-BASE_URL = BLOG_URL + "/?from=$COUNTER"
-LOGIN_URL = ABCLINUXU_URL + "/Profile"
-
-_STEP = 50  # sets how much blogpost can be at one page
-
-
-class Rating(namedtuple("Rating", ["rating", "base"])):
-    pass
-
-
 #= Functions & objects ========================================================
-class Blogpost(namedtuple("Blogpost", ["title",
-                                       "comments_n",
-                                       "rel_link",
-                                       "timestamp",
-                                       "link",
-                                       "rating",
-                                       "intro"])):
-    def get_full_text(self):
-        raise NotImplementedError("Not implemented yet.")
-
-    def get_comments(self):
-        raise NotImplementedError("Not implemented yet.")
-
-    def edit(self):
-        raise NotImplementedError("Not implemented yet.")
-
-
 class User(object):
     def __init__(self, username, password=None):
         self.username = username
@@ -251,15 +223,3 @@ class User(object):
             a = li.find("a")[0]
 
             print a
-
-
-#= Main program ===============================================================
-if __name__ == '__main__':
-    posts = User("bystroushaak").get_blogposts()
-    assert len(posts) >= 56
-    assert posts[0].title == "Google vyhledávání"
-    assert posts[55].title == "Dogecoin"
-
-    u = User("bystroushaak", open("pass").read().strip())
-    # u.add_blogpost("test", "just test text")
-    u.list_concepts()
