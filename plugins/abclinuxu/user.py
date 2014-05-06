@@ -11,6 +11,8 @@ import dhtmlparser as d
 from httpkie import Downloader
 
 from config import *
+from concept import Concept
+from blogpost import Blogpost, Rating
 
 
 #= Variables ==================================================================
@@ -152,9 +154,9 @@ class User(object):
         if not logged_in or logged_in.getContent() != "Odhlásit":
             raise UserWarning("Bad username/password!")
 
-    def add_blogpost(self, title, text, timestamp_of_pub=None):
+    def add_concept(self, title, text, timestamp_of_pub=None):
         """
-        Adds new blogpost into your concepts.
+        Adds new concept into your concepts.
 
         Args:
             title (str): Title of your contept. Do not use HTML in title!
@@ -219,7 +221,12 @@ class User(object):
         dom = d.parseString(data)
         concept_list = dom.find("div", {"class": "s_sekce"})[0]
 
+        concepts = []
         for li in concept_list.find("li"):
             a = li.find("a")[0]
 
-            print a
+            concept.append(
+                Concept(a.getContent().strip(), a.params["href"])
+            )
+
+        return concepts
