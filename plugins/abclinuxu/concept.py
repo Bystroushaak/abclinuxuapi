@@ -17,8 +17,14 @@ class Concept(namedtuple("Concept", ["title",
     def edit(self):
         raise NotImplementedError("Not implemented yet.")
 
+    def remove(self):
+        raise NotImplementedError("Not implemented yet.")
+
+    def publish(self):
+        raise NotImplementedError("Not implemented yet.")
+
     def add_picture(self, fn, data):
         raise NotImplementedError("Not implemented yet.")
 
-    def remove(self):
+    def list_pictures(self):
         raise NotImplementedError("Not implemented yet.")
