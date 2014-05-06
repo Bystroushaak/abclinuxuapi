@@ -113,7 +113,7 @@ class User(object):
                 )
 
             posts.extend(parsed)
-            cnt += _STEP
+            cnt += STEP
 
         return sorted(posts, key=lambda x: x.timestamp)
 
@@ -225,7 +225,7 @@ class User(object):
         for li in concept_list.find("li"):
             a = li.find("a")[0]
 
-            concept.append(
+            concepts.append(
                 Concept(a.getContent().strip(), a.params["href"])
             )
 

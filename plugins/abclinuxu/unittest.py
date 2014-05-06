@@ -18,4 +18,4 @@ if __name__ == '__main__':
 
     u = User("bystroushaak", open("pass").read().strip())
     # u.add_blogpost("test", "just test text")
-    u.list_concepts()
+    print u.get_concepts()

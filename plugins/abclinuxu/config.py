@@ -9,4 +9,4 @@ BLOG_URL = ABCLINUXU_URL + "/blog/$USERNAME"
 BASE_URL = BLOG_URL + "/?from=$COUNTER"
 LOGIN_URL = ABCLINUXU_URL + "/Profile"
 
-_STEP = 50  # sets how much blogpost can be at one page
+STEP = 50  # sets how much blogpost can be at one page
