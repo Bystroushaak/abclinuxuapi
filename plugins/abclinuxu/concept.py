@@ -4,18 +4,62 @@
 # Interpreter version: python 2.7
 #
 #= Imports ====================================================================
-from collections import namedtuple
+import dhtmlparser as d
+
+from config import *
 
 
 #= Variables ==================================================================
 #= Functions & objects ========================================================
-class Concept(namedtuple("Concept", ["title",
-                                     "rel_link"])):
-    def get_full_text(self):
-        raise NotImplementedError("Not implemented yet.")
+class Concept:
+    def __init__(self, title, rel_link, downer):
+        self.title = title
+        self.rel_link = rel_link
+        self.link = ABCLINUXU_URL + rel_link
+        self.downer = downer  # cookies
 
-    def edit(self):
-        raise NotImplementedError("Not implemented yet.")
+        self.meta = None
+
+    def _init_metadata(self, data=None):
+        if not data:
+            data = self.downer.download(self.link)
+
+        if '<div class="s_nadpis">Správa zápisku</div>' not in data:
+            raise ValueError("Can't parse metadata!")
+
+        data = data.split('<div class="s_nadpis">Správa zápisku</div>')[1]
+
+        dom = d.parseString(data)
+        meta_list = dom.find("div", {"class": "s_sekce"})[0]
+
+        self.meta = {}
+        for li in meta_list.find("li"):
+            a = li.find("a")[0]
+            self.meta[a.getContent().strip()] = a.params["href"]
+
+    def get_full_text(self):
+        data = self.downer.download(self.link)
+
+        if not self.meta:
+            self._init_metadata(data)
+
+        # data = data.split('<div class="rating">')[0]
+        data = data.rsplit('<!-- -->', 1)[0]
+
+        # find beggining of the concept text
+        dom = d.parseString(data)
+        meta_vypis = dom.find("p", {"class": "meta-vypis"})
+        if not meta_vypis:
+            raise ValueError("Can't find meta-vypis <p>!")
+        data = data.split(str(meta_vypis[0]))[1]
+
+        return data.strip()
+
+    def edit(self, data):
+        if not self.meta:
+            self._init_metadata()
+
+        print self.downer.download(ABCLINUXU_URL + self.meta["Uprav zápis"])
 
     def remove(self):
         raise NotImplementedError("Not implemented yet.")
@@ -28,3 +72,6 @@ class Concept(namedtuple("Concept", ["title",
 
     def list_pictures(self):
         raise NotImplementedError("Not implemented yet.")
+
+    def __str__(self):
+        return self.title
