@@ -194,7 +194,7 @@ class User(object):
 
         form_action = dom.find("form", {"name": "form"})[0].params["action"]
 
-        self.downer.download(
+        data = self.downer.download(
             ABCLINUXU_URL + form_action,
             post={
                 "cid": 1,
@@ -205,6 +205,13 @@ class User(object):
                 "action": "add2"
             }
         )
+
+        # no sophisticated parsing of the error is needed
+        if '<div class="error" id="contentError">' in data:
+            data = data.split('<div class="error" id="contentError">')[1]
+            data = data.split("</div>")[0]
+
+            raise ValueError(data)
 
     def get_concepts(self):
         self.login()
@@ -226,7 +233,7 @@ class User(object):
             a = li.find("a")[0]
 
             concepts.append(
-                Concept(a.getContent().strip(), a.params["href"])
+                Concept(a.getContent().strip(), a.params["href"], self.downer)
             )
 
         return concepts
