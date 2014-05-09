@@ -25,6 +25,10 @@ class User(object):
         self.blog_url = Template(BLOG_URL).substitute(USERNAME=self.username)
         self.session = requests.Session()
 
+    def _get(self, url, params=None, as_text=True):
+        data = self.session.get(url, params=params)
+        return data.text.encode("utf-8") if as_text else data.content
+
     def _parse_timestamp(self, meta):
         date = filter(
             lambda x: ":" in x and "." in x,
@@ -76,13 +80,12 @@ class User(object):
             parsed = []
 
             # download data from BASE_URL template
-            data = self.session.get(
+            data = self._get(
                 Template(BASE_URL).substitute(
                     USERNAME=self.username,
                     COUNTER=cnt
                 )
             )
-            data = data.text.encode("utf-8")
 
             # clean crap, get just content
             data = data.split(
@@ -167,7 +170,7 @@ class User(object):
         """
         self.login()
 
-        dom = d.parseString(self.session.get(self.blog_url).text.encode("utf-8"))
+        dom = d.parseString(self._get(self.blog_url))
 
         # get section with links to new blog
         s_sekce = filter(
@@ -188,8 +191,7 @@ class User(object):
         add_blog_link = add_blog_link[0].params["href"]
 
         # get "add blog" page
-        data = self.session.get(ABCLINUXU_URL + add_blog_link)
-        data = data.text.encode("utf-8")
+        data = self._get(ABCLINUXU_URL + add_blog_link)
         dom = d.parseString(data)
 
         form_action = dom.find("form", {"name": "form"})[0].params["action"]
@@ -213,7 +215,7 @@ class User(object):
 
         # get the fucking untagged part of the site, where the links to the
         # concepts are stored
-        data = self.session.get(self.blog_url).text.encode("utf-8")
+        data = self._get(self.blog_url)
 
         if '<div class="s_nadpis">Rozepsané zápisy</div>' not in data:
             return []

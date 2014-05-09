@@ -23,9 +23,13 @@ class Concept:
         self.meta = None
         self.session = session
 
+    def _get(self, url, params=None, as_text=True):
+        data = self.session.get(url, params=params)
+        return data.text.encode("utf-8") if as_text else data.content
+
     def _init_metadata(self, data=None):
         if not data:
-            data = self.session.get(self.link).text.encode("utf-8")
+            data = self._get(self.link)
 
         if '<div class="s_nadpis">Správa zápisku</div>' not in data:
             raise ValueError(
@@ -43,7 +47,7 @@ class Concept:
             self.meta[a.getContent().strip()] = a.params["href"]
 
     def get_full_text(self):
-        data = self.session.get(self.link).text.encode("utf-8")
+        data = self._get(self.link)
 
         if not self.meta:
             self._init_metadata(data)
@@ -64,7 +68,7 @@ class Concept:
         if not self.meta:
             self._init_metadata()
 
-        data = self.session.get(ABCLINUXU_URL + self.meta["Uprav zápis"])
+        data = self._get(ABCLINUXU_URL + self.meta["Uprav zápis"])
         data = data.text.encode("utf-8")
         # TODO: implement
 
@@ -86,9 +90,7 @@ class Concept:
             self._init_metadata()
 
         # get link to pic form
-        data = self.session.get(
-            ABCLINUXU_URL + self.meta["Přidej obrázek"]
-        ).text.encode("utf-8")
+        data = self._get(ABCLINUXU_URL + self.meta["Přidej obrázek"])
         dom = d.parseString(data)
 
         # get information from pic form
