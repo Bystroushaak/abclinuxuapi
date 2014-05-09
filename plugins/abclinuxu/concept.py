@@ -4,6 +4,9 @@
 # Interpreter version: python 2.7
 #
 #= Imports ====================================================================
+import os.path
+
+import requests
 import dhtmlparser as d
 
 from config import *
@@ -12,17 +15,17 @@ from config import *
 #= Variables ==================================================================
 #= Functions & objects ========================================================
 class Concept:
-    def __init__(self, title, rel_link, downer):
+    def __init__(self, title, rel_link, session):
         self.title = title
         self.rel_link = rel_link
         self.link = ABCLINUXU_URL + rel_link
-        self.downer = downer  # cookies
 
         self.meta = None
+        self.session = session
 
     def _init_metadata(self, data=None):
         if not data:
-            data = self.downer.download(self.link)
+            data = self.session.get(self.link).text.encode("utf-8")
 
         if '<div class="s_nadpis">Správa zápisku</div>' not in data:
             raise ValueError("Can't parse metadata!")
@@ -38,7 +41,7 @@ class Concept:
             self.meta[a.getContent().strip()] = a.params["href"]
 
     def get_full_text(self):
-        data = self.downer.download(self.link)
+        data = self.session.get(self.link).text.encode("utf-8")
 
         if not self.meta:
             self._init_metadata(data)
@@ -46,7 +49,7 @@ class Concept:
         # data = data.split('<div class="rating">')[0]
         data = data.rsplit('<!-- -->', 1)[0]
 
-        # find beggining of the concept text
+        # find beginning of the concept text
         dom = d.parseString(data)
         meta_vypis = dom.find("p", {"class": "meta-vypis"})
         if not meta_vypis:
@@ -55,11 +58,13 @@ class Concept:
 
         return data.strip()
 
-    def edit(self, data):
+    def edit(self, text, title=None):
         if not self.meta:
             self._init_metadata()
 
-        print self.downer.download(ABCLINUXU_URL + self.meta["Uprav zápis"])
+        data = self.session.get(ABCLINUXU_URL + self.meta["Uprav zápis"])
+        data = data.text.encode("utf-8")
+        # TODO: implement
 
     def remove(self):
         raise NotImplementedError("Not implemented yet.")
@@ -67,8 +72,16 @@ class Concept:
     def publish(self):
         raise NotImplementedError("Not implemented yet.")
 
-    def add_picture(self, fn, data):
-        raise NotImplementedError("Not implemented yet.")
+    def add_picture(self, pic, pic_is_filename=False):
+        if pic_is_filename:
+            if not os.path.exists(pic):
+                raise ValueError("Picture file '%s' not found!" % pic)
+
+            with open(pic, "rb") as f:
+                pic = f.read()
+
+
+
 
     def list_pictures(self):
         raise NotImplementedError("Not implemented yet.")

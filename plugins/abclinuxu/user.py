@@ -7,8 +7,8 @@
 import time
 from string import Template
 
+import requests
 import dhtmlparser as d
-from httpkie import Downloader
 
 from config import *
 from concept import Concept
@@ -22,8 +22,8 @@ class User(object):
         self.username = username
         self.password = password
 
-        self.downer = Downloader()
         self.blog_url = Template(BLOG_URL).substitute(USERNAME=self.username)
+        self.session = requests.Session()
 
     def _parse_timestamp(self, meta):
         date = filter(
@@ -76,12 +76,13 @@ class User(object):
             parsed = []
 
             # download data from BASE_URL template
-            data = self.downer.download(
+            data = self.session.get(
                 Template(BASE_URL).substitute(
                     USERNAME=self.username,
                     COUNTER=cnt
                 )
             )
+            data = data.text.encode("utf-8")
 
             # clean crap, get just content
             data = data.split(
@@ -126,9 +127,9 @@ class User(object):
         """
         assert self.password is not None, "Invalid password."
 
-        data = self.downer.download(
+        data = self.session.post(
             LOGIN_URL,
-            post={
+            data={
                 "finish": "Přihlásit",
                 "LOGIN": self.username,
                 "PASSWORD": self.password,
@@ -137,7 +138,7 @@ class User(object):
                 "action": "login2",
                 "url": "http://www.abclinuxu.cz/"
             }
-        )
+        ).text.encode("utf-8")
 
         # test, whether the user is successfully logged in
         dom = d.parseString(data)
@@ -154,21 +155,19 @@ class User(object):
         if not logged_in or logged_in.getContent() != "Odhlásit":
             raise UserWarning("Bad username/password!")
 
-    def add_concept(self, title, text, timestamp_of_pub=None):
+    def add_concept(self, text, title, timestamp_of_pub=None):
         """
         Adds new concept into your concepts.
 
         Args:
-            title (str): Title of your contept. Do not use HTML in title!
             text (str): Text of your concept.
+            title (str): Title of your contept. Do not use HTML in title!
             timestamp_of_pub (int/float, default None): Timestamp of the
                 publication date.
         """
         self.login()
 
-        dom = d.parseString(
-            self.downer.download(self.blog_url)
-        )
+        dom = d.parseString(self.session.get(self.blog_url).text.encode("utf-8"))
 
         # get section with links to new blog
         s_sekce = filter(
@@ -189,14 +188,15 @@ class User(object):
         add_blog_link = add_blog_link[0].params["href"]
 
         # get "add blog" page
-        data = self.downer.download(ABCLINUXU_URL + add_blog_link)
+        data = self.session.get(ABCLINUXU_URL + add_blog_link)
+        data = data.text.encode("utf-8")
         dom = d.parseString(data)
 
         form_action = dom.find("form", {"name": "form"})[0].params["action"]
 
-        data = self.downer.download(
+        data = self.session.post(
             ABCLINUXU_URL + form_action,
-            post={
+            data={
                 "cid": 1,
                 "publish": "",  # TODO: timestamp_of_pub
                 "content": text,
@@ -205,6 +205,7 @@ class User(object):
                 "action": "add2"
             }
         )
+        data = data.text.encode("utf-8")
 
         # no sophisticated parsing of the error is needed
         if '<div class="error" id="contentError">' in data:
@@ -218,7 +219,7 @@ class User(object):
 
         # get the fucking untagged part of the site, where the links to the
         # concepts are stored
-        data = self.downer.download(self.blog_url)
+        data = self.session.get(self.blog_url).text.encode("utf-8")
 
         if '<div class="s_nadpis">Rozepsané zápisy</div>' not in data:
             return []
@@ -233,7 +234,7 @@ class User(object):
             a = li.find("a")[0]
 
             concepts.append(
-                Concept(a.getContent().strip(), a.params["href"], self.downer)
+                Concept(a.getContent().strip(), a.params["href"], self.session)
             )
 
         return concepts
