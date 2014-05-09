@@ -206,13 +206,7 @@ class User(object):
             }
         )
         data = data.text.encode("utf-8")
-
-        # no sophisticated parsing of the error is needed
-        if '<div class="error" id="contentError">' in data:
-            data = data.split('<div class="error" id="contentError">')[1]
-            data = data.split("</div>")[0]
-
-            raise ValueError(data)
+        check_error_div(data, '<div class="error" id="contentError">')
 
     def get_concepts(self):
         self.login()

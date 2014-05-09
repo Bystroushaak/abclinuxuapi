@@ -75,11 +75,12 @@ class Concept:
         raise NotImplementedError("Not implemented yet.")
 
     def add_picture(self, opened_file):
-        # read the picture from disk
-        if pic_is_filename:
-            if not os.path.exists(pic):
-                raise ValueError("Picture file '%s' not found!" % pic)
+        """
+        Add picture to the Concept.
 
+        Args:
+            opened_file (file): opened file object
+        """
         # init meta
         if not self.meta:
             self._init_metadata()
@@ -104,14 +105,7 @@ class Concept:
             files={"screenshot": opened_file}
         )
         data = data.text.encode("utf-8")
-
-        # no sophisticated parsing of the error is needed
-        if '<div class="error" id="screenshotError">' in data:
-            data = data.split('<div class="error" id="screenshotError">')[1]
-            data = data.split("</div>")[0]
-
-            raise ValueError(data)
-
+        check_error_div(data, '<div class="error" id="screenshotError">')
 
     def list_pictures(self):
         raise NotImplementedError("Not implemented yet.")
