@@ -28,7 +28,9 @@ class Concept:
             data = self.session.get(self.link).text.encode("utf-8")
 
         if '<div class="s_nadpis">Správa zápisku</div>' not in data:
-            raise ValueError("Can't parse metadata!")
+            raise ValueError(
+                "Can't parse metadata! It looks like I am not logged in!"
+            )
 
         data = data.split('<div class="s_nadpis">Správa zápisku</div>')[1]
 
@@ -72,15 +74,43 @@ class Concept:
     def publish(self):
         raise NotImplementedError("Not implemented yet.")
 
-    def add_picture(self, pic, pic_is_filename=False):
+    def add_picture(self, opened_file):
+        # read the picture from disk
         if pic_is_filename:
             if not os.path.exists(pic):
                 raise ValueError("Picture file '%s' not found!" % pic)
 
-            with open(pic, "rb") as f:
-                pic = f.read()
+        # init meta
+        if not self.meta:
+            self._init_metadata()
 
+        # get link to pic form
+        data = self.session.get(
+            ABCLINUXU_URL + self.meta["Přidej obrázek"]
+        ).text.encode("utf-8")
+        dom = d.parseString(data)
 
+        # get information from pic form
+        form = dom.find("form", {"enctype": "multipart/form-data"})[0]
+        add_pic_url = form.params["action"]
+
+        # send pic
+        data = self.session.post(
+            ABCLINUXU_URL + add_pic_url,
+            data={
+                "action": "addScreenshot2",
+                "finish": "Nahrát"
+            },
+            files={"screenshot": opened_file}
+        )
+        data = data.text.encode("utf-8")
+
+        # no sophisticated parsing of the error is needed
+        if '<div class="error" id="screenshotError">' in data:
+            data = data.split('<div class="error" id="screenshotError">')[1]
+            data = data.split("</div>")[0]
+
+            raise ValueError(data)
 
 
     def list_pictures(self):
