@@ -4,8 +4,6 @@
 # Interpreter version: python 2.7
 #
 #= Imports ====================================================================
-import os.path
-
 import requests
 import dhtmlparser as d
 
@@ -15,6 +13,10 @@ from config import *
 #= Variables ==================================================================
 #= Functions & objects ========================================================
 class Concept:
+    """
+    This class represents concept of the blog - it has all attributes of the
+    blog, but it is invisible for the readers.
+    """
     def __init__(self, title, rel_link, session):
         self.title = title
         self.rel_link = rel_link
@@ -46,7 +48,13 @@ class Concept:
             a = li.find("a")[0]
             self.meta[a.getContent().strip()] = a.params["href"]
 
-    def get_full_text(self):
+    def get_content(self):
+        """
+        Get content of this Concept.
+
+        Returns:
+            str: full HTML UTF-8 encoded text of the concept.
+        """
         data = self._get(self.link)
 
         if not self.meta:
@@ -63,20 +71,6 @@ class Concept:
         data = data.split(str(meta_vypis[0]))[1]
 
         return data.strip()
-
-    def edit(self, text, title=None):
-        if not self.meta:
-            self._init_metadata()
-
-        data = self._get(ABCLINUXU_URL + self.meta["Uprav zápis"])
-        data = data.text.encode("utf-8")
-        # TODO: implement
-
-    def remove(self):
-        raise NotImplementedError("Not implemented yet.")
-
-    def publish(self):
-        raise NotImplementedError("Not implemented yet.")
 
     def add_picture(self, opened_file):
         """
@@ -111,6 +105,21 @@ class Concept:
 
     def list_pictures(self):
         raise NotImplementedError("Not implemented yet.")
+
+    def remove(self):
+        raise NotImplementedError("Not implemented yet.")
+
+    def publish(self):
+        raise NotImplementedError("Not implemented yet.")
+
+    def edit(self, text, title=None):
+        raise NotImplementedError("Not implemented yet.")
+
+        # if not self.meta:
+        #     self._init_metadata()
+
+        # data = self._get(ABCLINUXU_URL + self.meta["Uprav zápis"])
+        # data = data.text.encode("utf-8")
 
     def __str__(self):
         return self.title
