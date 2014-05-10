@@ -18,7 +18,7 @@ https://github.com/Bystroushaak/abclinuxu
 Documentation
 -------------
 Full module documentation is hosted at ReadTheDocs:
-http://abclinuxu.readthedocs.org
+http://abclinuxuapi.readthedocs.org
 
 Disclaimer
 ----------
