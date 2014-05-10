@@ -24,6 +24,7 @@ class Concept:
 
         self.meta = None
         self.session = session
+        self.data = None
 
     def _get(self, url, params=None, as_text=True):
         data = self.session.get(url, params=params)
@@ -47,6 +48,9 @@ class Concept:
         for li in meta_list.find("li"):
             a = li.find("a")[0]
             self.meta[a.getContent().strip()] = a.params["href"]
+
+    def _refresh(self):
+        self.data = self._get(self.link)
 
     def get_content(self):
         """
@@ -72,7 +76,7 @@ class Concept:
 
         return data.strip()
 
-    def add_picture(self, opened_file):
+    def add_pic(self, opened_file):
         """
         Add picture to the Concept.
 
@@ -103,8 +107,25 @@ class Concept:
         data = data.text.encode("utf-8")
         check_error_div(data, '<div class="error" id="screenshotError">')
 
-    def list_pictures(self):
-        raise NotImplementedError("Not implemented yet.")
+    def list_pics(self):
+        # init meta
+        if not self.meta:
+            self._init_metadata()
+
+        data = self._get(ABCLINUXU_URL + self.meta["Správa příloh"])
+        dom = d.parseString(data)
+
+        form = dom.find("form", {"name": "form"})
+        assert len(form) > 0, "Can't find pic form!"
+
+        urls = []
+        for a in form[0].find("a"):
+            if "href" not in a.params:
+                continue
+
+            urls.append(a.params["href"])
+
+        return urls
 
     def remove(self):
         raise NotImplementedError("Not implemented yet.")
