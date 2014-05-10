@@ -4,6 +4,7 @@
 # Interpreter version: python 2.7
 #
 #= Imports ====================================================================
+import os
 import sys
 import os.path
 import getpass
@@ -14,9 +15,81 @@ import dhtmlparser as d
 
 
 #= Variables ==================================================================
+ALLOWED_IMAGES = [
+    "jpg",
+    "jpeg",
+    "gif",
+    "png"
+]
+
+
 #= Functions & objects ========================================================
-def upload_file(args):
-    print args
+def get_body(dom):
+    body = dom.find("body")
+    if not body:
+        return str(dom)
+    else:
+        return body[0].getContent()
+
+
+def upload_image(concept, image_path):
+    # remote images
+    if not os.path.exists(image_path):
+        return image_path
+
+    concept.add_pic(open(image_path))
+
+    return concept.list_pics()[-1]
+
+
+def upload_html(dom, args):
+    user = abclinuxu.User(args.username, args.password)
+
+    try:
+        user.add_concept(get_body(dom), args.title)
+    except ValueError, e:
+        sys.stderr.write("Fail: " + e.message + "\n")
+        sys.exit(1)
+
+    concept = user.get_concepts()[-1]
+
+    print "Uploading your concept '%s'" % concept.title
+    print "Uploading inlined images:"
+
+    # upload inlined images
+    for img in dom.find("img"):
+        if "src" not in img.params:
+            continue
+
+        print "\tUploading '%s'" % os.path.basename(img.params["src"])
+
+        img.params["src"] = upload_image(concept, img.params["src"])
+
+    print
+    print "Uploading linked images:"
+
+    # upload linked images
+    for a in dom.find("a"):
+        if "href" not in a.params or "." not in a.params["href"]:
+            continue
+
+        if a.params["href"].rsplit(".", 1)[1].lower() not in ALLOWED_IMAGES:
+            continue
+
+        print "\tUploading '%s'" % os.path.basename(a.params["href"])
+
+        a.params["href"] = upload_image(concept, a.params["href"])
+
+    print
+    print "Uploading concept .."
+
+    try:
+        concept.edit(get_body(dom))
+    except ValueError, e:
+        sys.stderr.write("Fail: " + e.message + "\n")
+        sys.exit(1)
+
+    print "Done: " + concept.link
 
 
 #= Main program ===============================================================
@@ -76,4 +149,5 @@ if __name__ == '__main__':
     if args.password is None:
         args.password = getpass.getpass("Password for '%s': " % args.username)
 
-    upload_file(args)
+    os.chdir(os.path.dirname(args.FN))
+    upload_html(dom, args)
