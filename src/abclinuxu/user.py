@@ -290,7 +290,7 @@ class User(object):
         data = self.session.post(
             ABCLINUXU_URL + form_action,
             data={
-                "cid": 1,
+                "cid": 0,
                 "publish": "",  # TODO: timestamp_of_pub
                 "content": text,
                 "title": d.removeTags(title),
