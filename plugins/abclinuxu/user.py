@@ -21,6 +21,7 @@ class User(object):
     def __init__(self, username, password=None):
         self.username = username
         self.password = password
+        self.logged_in = False
 
         self.blog_url = Template(BLOG_URL).substitute(USERNAME=self.username)
         self.session = requests.Session()
@@ -121,14 +122,25 @@ class User(object):
 
         return sorted(posts, key=lambda x: x.timestamp)
 
-    def login(self):
+    def login(self, password=None):
         """
         Logs the user in, tests, if the user is really logged.
+
+        Args:
+            password (str, default None): Password, overwrites the password set
+                     when the object was created.
 
         Raises:
             UserWarning: if there was some error during login.
         """
-        assert self.password is not None, "Invalid password."
+        if self.logged_in:
+            return
+
+        if password is not None:
+            self.password = password
+
+        if self.password is None:
+            raise UserWarning("Invalid password.")
 
         data = self.session.post(
             LOGIN_URL,
@@ -157,6 +169,8 @@ class User(object):
         logged_in = logged_in[0].find("a")[-1]
         if not logged_in or logged_in.getContent() != "Odhlásit":
             raise UserWarning("Bad username/password!")
+
+        self.logged_in = True
 
     def add_concept(self, text, title, timestamp_of_pub=None):
         """
