@@ -1,2 +1,4 @@
 *.pyc
 pass
+src/abclinuxu_api.egg-info
+dist/
