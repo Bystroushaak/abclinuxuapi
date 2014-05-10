@@ -27,10 +27,30 @@ class User(object):
         self.session = requests.Session()
 
     def _get(self, url, params=None, as_text=True):
+        """
+        Shortcut for ``self.session.get().text.encode("utf-8")``.
+
+        Args:
+            url (str): Url on which the GET request will be sent.
+            params (dict): GET parameters.
+            as_text (bool, default True): Return result as text or binary data.
+
+        Returns:
+            str/binary data: depending on the `as_text` parameter.
+        """
         data = self.session.get(url, params=params)
         return data.text.encode("utf-8") if as_text else data.content
 
     def _parse_timestamp(self, meta):
+        """
+        Parse number timestamp from the date representation.
+
+        Args:
+            meta (str): Meta html from the blogpost body.
+
+        Returns:
+            int: Timestamp.
+        """
         date = filter(
             lambda x: ":" in x and "." in x,
             str(meta).splitlines()
@@ -38,11 +58,29 @@ class User(object):
         return time.mktime(time.strptime(date, "%d.%m.%Y %H:%M"))
 
     def _parse_comments_n(self, meta):
+        """
+        Parse number of comments under the blogpost.
+
+        Args:
+            meta (str): Meta html from the blogpost body.
+
+        Returns:
+            int: Number of comments.
+        """
         comments = meta.find("a")[-1].getContent()
         comments = comments.split("&nbsp;")[1]
         return int(comments)
 
     def _parse_rating(self, meta):
+        """
+        Parse rating of the blogpost.
+
+        Args:
+            meta (str): Meta html from the blogpost body.
+
+        Returns:
+            Rating: :class:`.Rating` object.
+        """
         rating = filter(
             lambda x: "Hodnocení:" in x,
             str(meta).splitlines()
@@ -55,6 +93,9 @@ class User(object):
         # None is returned automatically
 
     def _parse_intro(self, blog, meta, title_tag):
+        """
+        Parse intro from the `meta` HTML part.
+        """
         intro = blog.getContent().replace(str(meta), "")
         intro = intro.replace(str(title_tag), "")
 
@@ -63,6 +104,56 @@ class User(object):
             intro = intro.replace(str(signature[0]), "")
 
         return d.removeTags(intro.strip()).strip()
+
+    def login(self, password=None):
+        """
+        Logs the user in, tests, if the user is really logged.
+
+        Args:
+            password (str, default None): Password, overwrites the password set
+                     when the object was created.
+
+        Raises:
+            UserWarning: if there was some error during login.
+        """
+        if self.logged_in:
+            return
+
+        if password is not None:
+            self.password = password
+
+        if self.password is None:
+            raise UserWarning("Invalid password.")
+
+        data = self.session.post(
+            LOGIN_URL,
+            data={
+                "finish": "Přihlásit",
+                "LOGIN": self.username,
+                "PASSWORD": self.password,
+                "noCookie": "no",
+                "useHttps": "yes" if LOGIN_URL.startswith("https") else "no",
+                "action": "login2",
+                "url": "http://www.abclinuxu.cz/"
+            }
+        ).text.encode("utf-8")
+
+        # test, whether the user is successfully logged in
+        dom = d.parseString(data)
+
+        logged_in = dom.find("div", {"class": "hl"})
+        if not logged_in:
+            raise UserWarning("Bad username/password!")
+
+        logged_in = logged_in[0].find("div", {"class": "hl_vpravo"})
+        if not logged_in:
+            raise UserWarning("Bad username/password!")
+
+        logged_in = logged_in[0].find("a")[-1]
+        if not logged_in or logged_in.getContent() != "Odhlásit":
+            raise UserWarning("Bad username/password!")
+
+        self.logged_in = True
 
     def get_blogposts(self):
         """
@@ -122,55 +213,38 @@ class User(object):
 
         return sorted(posts, key=lambda x: x.timestamp)
 
-    def login(self, password=None):
+    def get_concepts(self):
         """
-        Logs the user in, tests, if the user is really logged.
+        Returns:
+            list: of Concept objects.
 
-        Args:
-            password (str, default None): Password, overwrites the password set
-                     when the object was created.
-
-        Raises:
-            UserWarning: if there was some error during login.
+        Note:
+            Concepts are unpublished Blogpost and has almost same properties.
         """
-        if self.logged_in:
-            return
+        self.login()
 
-        if password is not None:
-            self.password = password
+        # get the fucking untagged part of the site, where the links to the
+        # concepts are stored
+        data = self._get(self.blog_url)
 
-        if self.password is None:
-            raise UserWarning("Invalid password.")
+        if '<div class="s_nadpis">Rozepsané zápisy</div>' not in data:
+            return []
 
-        data = self.session.post(
-            LOGIN_URL,
-            data={
-                "finish": "Přihlásit",
-                "LOGIN": self.username,
-                "PASSWORD": self.password,
-                "noCookie": "no",
-                "useHttps": "yes" if LOGIN_URL.startswith("https") else "no",
-                "action": "login2",
-                "url": "http://www.abclinuxu.cz/"
-            }
-        ).text.encode("utf-8")
+        data = data.split('<div class="s_nadpis">Rozepsané zápisy</div>')[1]
 
-        # test, whether the user is successfully logged in
         dom = d.parseString(data)
+        concept_list = dom.find("div", {"class": "s_sekce"})[0]
 
-        logged_in = dom.find("div", {"class": "hl"})
-        if not logged_in:
-            raise UserWarning("Bad username/password!")
+        # links to concepts are stored in <li>
+        concepts = []
+        for li in concept_list.find("li"):
+            a = li.find("a")[0]
 
-        logged_in = logged_in[0].find("div", {"class": "hl_vpravo"})
-        if not logged_in:
-            raise UserWarning("Bad username/password!")
+            concepts.append(
+                Concept(a.getContent().strip(), a.params["href"], self.session)
+            )
 
-        logged_in = logged_in[0].find("a")[-1]
-        if not logged_in or logged_in.getContent() != "Odhlásit":
-            raise UserWarning("Bad username/password!")
-
-        self.logged_in = True
+        return concepts
 
     def add_concept(self, text, title, timestamp_of_pub=None):
         """
@@ -226,36 +300,3 @@ class User(object):
         )
         data = data.text.encode("utf-8")
         check_error_div(data, '<div class="error" id="contentError">')
-
-    def get_concepts(self):
-        """
-        Returns:
-            list: of Concept objects.
-
-        Note:
-            Concepts are unpublished Blogpost and has almost same properties.
-        """
-        self.login()
-
-        # get the fucking untagged part of the site, where the links to the
-        # concepts are stored
-        data = self._get(self.blog_url)
-
-        if '<div class="s_nadpis">Rozepsané zápisy</div>' not in data:
-            return []
-
-        data = data.split('<div class="s_nadpis">Rozepsané zápisy</div>')[1]
-
-        dom = d.parseString(data)
-        concept_list = dom.find("div", {"class": "s_sekce"})[0]
-
-        # links to concepts are stored in <li>
-        concepts = []
-        for li in concept_list.find("li"):
-            a = li.find("a")[0]
-
-            concepts.append(
-                Concept(a.getContent().strip(), a.params["href"], self.session)
-            )
-
-        return concepts
