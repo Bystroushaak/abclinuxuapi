@@ -127,20 +127,50 @@ class Concept:
 
         return urls
 
+    def edit(self, text, title=None, timestamp_of_pub=None):
+        if not self.meta:
+            self._init_metadata()
+
+        data = self._get(ABCLINUXU_URL + self.meta["Uprav zápis"])
+        dom = d.parseString(data)
+
+        form = dom.find("form", {"name": "form"})
+
+        assert len(form) > 0, "Can't find edit form!"
+        form = form[0]
+
+        form_action = form.params["action"]
+
+        if title is None:
+            title = form.find("input", {"name": "title"})[0].params["value"]
+
+        date = ""
+        if timestamp_of_pub is None:
+            date = form.find("input", {"name": "publish"})[0].params["value"]
+        elif type(timestamp_of_pub) in [str, unicode]:
+            date = timestamp_of_pub
+        else:
+            pass  # TODO: date processing
+
+        data = self.session.post(
+            ABCLINUXU_URL + form_action,
+            data={
+                "cid": 0,
+                "publish": date,
+                "content": text,
+                "title": title,
+                "delay": "Ulož",
+                "action": "edit2"
+            }
+        )
+        data = data.text.encode("utf-8")
+        check_error_div(data, '<div class="error" id="contentError">')
+
+    def __str__(self):
+        return self.title
+
     def remove(self):
         raise NotImplementedError("Not implemented yet.")
 
     def publish(self):
         raise NotImplementedError("Not implemented yet.")
-
-    def edit(self, text, title=None):
-        raise NotImplementedError("Not implemented yet.")
-
-        # if not self.meta:
-        #     self._init_metadata()
-
-        # data = self._get(ABCLINUXU_URL + self.meta["Uprav zápis"])
-        # data = data.text.encode("utf-8")
-
-    def __str__(self):
-        return self.title
