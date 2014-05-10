@@ -181,6 +181,9 @@ class User(object):
             title (str): Title of your contept. Do not use HTML in title!
             timestamp_of_pub (int/float, default None): Timestamp of the
                 publication date.
+
+        Raises:
+            UserWarning: if the site is broken or user was logged out.
         """
         self.login()
 
@@ -192,7 +195,7 @@ class User(object):
             dom.find("div", {"class": "s_sekce"})
         )
         if not s_sekce:
-            raise ValueError("Can't resolve right div tag!")
+            raise UserWarning("Can't resolve right div tag!")
 
         # get link to "add blog" page
         add_blog_link = filter(
@@ -201,7 +204,7 @@ class User(object):
             s_sekce[0].find("a")
         )
         if not add_blog_link:
-            raise ValueError("Can't resolve user number!")
+            raise UserWarning("Can't resolve user number!")
         add_blog_link = add_blog_link[0].params["href"]
 
         # get "add blog" page
@@ -225,6 +228,13 @@ class User(object):
         check_error_div(data, '<div class="error" id="contentError">')
 
     def get_concepts(self):
+        """
+        Returns:
+            list: of Concept objects.
+
+        Note:
+            Concepts are unpublished Blogpost and has almost same properties.
+        """
         self.login()
 
         # get the fucking untagged part of the site, where the links to the
@@ -239,6 +249,7 @@ class User(object):
         dom = d.parseString(data)
         concept_list = dom.find("div", {"class": "s_sekce"})[0]
 
+        # links to concepts are stored in <li>
         concepts = []
         for li in concept_list.find("li"):
             a = li.find("a")[0]
