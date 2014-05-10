@@ -1,2 +1,2 @@
-include LICENSE CONTRIBUTORS.rst CHANGELOG.rst README.rst
+include LICENSE.txt CONTRIBUTORS.rst CHANGELOG.rst README.rst
 recursive-include html_docs *

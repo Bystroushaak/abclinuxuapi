@@ -77,6 +77,8 @@ setup(
     packages=find_packages('src'),
     package_dir={'': 'src'},
 
+    scripts=['bin/abclinuxu_uploader.py'],
+
     namespace_packages=['abclinuxu'],
     include_package_data=True,
     zip_safe=False,
