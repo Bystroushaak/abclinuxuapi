@@ -54,6 +54,7 @@ def upload_html(dom, args):
     concept = user.get_concepts()[-1]
 
     print "Uploading your concept '%s'" % concept.title
+    print
     print "Uploading inlined images:"
 
     # upload inlined images
@@ -89,6 +90,7 @@ def upload_html(dom, args):
         sys.stderr.write("Fail: " + e.message + "\n")
         sys.exit(1)
 
+    print
     print "Done: " + concept.link
 
 
