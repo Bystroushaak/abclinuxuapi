@@ -28,19 +28,30 @@ def test_login():
         u.login()
 
 
-def test_blogpost_fetching():
-    u = User("bystroushaak")
-    posts = u.get_blogposts()
+def test_get_blogposts():
+    posts = User("bystroushaak").get_blogposts()
 
     assert len(posts) >= 56
-    assert posts[0].title == "Google vahledávání"
+    assert posts[0].title == "Google vyhledávání"
     assert posts[55].title == "Dogecoin"
 
 
-#= Main program ===============================================================
-if __name__ == '__main__':
-    pass
-    # u.add_concept("test2", 'just some text <p class="separator"></a>')
-    # print u.get_concepts()[0].get_full_text()
-    # print u.get_concepts()[0].edit("new text")
-    # print u.get_concepts()[0].add_picture(open("/home/bystrousak/funyarinpa_drak.jpg"))
+def test_add_concept():
+    u = User("unittest", open("pass").read().strip())
+
+    old_concept_list = u.get_concepts()
+
+    u.add_concept("Text of the new concept", "Title of the concept")
+
+    new_concept_list = u.get_concepts()
+
+    assert len(old_concept_list) < len(new_concept_list)
+
+    assert new_concept_list[-1].title == "Title of the concept"
+    content = new_concept_list[-1].get_content()
+
+    assert len(content) > 0
+
+    print content
+
+    # assert  == "Text of the new concept"
