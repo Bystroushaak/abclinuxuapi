@@ -10,12 +10,19 @@ from string import Template
 import requests
 import dhtmlparser as d
 
-from config import *
-from concept import Concept
+from concept import Concept, check_error_div
 from blogpost import Blogpost, Rating
 
 
 #= Variables ==================================================================
+ABCLINUXU_URL = "https://www.abclinuxu.cz"
+PROFILE_URL = ABCLINUXU_URL + "/lide/$USERNAME"
+BASE_URL = "/?from=$COUNTER"
+LOGIN_URL = ABCLINUXU_URL + "/Profile"
+
+STEP = 50  # sets how much blogpost can be at one page
+
+
 #= Functions & objects ========================================================
 class User(object):
     def __init__(self, username, password=None):
@@ -23,8 +30,29 @@ class User(object):
         self.password = password
         self.logged_in = False
 
-        self.blog_url = Template(BLOG_URL).substitute(USERNAME=self.username)
         self.session = requests.Session()
+        self.blog_url = ABCLINUXU_URL + self._parse_blogname()
+
+    def _parse_blogname(self):
+        data = self._get(
+            Template(PROFILE_URL).substitute(USERNAME=self.username)
+        )
+
+        dom = d.parseString(data)
+        blogname = filter(
+            lambda x: x.getContent().strip().startswith("Můj blog: "),
+            dom.find("h2")
+        )
+
+        if not blogname:
+            raise UserWarning("This user doesn't have blog!")
+
+        href = blogname[0].find("a")
+
+        if not href:
+            raise UserWarning("Can't find blog link!")
+
+        return href[0].params["href"]
 
     def _get(self, url, params=None, as_text=True):
         """
@@ -54,7 +82,12 @@ class User(object):
         date = filter(
             lambda x: ":" in x and "." in x,
             str(meta).splitlines()
-        )[0].strip()
+        )
+        date = date[0].strip()
+
+        if len(date) == 11:  # new blogs are without year
+            date = date.replace(". ", ".%d " % time.localtime().tm_year)
+
         return time.mktime(time.strptime(date, "%d.%m.%Y %H:%M"))
 
     def _parse_comments_n(self, meta):
@@ -173,8 +206,7 @@ class User(object):
 
             # download data from BASE_URL template
             data = self._get(
-                Template(BASE_URL).substitute(
-                    USERNAME=self.username,
+                self.blog_url + Template(BASE_URL).substitute(
                     COUNTER=cnt
                 )
             )
@@ -241,7 +273,11 @@ class User(object):
             a = li.find("a")[0]
 
             concepts.append(
-                Concept(a.getContent().strip(), a.params["href"], self.session)
+                Concept(
+                    a.getContent().strip(),
+                    ABCLINUXU_URL + a.params["href"],
+                    self.session
+                )
             )
 
         return concepts

@@ -3,24 +3,29 @@
 #
 # Interpreter version: python 2.7
 #
-#= Imports ====================================================================
+# Imports =====================================================================
 import requests
 import dhtmlparser as d
 
-from config import *
+
+#=Functions & objects =========================================================
+def check_error_div(data, error_div):
+    # no sophisticated parsing of the error is needed
+    if error_div in data:
+        data = data.split(error_div)[1]
+        data = data.split("</div>")[0]
+
+        raise ValueError(data)
 
 
-#= Variables ==================================================================
-#= Functions & objects ========================================================
 class Concept:
     """
     This class represents concept of the blog - it has all attributes of the
     blog, but it is invisible for the readers.
     """
-    def __init__(self, title, rel_link, session):
+    def __init__(self, title, link, session):
         self.title = title
-        self.rel_link = rel_link
-        self.link = ABCLINUXU_URL + rel_link
+        self.link = link
 
         self.meta = None
         self.session = session
