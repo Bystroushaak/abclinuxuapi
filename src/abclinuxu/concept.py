@@ -23,9 +23,10 @@ class Concept:
     This class represents concept of the blog - it has all attributes of the
     blog, but it is invisible for the readers.
     """
-    def __init__(self, title, link, session):
+    def __init__(self, title, link, session, server_url):
         self.title = title
-        self.link = link
+        self.link = server_url + link
+        self.server_url = server_url
 
         self.meta = None
         self.session = session
@@ -93,7 +94,7 @@ class Concept:
             self._init_metadata()
 
         # get link to pic form
-        data = self._get(ABCLINUXU_URL + self.meta["Přidej obrázek"])
+        data = self._get(self.server_url + self.meta["Přidej obrázek"])
         dom = d.parseString(data)
 
         # get information from pic form
@@ -102,7 +103,7 @@ class Concept:
 
         # send pic
         data = self.session.post(
-            ABCLINUXU_URL + add_pic_url,
+            self.server_url + add_pic_url,
             data={
                 "action": "addScreenshot2",
                 "finish": "Nahrát"
@@ -117,7 +118,7 @@ class Concept:
         if not self.meta:
             self._init_metadata()
 
-        data = self._get(ABCLINUXU_URL + self.meta["Správa příloh"])
+        data = self._get(self.server_url + self.meta["Správa příloh"])
         dom = d.parseString(data)
 
         form = dom.find("form", {"name": "form"})
@@ -136,7 +137,7 @@ class Concept:
         if not self.meta:
             self._init_metadata()
 
-        data = self._get(ABCLINUXU_URL + self.meta["Uprav zápis"])
+        data = self._get(self.server_url + self.meta["Uprav zápis"])
         dom = d.parseString(data)
 
         form = dom.find("form", {"name": "form"})
@@ -158,7 +159,7 @@ class Concept:
             pass  # TODO: date processing
 
         data = self.session.post(
-            ABCLINUXU_URL + form_action,
+            self.server_url + form_action,
             data={
                 "cid": 0,
                 "publish": date,

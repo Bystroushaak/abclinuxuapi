@@ -275,8 +275,9 @@ class User(object):
             concepts.append(
                 Concept(
                     a.getContent().strip(),
-                    ABCLINUXU_URL + a.params["href"],
-                    self.session
+                    a.params["href"],
+                    self.session,
+                    ABCLINUXU_URL
                 )
             )
 
