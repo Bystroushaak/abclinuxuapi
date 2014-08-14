@@ -151,5 +151,9 @@ if __name__ == '__main__':
     if args.password is None:
         args.password = getpass.getpass("Password for '%s': " % args.username)
 
-    os.chdir(os.path.dirname(args.FN))
+    os.chdir(
+        os.path.dirname(
+            os.path.abspath(args.FN)
+        )
+    )
     upload_html(dom, args)
