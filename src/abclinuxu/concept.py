@@ -25,8 +25,8 @@ class Concept:
     """
     def __init__(self, title, link, session, server_url):
         self.title = title
-        self.link = server_url + link
         self.server_url = server_url
+        self.link = server_url + link
 
         self.meta = None
         self.session = session

@@ -71,7 +71,7 @@ class User(object):
 
     def _parse_timestamp(self, meta):
         """
-        Parse number timestamp from the date representation.
+        Parse numeric timestamp from the date representation.
 
         Args:
             meta (str): Meta html from the blogpost body.
@@ -102,6 +102,7 @@ class User(object):
         """
         comments = meta.find("a")[-1].getContent()
         comments = comments.split("&nbsp;")[1]
+
         return int(comments)
 
     def _parse_rating(self, meta):
@@ -122,8 +123,8 @@ class User(object):
         if rating:
             rating = rating[0].strip().replace("(", "")
             rating = rating.split("&nbsp;")
+
             return Rating(rating[1], rating[3])
-        # None is returned automatically
 
     def _parse_intro(self, blog, meta, title_tag):
         """
@@ -195,7 +196,8 @@ class User(object):
         Warning:
             Concepts are NOT icluded.
 
-        Return: sorted (old->new) list of Blogpost objects.
+        Returns:
+            list: sorted (old->new) list of Blogpost objects.
         """
         posts = []
 
