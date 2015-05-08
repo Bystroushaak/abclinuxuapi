@@ -85,7 +85,7 @@ class User(object):
         )
         date = date[0].strip()
 
-        if len(date) == 11:  # new blogs are without year
+        if len(date) <= 11:  # new blogs are without year
             date = date.replace(". ", ".%d " % time.localtime().tm_year)
 
         return time.mktime(time.strptime(date, "%d.%m.%Y %H:%M"))
