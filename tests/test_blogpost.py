@@ -68,14 +68,22 @@ def test_constructor_wrong_params(bp_url):
 
 
 def test_get_title(bpost):
-    bpost.pull()
-
     assert bpost.title == "Bolest proxy"
 
 
 def test_get_text(bpost):
-    bpost.pull()
-
     assert bpost.text.startswith("<h2>Bolest proxy</h2>")
     assert "Written in CherryTree" in bpost.text
     assert "bystrousak:" in bpost.text
+
+
+def test_Tag():
+    tag = abclinuxuapi.Tag("hello", url="http://..")
+
+    assert tag == "hello"
+    assert tag.url == "http://.."
+
+
+def test_get_tags(bpost):
+    assert bpost.tags
+    assert "proxy" in bpost.tags

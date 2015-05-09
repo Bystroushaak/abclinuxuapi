@@ -21,8 +21,15 @@ class Rating(namedtuple("Rating", ["rating", "base"])):
     pass
 
 
-class Tag(namedtuple("Tag", ["name", "link"])):
-    pass
+class Tag(str):
+    def __new__(self, name, *args, **kwargs):
+        return super(Tag, self).__new__(self, name)
+
+    def __init__(self, name, url=None):
+        super(Tag, self).__init__(name)
+
+        self.name = name
+        self.url = url
 
 
 class Blogpost(object):
@@ -33,6 +40,7 @@ class Blogpost(object):
         self.intro = None
         self.text = None
 
+        self.tags = None
         self.rating = None
         self.comments = None
         self.comments_n = -1
@@ -200,13 +208,16 @@ class Blogpost(object):
 
         self.text = content_tag.getContent()
 
+    def _parse_tags(self):
+        pass
+
     def pull(self):
         data = shared.download(url=self.url)
 
         self._dom = dhtmlparser.parseString(data)
         self._content_tag = None
 
-        # intro
+        # tags
         # rating
         # comments
         # comments_n
@@ -215,6 +226,7 @@ class Blogpost(object):
 
         self._parse_title()
         self._parse_text()
+        self._parse_tags()
 
     def get_full_text(self):
         raise NotImplementedError("Not implemented yet.")
