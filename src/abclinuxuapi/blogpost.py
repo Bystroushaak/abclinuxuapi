@@ -13,7 +13,7 @@ import dhtmlparser
 
 import shared
 from shared import first
-from shared import ABCLINUXU_URL
+from shared import url_context
 from shared import date_to_timestamp
 
 
@@ -142,7 +142,7 @@ class Blogpost(object):
         title_tag = first(html.find("h2", {"class": "st_nadpis"}))
         rel_link = first(title_tag.find("a")).params["href"]
 
-        link = ABCLINUXU_URL + rel_link
+        link = url_context(rel_link)
         title = dhtmlparser.removeTags(title_tag).strip()
 
         # get meta
@@ -219,7 +219,7 @@ class Blogpost(object):
         self.tags = [
             Tag(
                 tag.getContent(),
-                url=urljoin(ABCLINUXU_URL, tag.params["href"])
+                url=url_context(tag.params["href"])
             )
             for tag in first(tag_tags).find("a")
             if tag.params.get("href", "").startswith("/stitky/")
