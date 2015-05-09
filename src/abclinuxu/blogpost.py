@@ -4,6 +4,7 @@
 # Interpreter version: python 2.7
 #
 # Imports =====================================================================
+import time
 from collections import namedtuple
 
 import dhtmlparser
@@ -19,12 +20,12 @@ class Rating(namedtuple("Rating", ["rating", "base"])):
 
 
 class Blogpost(object):
-    def __init__(self, url, lazy=True):
+    def __init__(self, url, lazy=True, **kwargs):
         self.url = url
 
         self.title = None
         self.intro = None
-        self.text = None if lazy else self.get_full_text()
+        self.text = None
 
         self.rating = None
         self.comments = None
@@ -32,6 +33,20 @@ class Blogpost(object):
 
         self.created_ts = None
         self.last_modified_ts = None
+        self.object_ts = time.time()
+
+        # read parameters from kwargs
+        for key, val in kwargs.iteritems():
+            if key not in self.__dict__:
+                raise TypeError("Unknown parameter `%s`!" % key)
+
+            self.__dict__[key] = val
+
+        if not lazy:
+            self.pull()
+
+    def pull():
+        pass
 
     @staticmethod
     def _parse_intro(blog, meta, title_tag):
@@ -131,4 +146,10 @@ class Blogpost(object):
         raise NotImplementedError("Not implemented yet.")
 
     def edit(self):
+        raise NotImplementedError("Not implemented yet.")
+
+    def get_tags(self):
+        raise NotImplementedError("Not implemented yet.")
+
+    def get_number_of_reads(self):
         raise NotImplementedError("Not implemented yet.")
