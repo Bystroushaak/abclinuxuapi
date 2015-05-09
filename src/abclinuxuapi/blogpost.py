@@ -29,7 +29,7 @@ class Blogpost(object):
 
         self.rating = None
         self.comments = None
-        self.comments_n = 0
+        self.comments_n = -1
 
         self.created_ts = None
         self.last_modified_ts = None
@@ -40,12 +40,15 @@ class Blogpost(object):
             if key not in self.__dict__:
                 raise TypeError("Unknown parameter `%s`!" % key)
 
+            if key.startswith("_"):
+                raise ValueError("You can't set protected/private properties!")
+
             self.__dict__[key] = val
 
         if not lazy:
             self.pull()
 
-    def pull():
+    def pull(self):
         pass
 
     @staticmethod
