@@ -9,6 +9,7 @@ from urlparse import urljoin
 import requests
 import dhtmlparser as d
 
+import shared
 from shared import first
 from shared import ABCLINUXU_URL
 from concept import Concept, check_error_div
@@ -26,7 +27,7 @@ class User(object):
         self.password = password
         self.logged_in = False
 
-        self.session = requests.Session()
+        self.session = shared.SESSION
         self.blog_url = None
         self._user_id = None
 
@@ -248,6 +249,9 @@ class User(object):
             title (str): Title of your contept. Do not use HTML in title!
             timestamp_of_pub (int/float, default None): Timestamp of the
                 publication date.
+
+        Warning:
+            timestamp_of_pub is currently not implemented.
 
         Raises:
             UserWarning: if the site is broken or user was logged out.

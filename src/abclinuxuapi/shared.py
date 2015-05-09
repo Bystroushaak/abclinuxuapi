@@ -6,12 +6,24 @@
 # Imports =====================================================================
 import time
 
+import requests
+
 
 # Variables ===================================================================
 ABCLINUXU_URL = "https://www.abclinuxu.cz"
+SESSION = requests.Session()
 
 
 # Functions & classes =========================================================
+def download(url, params=None, method="GET", session=None, as_text=True):
+    if session is None:
+        session = SESSION
+
+    data = session.request(url, method=method, params=params)
+
+    return data.text.encode("utf-8") if as_text else data.content
+
+
 def first(inp_data):
     return next(x for x in inp_data)
 

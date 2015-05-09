@@ -8,7 +8,7 @@ import os.path
 
 import pytest
 
-import abclinuxu
+import abclinuxuapi
 
 
 # Fixtures ====================================================================
@@ -39,7 +39,7 @@ def password():
 
 # Tests =======================================================================
 def test_register_blog(username, password):
-    u = abclinuxu.User(username, password)
+    u = abclinuxuapi.User(username, password)
 
     if u.has_blog():
         return
@@ -49,16 +49,16 @@ def test_register_blog(username, password):
 
 
 def test_login(username, password):
-    u = abclinuxu.User(username, password)
+    u = abclinuxuapi.User(username, password)
     u.login()
 
     with pytest.raises(UserWarning):
-        u = abclinuxu.User(username, "bad password")
+        u = abclinuxuapi.User(username, "bad password")
         u.login()
 
 
 def test_get_blogposts():
-    posts = abclinuxu.User("bystroushaak").get_blogposts()
+    posts = abclinuxuapi.User("bystroushaak").get_blogposts()
 
     assert len(posts) >= 56
     assert posts[0].title == "Google vyhledávání"
@@ -66,7 +66,7 @@ def test_get_blogposts():
 
 
 def test_add_concept(username, password):
-    u = abclinuxu.User(username, password)
+    u = abclinuxuapi.User(username, password)
 
     old_concept_list = u.get_concepts()
 
@@ -87,7 +87,7 @@ def test_add_concept(username, password):
 
 
 def test_get_user_id(username, password):
-    u = abclinuxu.User(username, password)
+    u = abclinuxuapi.User(username, password)
     u.login()
 
     assert u._get_user_id()
