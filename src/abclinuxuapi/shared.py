@@ -5,6 +5,7 @@
 #
 # Imports =====================================================================
 import time
+from urlparse import urljoin
 
 import requests
 
@@ -35,3 +36,7 @@ def date_to_timestamp(date):
         date = date.replace(". ", ".%d " % time.localtime().tm_year)
 
     return time.mktime(time.strptime(date, "%d.%m.%Y %H:%M"))
+
+
+def url_context(url):
+    return urljoin(ABCLINUXU_URL, url)
