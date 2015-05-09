@@ -12,6 +12,10 @@ ABCLINUXU_URL = "https://www.abclinuxu.cz"
 
 
 # Functions & classes =========================================================
+def first(inp_data):
+    return next(x for x in inp_data)
+
+
 def date_to_timestamp(date):
     date = date.strip()
 

@@ -9,10 +9,10 @@ from urlparse import urljoin
 import requests
 import dhtmlparser as d
 
+from shared import first
 from shared import ABCLINUXU_URL
-from shared import date_to_timestamp
 from concept import Concept, check_error_div
-from blogpost import Blogpost, Rating
+from blogpost import Blogpost
 
 
 # Variables ===================================================================
@@ -20,10 +20,6 @@ BLOG_STEP = 50  # sets how much blogpost can be at one page
 
 
 # Functions & classes =========================================================
-def first(inp_data):
-    return next(x for x in inp_data)
-
-
 class User(object):
     def __init__(self, username, password=None, lazy=False):
         self.username = username
@@ -72,23 +68,6 @@ class User(object):
 
         return self._user_id
 
-    def _parse_timestamp(self, meta):
-        """
-        Parse numeric timestamp from the date representation.
-
-        Args:
-            meta (str): Meta html from the blogpost body.
-
-        Returns:
-            int: Timestamp.
-        """
-        date = filter(
-            lambda x: ":" in x and "." in x,
-            str(meta).splitlines()
-        )
-
-        return date_to_timestamp(date[0])
-
     def _compose_profile_url(self):
         return urljoin(ABCLINUXU_URL, urljoin("/lide/", self.username))
 
@@ -125,55 +104,6 @@ class User(object):
         """
         data = self.session.get(url, params=params)
         return data.text.encode("utf-8") if as_text else data.content
-
-    def _parse_comments_n(self, meta):
-        """
-        Parse number of comments under the blogpost.
-
-        Args:
-            meta (str): Meta html from the blogpost body.
-
-        Returns:
-            int: Number of comments.
-        """
-        comments = meta.find("a")[-1].getContent()
-        comments = comments.split("&nbsp;")[1]
-
-        return int(comments)
-
-    def _parse_rating(self, meta):
-        """
-        Parse rating of the blogpost.
-
-        Args:
-            meta (str): Meta html from the blogpost body.
-
-        Returns:
-            Rating: :class:`.Rating` object.
-        """
-        rating = filter(
-            lambda x: "Hodnocení:" in x,
-            str(meta).splitlines()
-        )
-
-        if rating:
-            rating = rating[0].strip().replace("(", "")
-            rating = rating.split("&nbsp;")
-
-            return Rating(rating[1], rating[3])
-
-    def _parse_intro(self, blog, meta, title_tag):
-        """
-        Parse intro from the `meta` HTML part.
-        """
-        intro = blog.getContent().replace(str(meta), "")
-        intro = intro.replace(str(title_tag), "")
-
-        signature = blog.find("div", {"class": "signature"})
-        if signature:
-            intro = intro.replace(str(signature[0]), "")
-
-        return d.removeTags(intro.strip()).strip()
 
     def login(self, password=None):
         """
@@ -261,31 +191,12 @@ class User(object):
 
             dom = d.parseString(data)
             for blog in dom.find("div", {"class": "cl"}):
-                # parse link and title
-                title_tag = blog.find("h2", {"class": "st_nadpis"})[0]
-                rel_link = title_tag.find("a")[0].params["href"]
-                link = ABCLINUXU_URL + rel_link
-                title = d.removeTags(title_tag).strip()
-
-                # get meta
-                meta = blog.find("p", {"class": "meta-vypis"})[0]
-
-                parsed.append(
-                    Blogpost(
-                        title=title,
-                        comments_n=self._parse_comments_n(meta),
-                        rel_link=rel_link,
-                        link=link,
-                        timestamp=self._parse_timestamp(meta),
-                        rating=self._parse_rating(meta),
-                        intro=self._parse_intro(blog, meta, title_tag)
-                    )
-                )
+                parsed.append(Blogpost.from_html(blog))
 
             posts.extend(parsed)
             cnt += BLOG_STEP
 
-        return sorted(posts, key=lambda x: x.timestamp)
+        return sorted(posts, key=lambda x: x.created_ts)
 
     def get_concepts(self):
         """
