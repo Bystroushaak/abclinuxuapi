@@ -4,6 +4,7 @@
 # Interpreter version: python 2.7
 #
 # Imports =====================================================================
+import time
 from urlparse import urljoin
 
 import requests
@@ -244,15 +245,25 @@ class User(object):
 
         return concepts
 
-    def add_concept(self, text, title, timestamp_of_pub=None):
+    @staticmethod
+    def _ts_to_concept_date(timestamp):
+        if not timestamp:
+            return None
+
+        # required format: 2005-01-25 07:12
+        return time.strftime(
+            "%Y-%m-%d %H:%M",
+            time.localtime(timestamp)
+        )
+
+    def add_concept(self, text, title, ts_of_pub=None):
         """
         Adds new concept into your concepts.
 
         Args:
             text (str): Text of your concept.
             title (str): Title of your contept. Do not use HTML in title!
-            timestamp_of_pub (int/float, default None): Timestamp of the
-                publication date.
+            ts_of_pub (int/float, default None): Timestamp of the publication.
 
         Warning:
             timestamp_of_pub is currently not implemented.
@@ -295,7 +306,7 @@ class User(object):
             ABCLINUXU_URL + form_action,
             data={
                 "cid": 0,
-                "publish": "",  # TODO: timestamp_of_pub
+                "publish": User._ts_to_concept_date(ts_of_pub),
                 "content": text,
                 "title": d.removeTags(title),
                 "delay": "Do konceptů",
