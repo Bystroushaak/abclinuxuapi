@@ -60,3 +60,14 @@ def test_constructor_multi_params(bp_url):
     assert bp.created_ts == "created_ts"
     assert bp.last_modified_ts == "last_modified_ts"
     assert bp.object_ts == "object_ts"
+
+
+def test_constructor_wrong_params(bp_url):
+    with pytest.raises(TypeError):
+        bp = abclinuxuapi.Blogpost(bp_url, azgabash=True)
+
+
+def test_get_title(bpost):
+    bpost.pull()
+
+    assert bpost.title == "Bolest proxy"

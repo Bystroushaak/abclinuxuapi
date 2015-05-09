@@ -9,6 +9,7 @@ from collections import namedtuple
 
 import dhtmlparser
 
+import shared
 from shared import first
 from shared import ABCLINUXU_URL
 from shared import date_to_timestamp
@@ -35,6 +36,8 @@ class Blogpost(object):
         self.last_modified_ts = None
         self.object_ts = time.time()
 
+        self._dom = None
+
         # read parameters from kwargs
         for key, val in kwargs.iteritems():
             if key not in self.__dict__:
@@ -47,9 +50,6 @@ class Blogpost(object):
 
         if not lazy:
             self.pull()
-
-    def pull(self):
-        pass
 
     @staticmethod
     def _parse_intro(blog, meta, title_tag):
@@ -141,6 +141,22 @@ class Blogpost(object):
         blog.comments_n = Blogpost._parse_comments_n(meta)
 
         return blog
+
+    def _parse_title(self):
+        assert self._dom
+
+        title_tag = self._dom.find("title")
+
+        if not title_tag:
+            return
+
+        self.title = first(title_tag).getContent()
+
+    def pull(self):
+        data = shared.download(url=self.url)
+        self._dom = dhtmlparser.parseString(data)
+
+        self._parse_title()
 
     def get_full_text(self):
         raise NotImplementedError("Not implemented yet.")
