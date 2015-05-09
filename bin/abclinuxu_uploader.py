@@ -3,18 +3,18 @@
 #
 # Interpreter version: python 2.7
 #
-#= Imports ====================================================================
+# Imports =====================================================================
 import os
 import sys
 import os.path
 import getpass
 import argparse
 
-import abclinuxu  # https://github.com/Bystroushaak/abclinuxuapi
+import abclinuxuapi
 import dhtmlparser as d
 
 
-#= Variables ==================================================================
+# Variables ===================================================================
 ALLOWED_IMAGES = [
     "jpg",
     "jpeg",
@@ -23,7 +23,7 @@ ALLOWED_IMAGES = [
 ]
 
 
-#= Functions & objects ========================================================
+# Functions & objects =========================================================
 def get_body(dom):
     body = dom.find("body")
     if not body:
@@ -43,7 +43,7 @@ def upload_image(concept, image_path):
 
 
 def upload_html(dom, args):
-    user = abclinuxu.User(args.username, args.password)
+    user = abclinuxuapi.User(args.username, args.password)
 
     try:
         user.add_concept(get_body(dom), args.title)
@@ -94,7 +94,7 @@ def upload_html(dom, args):
     print "Done: " + concept.link
 
 
-#= Main program ===============================================================
+# Main program ================================================================
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="abclinuxu.cz blog uploader.")
 
