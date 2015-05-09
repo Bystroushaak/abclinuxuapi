@@ -37,24 +37,26 @@ def password():
     return username_password()[-1]
 
 
-# Tests =======================================================================
-def test_register_blog(username, password):
-    u = abclinuxuapi.User(username, password)
+@pytest.fixture
+def user():
+    return abclinuxuapi.User(*username_password())
 
-    if u.has_blog():
+
+# Tests =======================================================================
+def test_register_blog(user):
+    if user.has_blog():
         return
 
-    u.register_blog("Test user's blog")
-    assert u.has_blog()
+    user.register_blog("Test user's blog")
+    assert user.has_blog()
 
 
-def test_login(username, password):
-    u = abclinuxuapi.User(username, password)
-    u.login()
+def test_login(user, username):
+    user.login()
 
     with pytest.raises(UserWarning):
-        u = abclinuxuapi.User(username, "bad password")
-        u.login()
+        user = abclinuxuapi.User(username, "bad password")
+        user.login()
 
 
 def test_get_blogposts():
@@ -65,14 +67,12 @@ def test_get_blogposts():
     assert posts[55].title == "Dogecoin"
 
 
-def test_add_concept(username, password):
-    u = abclinuxuapi.User(username, password)
+def test_add_concept(user):
+    old_concept_list = user.get_concepts()
 
-    old_concept_list = u.get_concepts()
+    user.add_concept("Text of the new concept", "Title of the concept")
 
-    u.add_concept("Text of the new concept", "Title of the concept")
-
-    new_concept_list = u.get_concepts()
+    new_concept_list = user.get_concepts()
 
     assert len(old_concept_list) < len(new_concept_list)
 
@@ -86,9 +86,8 @@ def test_add_concept(username, password):
     # assert  == "Text of the new concept"
 
 
-def test_get_user_id(username, password):
-    u = abclinuxuapi.User(username, password)
-    u.login()
+def test_get_user_id(user):
+    user.login()
 
-    assert u._get_user_id()
-    assert int(u._get_user_id())
+    assert user._get_user_id()
+    assert int(user._get_user_id())

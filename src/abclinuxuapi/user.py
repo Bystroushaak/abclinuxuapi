@@ -27,7 +27,7 @@ class User(object):
         self.password = password
         self.logged_in = False
 
-        self.session = shared.SESSION
+        self.session = requests.Session()
         self.blog_url = None
         self._user_id = None
 
@@ -103,8 +103,12 @@ class User(object):
         Returns:
             str/binary data: depending on the `as_text` parameter.
         """
-        data = self.session.get(url, params=params)
-        return data.text.encode("utf-8") if as_text else data.content
+        return shared.download(
+            url=url,
+            params=params,
+            session=self.session,
+            as_text=as_text
+        )
 
     def login(self, password=None):
         """
