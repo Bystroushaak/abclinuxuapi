@@ -5,6 +5,7 @@
 #
 # Imports =====================================================================
 import time
+import copy
 from collections import namedtuple
 
 import dhtmlparser
@@ -36,7 +37,9 @@ class Blogpost(object):
         self.last_modified_ts = None
         self.object_ts = time.time()
 
+        # those are used for caching to speed up parsing
         self._dom = None
+        self._content_tag = None
 
         # read parameters from kwargs
         for key, val in kwargs.iteritems():
@@ -152,11 +155,62 @@ class Blogpost(object):
 
         self.title = first(title_tag).getContent()
 
+    def _parse_content_tag(self):
+        assert self._dom
+
+        if self._content_tag:
+            return self._content_tag
+
+        content_tags = self._dom.match(
+            ["div", {"class": "obal"}],
+            ["div", {"class": "st", "id": "st"}]
+        )
+
+        if not content_tags:
+            raise ValueError("Can't find content - is this really blogpost?")
+
+        return first(content_tags)
+
+    def _parse_text(self):
+        content_tag = copy.deepcopy(self._parse_content_tag())
+
+        # this shit is not structured in tree, so the parsing is little bit
+        # hard
+        h2_tag = first(content_tag.find("h2"))
+        rating_tag = first(content_tag.find("div", {"class": "rating"}))
+
+        # throw everything to the h2_tag
+        while content_tag.childs[0] != h2_tag:
+            content_tag.childs.pop(0)
+
+        # throw everything after the rating_tag
+        while content_tag.childs[-1] != rating_tag:
+            content_tag.childs.pop()
+
+        # throw also the rating
+        content_tag.childs.pop()
+
+        meta_vypis_tag = content_tag.find("p", {"class": "meta-vypis"})
+        if meta_vypis_tag:
+            content_tag.removeChild(meta_vypis_tag, end_tag_too=True)
+
+        self.text = content_tag.getContent()
+
     def pull(self):
         data = shared.download(url=self.url)
+
         self._dom = dhtmlparser.parseString(data)
+        self._content_tag = None
+
+        # intro
+        # rating
+        # comments
+        # comments_n
+        # created_ts
+        # last_modified_ts
 
         self._parse_title()
+        self._parse_text()
 
     def get_full_text(self):
         raise NotImplementedError("Not implemented yet.")

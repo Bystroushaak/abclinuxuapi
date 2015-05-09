@@ -17,7 +17,7 @@ def bp_url():
 
 @pytest.fixture
 def bpost():
-    return abclinuxuapi.Blogpost(bp_url())
+    return abclinuxuapi.Blogpost(bp_url(), lazy=False)
 
 
 # Tests =======================================================================
@@ -71,3 +71,11 @@ def test_get_title(bpost):
     bpost.pull()
 
     assert bpost.title == "Bolest proxy"
+
+
+def test_get_text(bpost):
+    bpost.pull()
+
+    assert bpost.text.startswith("<h2>Bolest proxy</h2>")
+    assert "Written in CherryTree" in bpost.text
+    assert "bystrousak:" in bpost.text
