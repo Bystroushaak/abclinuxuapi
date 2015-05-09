@@ -6,6 +6,7 @@
 # Imports =====================================================================
 import time
 import copy
+from urlparse import urljoin
 from collections import namedtuple
 
 import dhtmlparser
@@ -209,7 +210,20 @@ class Blogpost(object):
         self.text = content_tag.getContent()
 
     def _parse_tags(self):
-        pass
+        tag_tags = self._parse_content_tag().find("div", {"class": "tag-box"})
+
+        if not tag_tags:
+            self.tags = []
+            return
+
+        self.tags = [
+            Tag(
+                tag.getContent(),
+                url=urljoin(ABCLINUXU_URL, tag.params["href"])
+            )
+            for tag in first(tag_tags).find("a")
+            if tag.params.get("href", "").startswith("/stitky/")
+        ]
 
     def pull(self):
         data = shared.download(url=self.url)
@@ -217,7 +231,6 @@ class Blogpost(object):
         self._dom = dhtmlparser.parseString(data)
         self._content_tag = None
 
-        # tags
         # rating
         # comments
         # comments_n
