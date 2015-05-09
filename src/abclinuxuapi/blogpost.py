@@ -21,6 +21,10 @@ class Rating(namedtuple("Rating", ["rating", "base"])):
     pass
 
 
+class Tag(namedtuple("Tag", ["name", "link"])):
+    pass
+
+
 class Blogpost(object):
     def __init__(self, url, lazy=True, **kwargs):
         self.url = url
