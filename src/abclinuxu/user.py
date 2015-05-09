@@ -3,71 +3,74 @@
 #
 # Interpreter version: python 2.7
 #
-#= Imports ====================================================================
-import time
-from string import Template
+# Imports =====================================================================
+from urlparse import urljoin
 
 import requests
 import dhtmlparser as d
 
+from shared import ABCLINUXU_URL
+from shared import date_to_timestamp
 from concept import Concept, check_error_div
 from blogpost import Blogpost, Rating
 
 
-#= Variables ==================================================================
-ABCLINUXU_URL = "https://www.abclinuxu.cz"
-PROFILE_URL = ABCLINUXU_URL + "/lide/$USERNAME"
-BASE_URL = "/?from=$COUNTER"
-LOGIN_URL = ABCLINUXU_URL + "/Profile"
-
-STEP = 50  # sets how much blogpost can be at one page
+# Variables ===================================================================
+BLOG_STEP = 50  # sets how much blogpost can be at one page
 
 
-#= Functions & objects ========================================================
+# Functions & classes =========================================================
+def first(inp_data):
+    return next(x for x in inp_data)
+
+
 class User(object):
-    def __init__(self, username, password=None):
+    def __init__(self, username, password=None, lazy=False):
         self.username = username
         self.password = password
         self.logged_in = False
 
         self.session = requests.Session()
-        self.blog_url = ABCLINUXU_URL + self._parse_blogname()
+        self.blog_url = None
+        self._user_id = None
 
-    def _parse_blogname(self):
-        data = self._get(
-            Template(PROFILE_URL).substitute(USERNAME=self.username)
-        )
+        if not lazy:
+            self.init()
 
-        dom = d.parseString(data)
-        blogname = filter(
-            lambda x: x.getContent().strip().startswith("Můj blog: "),
-            dom.find("h2")
-        )
+    def init(self):
+        self.blog_url = self._parse_blogname()
 
-        if not blogname:
-            raise UserWarning("This user doesn't have blog!")
-
-        href = blogname[0].find("a")
-
-        if not href:
-            raise UserWarning("Can't find blog link!")
-
-        return href[0].params["href"]
-
-    def _get(self, url, params=None, as_text=True):
+    def _get_user_id(self):
         """
-        Shortcut for ``self.session.get().text.encode("utf-8")``.
-
-        Args:
-            url (str): Url on which the GET request will be sent.
-            params (dict): GET parameters.
-            as_text (bool, default True): Return result as text or binary data.
+        Resolve user's ID number for logged user.
 
         Returns:
-            str/binary data: depending on the `as_text` parameter.
+            str: USER id as string.
         """
-        data = self.session.get(url, params=params)
-        return data.text.encode("utf-8") if as_text else data.content
+        if self._user_id is not None:
+            return self._user_id
+
+        self.login()
+        dom = d.parseString(self._get(ABCLINUXU_URL))
+
+        # resolve user's navigation panel
+        nav_bar = dom.match(
+            ["div", {"class": "hl_vpravo"}],
+            {
+                "tag_name": "a",
+                "fn": lambda x: x.params.get("href", "").startswith("/Profile")
+            }
+        )
+
+        if not nav_bar:
+            raise ValueError("Can't parse user's navigation bar!")
+
+        profile_link = first(nav_bar).params["href"]
+
+        # transform /Profile/24642?action=myPage -> 24642
+        self._user_id = profile_link.split("?")[0].split("/")[-1]
+
+        return self._user_id
 
     def _parse_timestamp(self, meta):
         """
@@ -83,12 +86,45 @@ class User(object):
             lambda x: ":" in x and "." in x,
             str(meta).splitlines()
         )
-        date = date[0].strip()
 
-        if len(date) <= 11:  # new blogs are without year
-            date = date.replace(". ", ".%d " % time.localtime().tm_year)
+        return date_to_timestamp(date[0])
 
-        return time.mktime(time.strptime(date, "%d.%m.%Y %H:%M"))
+    def _compose_profile_url(self):
+        return urljoin(ABCLINUXU_URL, urljoin("/lide/", self.username))
+
+    def _parse_blogname(self):
+        data = self._get(self._compose_profile_url())
+
+        dom = d.parseString(data)
+        blogname = filter(
+            lambda x: x.getContent().strip().startswith("Můj blog: "),
+            dom.find("h2")
+        )
+
+        if not blogname:
+            return None
+
+        links = blogname[0].find("a")
+
+        if not links:
+            raise UserWarning("Can't find blog link!")
+
+        return urljoin(ABCLINUXU_URL, links[0].params["href"])
+
+    def _get(self, url, params=None, as_text=True):
+        """
+        Shortcut for ``self.session.get().text.encode("utf-8")``.
+
+        Args:
+            url (str): Url on which the GET request will be sent.
+            params (dict): GET parameters.
+            as_text (bool, default True): Return result as text or binary data.
+
+        Returns:
+            str/binary data: depending on the `as_text` parameter.
+        """
+        data = self.session.get(url, params=params)
+        return data.text.encode("utf-8") if as_text else data.content
 
     def _parse_comments_n(self, meta):
         """
@@ -159,14 +195,15 @@ class User(object):
         if self.password is None:
             raise UserWarning("Invalid password.")
 
+        login_url = urljoin(ABCLINUXU_URL, "/Profile")
         data = self.session.post(
-            LOGIN_URL,
+            login_url,
             data={
                 "finish": "Přihlásit",
                 "LOGIN": self.username,
                 "PASSWORD": self.password,
                 "noCookie": "no",
-                "useHttps": "yes" if LOGIN_URL.startswith("https") else "no",
+                "useHttps": "yes" if login_url.startswith("https") else "no",
                 "action": "login2",
                 "url": "http://www.abclinuxu.cz/"
             }
@@ -175,6 +212,7 @@ class User(object):
         # test, whether the user is successfully logged in
         dom = d.parseString(data)
 
+        # TODO: přepsat na .match()
         logged_in = dom.find("div", {"class": "hl"})
         if not logged_in:
             raise UserWarning("Bad username/password!")
@@ -189,6 +227,12 @@ class User(object):
 
         self.logged_in = True
 
+    def has_blog(self):
+        return self.blog_url is not None
+
+    def _compose_blogposts_url(self, from_counter):
+        return urljoin(self.blog_url, "?from=%d" % from_counter)
+
     def get_blogposts(self):
         """
         Lists all of users PUBLISHED blogposts.
@@ -199,19 +243,15 @@ class User(object):
         Returns:
             list: sorted (old->new) list of Blogpost objects.
         """
-        posts = []
+        if not self.has_blog():
+            return []
 
         cnt = 0
+        posts = []
         parsed = [1]  # just placeholder for first while iteration
         while parsed:
             parsed = []
-
-            # download data from BASE_URL template
-            data = self._get(
-                self.blog_url + Template(BASE_URL).substitute(
-                    COUNTER=cnt
-                )
-            )
+            data = self._get(self._compose_blogposts_url(cnt))
 
             # clean crap, get just content
             data = data.split(
@@ -243,7 +283,7 @@ class User(object):
                 )
 
             posts.extend(parsed)
-            cnt += STEP
+            cnt += BLOG_STEP
 
         return sorted(posts, key=lambda x: x.timestamp)
 
@@ -255,6 +295,9 @@ class User(object):
         Note:
             Concepts are unpublished Blogpost and has almost same properties.
         """
+        if not self.has_blog():
+            raise ValueError("User doesn't have blog!")
+
         self.login()
 
         # get the fucking untagged part of the site, where the links to the
@@ -298,6 +341,9 @@ class User(object):
         Raises:
             UserWarning: if the site is broken or user was logged out.
         """
+        if not self.has_blog():
+            raise ValueError("User doesn't have blog!")
+
         self.login()
 
         dom = d.parseString(self._get(self.blog_url))
@@ -339,3 +385,42 @@ class User(object):
         )
         data = data.text.encode("utf-8")
         check_error_div(data, '<div class="error" id="contentError">')
+
+    def register_blog(self, blog_name):
+        """
+        Register blog under `blog_name`.
+
+        Raises:
+            UserWarning: If user already have blog registered.
+            ValueError: If it is not possible to register blog for user (see \
+                        exception message for details).
+        """
+        if self.has_blog():
+            raise UserWarning("User already have blog!")
+
+        add_blog_url = urljoin(
+            ABCLINUXU_URL,
+            urljoin("/blog/edit/", self._get_user_id())
+        )
+
+        data = self.session.post(
+            add_blog_url,
+            params={
+                "blogName": blog_name,
+                "category1": "",
+                "category2": "",
+                "category3": "",
+                "action": "addBlog2",
+            }
+        )
+
+        # check for errors
+        dom = d.parseString(data.text.encode("utf-8"))
+        errors = dom.find("p", {"class": "error"})
+        if errors:
+            raise ValueError(first(errors).getContent())
+
+        self.blog_url = self._parse_blogname()
+
+        if not self.has_blog():
+            raise ValueError("Couldn't register new blog.")

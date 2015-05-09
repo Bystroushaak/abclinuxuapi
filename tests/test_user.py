@@ -38,6 +38,16 @@ def password():
 
 
 # Tests =======================================================================
+def test_register_blog(username, password):
+    u = abclinuxu.User(username, password)
+
+    if u.has_blog():
+        return
+
+    u.register_blog("Test user's blog")
+    assert u.has_blog()
+
+
 def test_login(username, password):
     u = abclinuxu.User(username, password)
     u.login()
@@ -74,3 +84,11 @@ def test_add_concept(username, password):
     # print content
 
     # assert  == "Text of the new concept"
+
+
+def test_get_user_id(username, password):
+    u = abclinuxu.User(username, password)
+    u.login()
+
+    assert u._get_user_id()
+    assert int(u._get_user_id())
