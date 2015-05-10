@@ -93,3 +93,10 @@ def test_get_rating(bpost):
     assert bpost.rating
     assert bpost.rating.rating == 100
     assert bpost.rating.base == 15
+
+
+def test_meta_parsing(bpost):
+    assert bpost.has_tux
+    assert bpost.created_ts == 1423587660.0
+    assert bpost.last_modified_ts >= 1423591140.0
+    assert bpost.readed >= 1451

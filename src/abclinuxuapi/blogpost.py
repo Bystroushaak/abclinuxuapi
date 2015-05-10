@@ -43,12 +43,14 @@ class Blogpost(object):
 
         self.tags = None
         self.rating = None
+        self.has_tux = False
         self.comments = None
         self.comments_n = -1
+        self.readed = None
 
+        self.object_ts = time.time()
         self.created_ts = None
         self.last_modified_ts = None
-        self.object_ts = time.time()
 
         # those are used for caching to speed up parsing
         self._dom = None
@@ -248,6 +250,40 @@ class Blogpost(object):
             base=int(base.split()[-1]),
         )
 
+    def _parse_meta(self):
+        content = self._parse_content_tag()
+        meta_vypis_tags = content.find("p", {"class": "meta-vypis"})
+
+        if not meta_vypis_tags:
+            return
+
+        meta_vypis_tag = first(meta_vypis_tags)
+
+        has_tux_tags = meta_vypis_tag.find("img", {"class": "blog_digest"})
+
+        if has_tux_tags:
+            self.has_tux = True
+
+        # get clean string - another thing which is not semantic at all
+        lines = dhtmlparser.removeTags(meta_vypis_tag)
+
+        self.created_ts = Blogpost._parse_timestamp(lines)
+
+        # rest will be picked one by one
+        lines = lines.strip().splitlines()
+
+        # parse last modification time
+        modified_ts_line = [x for x in lines if "poslední úprava:" in x]
+        if modified_ts_line:
+            date_string = first(modified_ts_line).split(": ")[-1]
+            self.last_modified_ts = date_to_timestamp(date_string)
+
+        # parse number of reads
+        reads_line = [x for x in lines if "Přečteno:" in x]
+        if reads_line:
+            reads = first(reads_line).split(":")[-1].split("&")[0]
+            self.readed = int(reads)
+
     def pull(self):
         data = shared.download(url=self.url)
 
@@ -256,13 +292,12 @@ class Blogpost(object):
 
         # comments
         # comments_n
-        # created_ts
-        # last_modified_ts
 
         self._parse_title()
         self._parse_text()
         self._parse_tags()
         self._parse_rating()
+        self._parse_meta()
 
     def get_full_text(self):
         raise NotImplementedError("Not implemented yet.")
