@@ -1,19 +1,16 @@
 Introduction
 ============
 
-This module contains basic API for http://abclinuxu.cz.
+This module contains basic API for crawling the http://abclinuxu.cz website.
 
 Installation
 ------------
-Module is hosted at `PYPI <https://pypi.python.org/pypi/abclinuxu/>`_, and can be easily 
-installed using `PIP <http://en.wikipedia.org/wiki/Pip_%28package_manager%29>`_:
+Module is hosted at `PYPI <https://pypi.python.org/pypi/abclinuxuapi/>`_, and
+can be installed using `PIP <http://en.wikipedia.org/wiki/Pip_%28package_manager%29>`_:
 
 ::
 
-    pip install abclinuxu
-
-Source code can be found at `GitHub <https://github.com/>`_:
-https://github.com/Bystroushaak/abclinuxu
+    pip install abclinuxuapi
 
 Documentation
 -------------
