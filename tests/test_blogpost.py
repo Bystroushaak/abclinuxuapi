@@ -87,3 +87,9 @@ def test_Tag():
 def test_get_tags(bpost):
     assert bpost.tags
     assert "proxy" in bpost.tags
+
+
+def test_get_rating(bpost):
+    assert bpost.rating
+    assert bpost.rating.rating == 100
+    assert bpost.rating.base == 15

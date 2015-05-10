@@ -98,7 +98,7 @@ class Blogpost(object):
         return int(comments)
 
     @staticmethod
-    def _parse_rating(meta):
+    def _parse_rating_from_preview(meta):
         """
         Parse rating of the blogpost.
 
@@ -117,7 +117,7 @@ class Blogpost(object):
             rating = rating[0].strip().replace("(", "")
             rating = rating.split("&nbsp;")
 
-            return Rating(rating[1], rating[3])
+            return Rating(int(rating[1]), int(rating[3]))
 
     @staticmethod
     def _parse_timestamp(meta):
@@ -152,7 +152,7 @@ class Blogpost(object):
 
         blog.title = title
         blog.intro = Blogpost._parse_intro(html, meta, title_tag)
-        blog.rating = Blogpost._parse_rating(meta)
+        blog.rating = Blogpost._parse_rating_from_preview(meta)
         blog.created_ts = Blogpost._parse_timestamp(meta)
         blog.comments_n = Blogpost._parse_comments_n(meta)
 
@@ -225,13 +225,35 @@ class Blogpost(object):
             if tag.params.get("href", "").startswith("/stitky/")
         ]
 
+    def _parse_rating(self):
+        content = self._parse_content_tag()
+        rating_tags = content.find("div", {"class": "rating"})
+
+        if not rating_tags:
+            return
+
+        # <span> with voting info
+        voting_spans = first(rating_tags).find("span")
+        
+        if not voting_spans:
+            return
+
+        voting_span = first(voting_spans)
+
+        rating = voting_span.getContent()
+        base = voting_span.params.get("title", "0")
+
+        self.rating = Rating(
+            rating=int(rating.split()[0]),
+            base=int(base.split()[-1]),
+        )
+
     def pull(self):
         data = shared.download(url=self.url)
 
         self._dom = dhtmlparser.parseString(data)
         self._content_tag = None
 
-        # rating
         # comments
         # comments_n
         # created_ts
@@ -240,6 +262,7 @@ class Blogpost(object):
         self._parse_title()
         self._parse_text()
         self._parse_tags()
+        self._parse_rating()
 
     def get_full_text(self):
         raise NotImplementedError("Not implemented yet.")
