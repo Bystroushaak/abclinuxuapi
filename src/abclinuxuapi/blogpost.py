@@ -15,6 +15,7 @@ import shared
 from shared import first
 from shared import url_context
 from shared import date_to_timestamp
+from comment import Comment
 
 
 # Functions & objects =========================================================
@@ -258,7 +259,6 @@ class Blogpost(object):
             return
 
         meta_vypis_tag = first(meta_vypis_tags)
-
         has_tux_tags = meta_vypis_tag.find("img", {"class": "blog_digest"})
 
         if has_tux_tags:
@@ -298,18 +298,11 @@ class Blogpost(object):
         self._parse_tags()
         self._parse_rating()
         self._parse_meta()
-
-    def get_full_text(self):
-        raise NotImplementedError("Not implemented yet.")
-
-    def get_comments(self):
-        raise NotImplementedError("Not implemented yet.")
+        self.comments = Comment.comments_from_html(self._dom)
+        self.comments_n = len(self.comments)
 
     def edit(self):
         raise NotImplementedError("Not implemented yet.")
 
-    def get_tags(self):
-        raise NotImplementedError("Not implemented yet.")
-
-    def get_number_of_reads(self):
-        raise NotImplementedError("Not implemented yet.")
+    def get_images(self):
+        pass
