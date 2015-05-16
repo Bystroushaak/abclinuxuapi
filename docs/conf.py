@@ -10,8 +10,6 @@ sys.path.insert(0, os.path.normpath(os.path.abspath('.') + '/..'))
 extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.todo',
-    'sphinx.ext.coverage',
-    'sphinx.ext.viewcode',
     'sphinxcontrib.napoleon',
     'sphinx.ext.intersphinx'
 ]
@@ -77,4 +75,4 @@ html_static_path = ['_static']
 html_show_sourcelink = True
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'abclinuxu'
+htmlhelp_basename = 'abclinuxuapi'

@@ -1,6 +1,11 @@
 Changelog
 =========
 
+0.2.0
+-----
+    - Added a lot of features.
+    - Fixed broken setup.py.
+
 0.1.0
 -----
     - Created.

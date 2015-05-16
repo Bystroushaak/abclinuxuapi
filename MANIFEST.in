@@ -1,2 +1,4 @@
 include LICENSE.txt CONTRIBUTORS.rst CHANGELOG.rst README.rst
-recursive-include html_docs *
+recursive-include docs *
+recursive-include tests *.py
+recursive-exclude tests login __pycache__
