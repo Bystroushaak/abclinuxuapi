@@ -6,4 +6,5 @@
 #= Imports ====================================================================
 from user import User
 from blogpost import Tag
+from comment import Comment
 from blogpost import Blogpost
