@@ -11,8 +11,8 @@ from collections import namedtuple
 
 import dhtmlparser
 
-import shared
 from shared import first
+from shared import download
 from shared import url_context
 from shared import parse_timestamp
 from shared import date_to_timestamp
@@ -268,7 +268,7 @@ class Blogpost(object):
             self.readed = int(reads)
 
     def pull(self):
-        data = shared.download(url=self.url)
+        data = download(url=self.url)
 
         self._dom = dhtmlparser.parseString(data)
         self._content_tag = None
