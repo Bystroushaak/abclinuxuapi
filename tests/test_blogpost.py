@@ -4,9 +4,11 @@
 # Interpreter version: python 2.7
 #
 # Imports =====================================================================
+import os.path
 import pytest
 
 import abclinuxuapi
+from abclinuxuapi import shared
 
 
 # Fixtures ====================================================================
@@ -16,8 +18,33 @@ def bp_url():
 
 
 @pytest.fixture
+def do_that_fucking_monkey_patch(monkeypatch):
+    def mock_download(*args, **kwargs):
+        fn = os.path.join(os.path.dirname(__file__), "mock_data/blogpost.html")
+
+        with open(fn) as f:
+            return f.read()
+
+    monkeypatch.setattr(abclinuxuapi.blogpost, "download", mock_download)
+
+
+def setup_module(do_that_fucking_monkey_patch):
+    """
+    It is not possiblel to import monkeypatch from pytest. You have to use it
+    as fixture.
+    """
+
+
+BPOST = abclinuxuapi.Blogpost(bp_url(), lazy=False)
+
+@pytest.fixture
 def bpost():
-    return abclinuxuapi.Blogpost(bp_url(), lazy=False)
+    """
+    This may seem a little bit crazy, but this speeds up the testing 6x.
+
+    I don't need new object for each test.
+    """
+    return BPOST
 
 
 # Tests =======================================================================

@@ -1,0 +1,1883 @@
+
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/1998/REC-html40-19980424/strict.dtd" >
+<html lang="cs">
+<head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="Robots" content="index,follow">
+    <title>Bolest proxy</title>
+    <link rel="stylesheet" type="text/css" href="/jquery-theme/ui.all.css">
+    <link rel="stylesheet" type="text/css" href="/data/site/prettyPhoto/prettyPhoto.css">
+    <link rel="stylesheet" type="text/css" href="/styles.css">
+    <link rel="canonical" href="http://www.abclinuxu.cz/blog/bystroushaak/2015/2/bolest-proxy" >
+    <!--[if IE]>
+       <link href="/msie.css" type="text/css" rel="stylesheet">
+    <![endif]-->
+    <!--[if IE 7]>
+       <link href="/msie7.css" type="text/css" rel="stylesheet">
+    <![endif]-->
+    <!--[if lt IE 7]>
+       <link href="/msie6.css" type="text/css" rel="stylesheet">
+    <![endif]-->
+    <link rel="icon" href="/images/site2/favicon.png" type="image/png">
+        <link rel="alternate" title="RSS zdroj aktuální sekce" href="http://www.abclinuxu.cz/auto/blog/bystroushaak.rss" type="application/rss+xml">
+
+        <meta name="keywords" lang="cs" content="bezpečnost, programování, proxy, Python, ">
+
+    <script type="text/javascript" src="/data/site/jquery/jquery-1.3.2.min.js"></script>
+    <script type="text/javascript" src="/data/site/prettyPhoto/jquery.prettyPhoto.js"></script>
+    <script type="text/javascript" src="/data/site/scripts.js"></script>
+        <script type="text/javascript" src="/data/syntaxhighlighter/scripts/all.js"></script>
+    <script type="text/javascript">
+        Page = new Object();
+            Page.relationID = 400957;
+            Page.userID = 19684;
+            Page.ticket = "805cKn1vvI";
+    </script>
+</head>
+
+<body id="www-abclinuxu-cz">
+
+<!-- the advertisement position netmonitor is not active -->
+<!-- ad position 'ad-init' -->
+<!-- (C)2000-2013 Gemius SA - gemiusAudience / abclinuxu.cz / Ostatni stranky -->
+<script type="text/javascript">
+<!--//--><![CDATA[//><!--
+var pp_gemius_identifier = 'nAibwgxfLImzY0xcXtikzGaDTM3ZI5CjEvS.n4fTUsn.g7';
+// lines below shouldn't be edited
+function gemius_pending(i) { window[i] = window[i] || function() {var x = window[i+'_pdata'] = window[i+'_pdata'] || []; x[x.length]=arguments;};};
+gemius_pending('gemius_hit'); gemius_pending('gemius_event'); gemius_pending('pp_gemius_hit'); gemius_pending('pp_gemius_event');
+(function(d,t) {try {var gt=d.createElement(t),s=d.getElementsByTagName(t)[0]; gt.setAttribute('async','async'); gt.setAttribute('defer','defer');
+ gt.src='http://spir.hit.gemius.pl/xgemius.js'; s.parentNode.insertBefore(gt,s);} catch (e) {}})(document,'script');
+//--><!]]>
+</script>
+<!-- ad position 'sf-lista' -->
+<div class="sflista">
+     <div class="ri">
+        <!--<a href="http://www.stickfish.com" title="Guarantee business interface.">
+    <img src="/images/site2/sflista/sf.gif" alt="Guarantee business interface."> stickfish.com</a>-->
+     </div>
+     <div class="le">
+        <a href="http://www.abclinuxu.cz" title="Linux na stříbrném podnose."><img src="/images/site2/sflista/ab.gif" alt="abclinuxu.cz"> AbcLinuxu.cz</a>
+        <a href="http://www.itbiz.cz" title="IT business."><img src="/images/site2/sflista/ib.gif" alt="itbiz.cz"> ITBiz.cz</a>
+        <a href="http://www.hdmag.cz/" title="HDmag.cz | Vysoké rozlišení od začátku do konce. Blu-ray filmy, přehrávače, HDTV, HD audio a video, PlayStation 3..."><img src="/images/site2/sflista/hd.gif" alt="HDmag.cz"> HDmag.cz</a>
+        <a href="http://www.abcprace.cz" title="Spojujeme lidi s prací v IT!"><img src="/images/site2/sflista/pr.gif" alt="abcprace.cz"> AbcPráce.cz</a>
+     </div>
+    <div class="cistic"></div>
+</div>
+<!-- ad position 'leaderboard' -->
+<!-- Pozice: go.cz.bbelements.com AbcLinuxu.cz(14398) / Zbytek webu(2) / leaderboard dynamic(3) / leaderboard(4) -->
+<script type='text/javascript' charset='utf-8'>
+/* <![CDATA[ */
+var bbs=screen,bbn=navigator,bbh;bbh='&ubl='+1*bbn.browserLanguage+'&ucc='+1*bbn.cpuClass+'&ucd='+1*bbs.colorDepth+'&udx='+1*bbs.deviceXDPI+'&udy='+1*bbs.deviceYDPI+'&usl='+1*bbn.systemLanguage+'&uje='+1*bbn.javaEnabled()+'&uah='+1*bbs.availHeight+'&uaw='+1*bbs.availWidth+'&ubd='+1*bbs.bufferDepth+'&uhe='+1*bbs.height+'&ulx='+1*bbs.logicalXDPI+'&uly='+1*bbs.logicalYDPI+'&use='+1*bbs.fontSmoothingEnabled+'&uto='+(new Date()).getTimezoneOffset()+'&uui='+1*bbs.updateInterval+'&uul='+1*bbn.userLanguage+'&uwi='+1*bbs.width;
+if(typeof(bburlparam)=='string') { bbh+='&'+bburlparam; }
+if(typeof(bbkeywords)=='string') { bbh+='&keywords='+encodeURIComponent(bbkeywords); }
+document.write("<scr"+"ipt type='text/javascript' charset='utf-8' src='http://go.cz.bbelements.com/please/showit/14398/2/3/4/?typkodu=js"+bbh+"&bust="+Math.random()+"&target=_blank'><"+"\/scr"+"ipt>");
+/* ]]> */
+</script>
+<noscript>
+<a href="http://go.cz.bbelements.com/please/redirect/14398/2/3/4/" target="_blank"><img src="http://go.cz.bbelements.com/please/showit/14398/2/3/4/?typkodu=img" border='0' alt='' /></a>
+</noscript>
+<div id="zh-kont">
+    <div id="zh-text" class="zh-box">
+<!-- ad position 'zahl-vlevo' -->
+<div id="zh-tema">
+<!--<table border="0" cellpadding="0" cellspacing="0">
+<tr><td colspan="6">Sledujte AbcLinuxu.cz na:</td></tr>
+<tr>
+<td><img src="/images/site2/facebook-favicon.gif" alt="facebook favicon logo"></td>
+<td class="reverse_anchor">&nbsp;<a href="http://www.facebook.com/pages/AbcLinuxucz/68355234681">Facebooku</a>,&nbsp;</td>
+
+<td><img src="/images/site2/twitter-favicon.gif" alt="twitter favicon logo"></td>
+<td class="reverse_anchor">&nbsp;<a href="http://twitter.com/abclinuxu">Twitteru</a>, &nbsp;</td>
+
+<td><img src="/images/site2/identica-favicon.gif" alt="identi.ca favicon logo"></td>
+<td class="reverse_anchor">&nbsp;<a href="http://identi.ca/abclinuxu">Identi.ca</a>, &nbsp;</td>
+
+<td><img src="/images/site2/feed16.png" alt="rss logo"></td>
+<td class="reverse_anchor">&nbsp;<a href="/napoveda/rss-a-jine-pristupy">RSS</a></td>
+
+</tr>
+</table>-->
+
+
+<div style="line-height: 35px"><img src="/images/site2/sflista/ab.gif" style="vertical-align: middle">AbcLinuxu <a href="/portal/wiki/namety-na-clanky">hledá autory</a>!</div>
+
+
+</div><!-- ad position 'zahl-vpravo' -->
+<div id="zh-ad" style="line-height:35px">
+   <!--<a href="/clanky/openmagazin-3-2010"><img class="zh-iko" src="/images/clanky/redakce/openmagazin-logo-90x45.png" alt="openmagazin logo" width="90" height="45"></a>
+    <a href="/clanky/openmagazin-3-2010">openMagazin 3/2010</a>-->
+    <!--<a href="/clanky/anketa-o-distribuci-2010"><img class="zh-iko" src="/images/clanky/redakce/distribuce-roku-2010-logo-41x45.png" alt="distribuce roku 2010" width="41" height="45"></a>
+    <a href="/clanky/anketa-o-distribuci-2010"><b>Hlasujte</b> o nejoblíbenější distribuci!</a>-->
+
+<img src="/images/site2/sflista/pr.gif" alt="" style="vertical-align: middle"> <!--<a href="/blog/doli/2011/8/abclinuxu-hleda-autory">Pište</a> pro AbcLinuxu!-->
+<a href="http://www.abcprace.cz/co-nabizime/">Inzerujte</a> na AbcPráce.cz od 950&nbsp;Kč
+</div><!-- the advertisement position zahl-komplet is not active -->    </div>
+    <div id="zh-logo" class="zh-box"><a href="/"></a></div>
+    <div id="zh-hledani" class="zh-box">
+        <form action="/hledani" method="get">
+            <div>
+                <input type="text" class="text" name="dotaz">
+                <input class="button" type="submit" value="Hledej">
+            </div>
+        </form>
+        <a href="/hledani?action=toAdvanced">Rozšířené hledání</a>
+    </div>
+</div>
+<div class="cistic"></div>
+
+<div id="menu-wrap">
+<b style="font-size:0px;display:block; background:transparent;">
+ <b class="roh1"></b><b class="roh2"></b>
+</b>
+<div class="menu-kont">
+
+<ul class="menu" id="menu">
+<li><a href="/poradna">Poradna</a>
+  <ul>
+    <li><a href="/poradna/linux">Linuxová poradna</a></li>
+    <li><a href="/poradna/databaze">Databázová poradna</a></li>
+    <li><a href="/poradna/programovani">Programovací poradna</a></li>
+    <li><a href="/poradna/hardware">Hardwarová poradna</a></li>
+    <li><a href="/poradna/unix">Unixová poradna</a></li>
+  </ul></li>
+<li><a href="/faq">FAQ</a></li>
+<li><a href="/hardware">Hardware</a>
+  <ul>
+    <li><a href="/ovladace">Ovladače</a></li>
+    <li><a href="/hardware/procesory">Procesory</a></li>
+    <li><a href="/hardware/pridavne-karty">Přídavné karty</a></li>
+    <li><a href="/hardware/pripojeni-na-sit">Připojení na síť</a></li>
+    <li><a href="/hardware/prislusenstvi">Příslušenství</a></li>
+    <li><a href="/hardware/sestavy">Sestavy</a></li>
+    <li><a href="/hardware/ukladani-dat">Ukládání dat</a></li>
+    <li><a href="/hardware/vstupni-zarizeni">Vstupní zařízení</a></li>
+    <li><a href="/hardware/vystupni-zarizeni">Výstupní zařízení</a></li>
+    <li><a href="/hardware/zakladni-desky">Základní desky</a></li>
+  </ul></li>
+<li><a href="/software">Software</a>
+  <ul>
+    <li><a href="/software/alternativy">Alternativy k aplikacím</a></li>
+    <li><a href="/software/bezpecnost">Bezpečnost</a></li>
+    <li><a href="/software/grafika">Grafika</a></li>
+    <li><a href="/software/hobby">Hobby</a></li>
+    <li><a href="/software/hry">Hry</a></li>
+    <li><a href="/software/internet">Internet</a></li>
+    <li><a href="/software/kancelar">Kancelář</a></li>
+    <li><a href="/software/multimedia">Multimédia</a></li>
+    <li><a href="/software/nastroje">Nástroje</a></li>
+    <li><a href="/software/pracovni-prostredi">Pracovní prostředí</a></li>
+    <li><a href="/software/programovani">Programování</a></li>
+    <li><a href="/software/server">Server</a></li>
+    <li><a href="/software/soubory">Soubory</a></li>
+    <li><a href="/software/system">Systém</a></li>
+    <li><a href="/software/vzdelavani">Vzdělávání</a></li>
+    <li><a href="/software/veda">Věda</a></li>
+  </ul></li>
+<li><a href="/clanky">Články</a>
+  <ul>
+    <li><a href="/clanky/bezpecnost">Bezpečnost</a></li>
+    <li><a href="/clanky/hardware">Hardware</a></li>
+    <li><a href="/clanky/hry-a-zabava">Hry a zábava</a></li>
+    <li><a href="/clanky/jaderne-noviny">Jaderné noviny</a></li>
+    <li><a href="/clanky/multimedia">Multimédia</a></li>
+    <li><a href="/clanky/navody">Návody</a></li>
+    <li><a href="/clanky/novinky">Novinky</a></li>
+    <li><a href="/clanky/programovani">Programování</a></li>
+    <li><a href="/clanky/recenze">Recenze</a></li>
+    <li><a href="/clanky/rozhovory">Rozhovory</a></li>
+    <li><a href="/clanky/ruzne">Různé</a></li>
+    <li><a href="/clanky/site">Sítě</a></li>
+    <li><a href="/clanky/system">Systém</a></li>
+    <li><a href="/clanky/tipy">Tipy a triky</a></li>
+    <li><a href="/clanky/pr" style="border-width:3px">Tiskové zprávy</a></li>
+    <li><a href="/serialy">Seriály</a></li>
+  </ul></li>
+<li><a href="/ucebnice">Učebnice</a>
+  <ul>
+    <li><a href="/ucebnice/uvod">Úvod</a></li>
+    <li><a href="/ucebnice/obsah">Obsah</a></li>
+    <li><a href="/ucebnice/historie">Historie Linuxu</a></li>
+    <li><a href="/ucebnice/zaklady">Základy Linuxu</a></li>
+    <li><a href="/ucebnice/prehled-prikazu">Přehled příkazů</a></li>
+  </ul></li>
+<li><a href="/blog">Blogy</a>
+  <ul>
+    <li><a href="/blog/vyber">Výběr (linuxové)</a></li>
+    <li><a href="/blog/souhrn">Stručný souhrn</a></li>
+    <li><a href="/blogy">Seznam blogů</a></li>
+  </ul></li>
+<li>
+    <a href="/skupiny">Skupiny</a>
+    <ul>
+                    <li><a href="/portal">Portál</a></li>
+            <li><a href="/tex">TeX</a></li>
+            <li><a href="/datove-schranky">Datové schránky</a></li>
+            <li><a href="/arch-linux">Arch Linux</a></li>
+            <li><a href="/openmoko">Openmoko</a></li>
+    </ul>
+</li>
+<li><a href="/desktopy">Desktopy</a></li>
+<li><a href="/hry">Hry</a></li>
+<li><a href="/slovnik">Slovník</a></li>
+<li><a href="/kdo-je">Kdo je</a></li>
+<li><a href="/bazar">Bazar</a></li>
+<li><a href="/">Portál</a>
+  <ul>
+    <li><a href="/nej">Žebříčky a statistiky</a></li>
+    <li><a href="/clanky/novinky/pojdte-psat-pro-abclinuxu.cz">Jak se stát autorem</a></li>
+    <li><a href="/redakce">Redakce</a></li>
+    <li><a href="/portal/propagace">Propagace</a></li>
+    <li><a href="/reklama">Inzerce</a></li>
+    <li><a href="/napoveda/rss-a-jine-pristupy">RSS feedy a PDA</a></li>
+    <li><a href="http://bugzilla.abclinuxu.cz"  title="Požadavky týkající se funkčnosti portálu" rel="nofollow">Bugzilla - chyby a náměty</a></li>
+    <li><a href="/pozadavky" title="Požadavky týkající se obsahu portálu">Vzkazy správcům (62)</a></li>
+    <li><a href="/vyvoj">Zdrojové kódy</a></li>
+    <li><a href="javascript:addSidebar();">Přidej sidebar</a></li>
+    <li><a href="javascript:addBookmark();">Přidej mezi oblíbené</a></li>
+    <li><a href="javascript:setHomepage();">Nastav jako domácí stránku</a></li>
+  </ul></li>
+<li><a href="http://www.abcprace.cz">Práce</a></li>
+<li><a href="/napoveda/mapa-serveru" title="Mapa stránek a dalších služeb">Mapa</a></li>
+</ul>
+
+</div>
+</div>
+<!--[if IE]><br style="font-size:0"><![endif]-->
+
+<div class="obal">
+
+    <div class="hl">
+        <div class="hl_vpravo">
+                <a href="/lide/bystroushaak">Bystroushaak</a> |
+                <a href="/blog/bystroushaak">Blog</a> |
+                <a href="/History?type=comments&amp;uid=19684">Mé komentáře</a> |
+                <a href="/History?type=discussions&amp;uid=19684&amp;filter=last">Navštívené diskuse</a> |
+                <a href="/History?type=questions&amp;uid=19684">Mé dotazy</a> |
+                <a href="/lide/bystroushaak/zalozky">Záložky</a> |
+                <a href="/Profile/19684?action=myPage">Nastavení</a> |
+                <a href="/Index?logout=true">Odhlásit</a>
+        </div>
+        <div class="hl_vlevo">
+            <ul class="menu-top">
+                <li>
+                    <a href="/doc/napoveda/alternativni-design">Styl</a>
+                    <ul class="menu-drop">
+                        <li>
+                            <a href="/EditUser/19684?action=changeStyle&amp;ticket=805cKn1vvI&amp;css=">Standardní světlý</a>
+                        </li>
+                        <li>
+                            <a href="/EditUser/19684?action=changeStyle&amp;ticket=805cKn1vvI&amp;css=/styles-dark.css">Oficiální tmavý</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div id="ls_prepinac" title="Skrýt sloupec" onclick="prepni_sloupec()">&#215;</div>
+
+    <div class="obal_ls" id="ls">
+        <div class="s">
+<!-- ad position 'vip' -->
+<!-- BBelements AdServer one2many Pozice: go.cz.bbelements.com AbcLinuxu.cz(14398) / Zbytek webu(2) / VIP square dynamický(1) / square(2)-->
+<!-- HowTo: Place this code into the html page there the ad should appear. -->
+<div id='bmone2n-14398.2.1.2'>
+<noscript><div style='display:inline'><a href='http://go.cz.bbelements.com/please/redirect/14398/2/1/2/'><img src='http://go.cz.bbelements.com/please/showit/14398/2/1/2/?typkodu=img' width='0' height='0' style='border-width:0' alt='' /></a></div></noscript>
+</div><!-- the advertisement position vip-text is not active --><!-- ad position 'itbiz' -->
+<div class="s_nadpis noext">
+   <a class="s_nadpis-pravy-odkaz" href="http://www.itbiz.cz"><img src="/images/site2/itbiz-minilogo.png" alt="itbiz logo" style="margin-top:0.2em"></a>
+   <a href="http://www.itbiz.cz">Píšeme jinde</a>
+</div>
+<div class="s_sekce">
+<ul class="noext">
+<li><a href="http://www.itbiz.cz/zpravicky/zisk-vyrobce-pocitacu-hewlett-packard-klesl-prekonal-vsak-odhady">Zisk výrobce počítačů Hewlett-Packard klesl, překonal však odhady</a></li>
+<li><a href="http://www.itbiz.cz/zpravicky/o-mapy-here-maji-zajem-tri-skupiny-firem">O mapy Here mají zájem tři skupiny firem</a></li>
+<li><a href="http://www.itbiz.cz/zpravicky/v-registru-by-mohly-byt-i-objednavky-a-smlouvy-firem-s-dotacemi">V registru by mohly být i objednávky a smlouvy firem s dotacemi</a></li>
+<li><a href="http://www.itbiz.cz/zpravicky/v-zemedelstvi-letos-stat-chysta-velke-tendry-za-5-4-miliardy-kc">V zemědělství letos stát chystá velké tendry za 5,4 miliardy Kč</a></li>
+<li><a href="http://www.itbiz.cz/zpravicky/pocet-domen-cz-prekonal-hranici-1-2-milionu">Počet domén .cz překonal hranici 1,2 milionu</a></li>
+</ul>
+</div>
+            <!-- ZPRÁVIČKY -->
+            <div class="s_nadpis">
+                <a class="s_nadpis-pravy-odkaz" href="/zpravicky/edit?action=add">napište &raquo;</a>
+                <a href="/zpravicky" title="zprávičky">Zprávičky</a>
+            </div>
+
+<!-- ad position 'hypertext1' -->
+<!-- BBelements AdServer one2many Pozice: go.cz.bbelements.com AbcLinuxu.cz(14398) / Zbytek webu(2) / hypertext(4) / Uživatelem definovaný rozměr 250x40(64)-->
+<!-- HowTo: Place this code into the html page there the ad should appear. -->
+<div style="margin-left: 10px"><div id='bmone2n-14398.2.4.64'></div></div>
+
+<!-- BBelements one2many Pozice: AbcLinuxu.cz(14398) / Zbytek webu(2) / textbox(5) / Uživatelem definovaný rozměr 250x250(64) -->
+<!-- HowTo: Place this code into the html page there the ad should appear. -->
+<div id='bmone2n-14398.2.5.64'>
+<noscript><div style='display:inline'><a href='http://go.cz.bbelements.com/please/redirect/14398/2/5/64/'><img src='http://go.cz.bbelements.com/please/showit/14398/2/5/64/?typkodu=img' width='250' height='250' style='border-width:0' alt='' /></a></div></noscript>
+</div>
+            <div class="s_sekce">
+                <div class="ls_zpr">
+
+        <div class="st_nadpis no_overflow">
+            <a href="/zpravicky/lemon-pi" title="Lemon Pi">Lemon Pi</a>
+        </div>
+    <span>včera 20:20 | IT novinky</span>
+        <div class="zpr_telo">Společnost Embedstudio spustila na Indiegogo <a href="https://www.indiegogo.com/projects/lemon-pi-35-arm-quad-core-a9-open-source-board#/story">kampaň</a> na podporu svého jednodeskového počítače (<a href="http://en.wikipedia.org/wiki/Single-board_computer">SBC</a>) Lemon Pi v ceně 35 dolarů. Které ovoce bude následovat po <a href="https://www.raspberrypi.org/">Raspberry</a>, <a href="http://www.bananapi.org/p/product.html">Banana</a>, <a href="http://www.orangepi.org/">Orange</a> a <a href="http://www.embedstudio.com/">Lemon</a>?</div>
+    <span><a href="/lide/ladislav.hagara">Ladislav Hagara</a>
+    | <a href="/zpravicky/lemon-pi" title="poslední&nbsp;dnes 16:57">Komentářů:&nbsp;30</a></span>
+                    <hr>
+<!-- the advertisement position sl-box1 is not active -->
+        <div class="st_nadpis no_overflow">
+            <a href="/zpravicky/neo900-lze-predobjednat" title="Neo900 lze předobjednat">Neo900 lze předobjednat</a>
+        </div>
+    <span>včera 10:40 | Zajímavý projekt</span>
+        <div class="zpr_telo">Telefon <a href="http://neo900.org/">Neo900</a>, nástupce linuxového telefonu Nokia N900, lze nyní <a href="https://my.neo900.org/">předobjednat</a>. Podrobnosti v často kladených otázkách (<a href="http://neo900.org/faq">FAQ</a>). [<a href="http://hardware.slashdot.org/story/15/05/21/1455230/pre-orders-start-for-neo900-open-source-phone">Slashdot</a>]</div>
+    <span><a href="/lide/ladislav.hagara">Ladislav Hagara</a>
+    | <a href="/zpravicky/neo900-lze-predobjednat" title="poslední&nbsp;dnes 16:28">Komentářů:&nbsp;13</a><span title="V diskusi jsou nové komentáře" class="new_comment_mark">*</span></span>
+                    <hr>
+<!-- the advertisement position sl-box2 is not active -->
+        <div class="st_nadpis no_overflow">
+            <a href="/zpravicky/systemd-220" title="systemd 220">systemd 220</a>
+        </div>
+    <span>včera 09:39 | Nová verze</span>
+        <div class="zpr_telo">Lennart Poettering <a href="http://lists.freedesktop.org/archives/systemd-devel/2015-May/032147.html">oznámil</a> vydání verze 220 správce systému a služeb <a href="/slovnik/systemd">systemd</a>. Verze 220 vyšla po třech měsících vývoje od vydání verze 219 (<a href="/zpravicky/systemd-219">zprávička</a>) a opět přináší řadu nových vlastností a vylepšení. Knihovna <a href="https://wiki.gnome.org/Projects/libgudev">gudev</a> byla od systemd oddělena a stala se součástí projektu GNOME. UEFI boot manager gummiboot byl naopak do systemd začleněn (<a href="/zpravicky/gummiboot-bude-zaclenen-do-systemd">zprávička</a>) a přejmenován na systemd-boot. Odstraněn byl systemd-shutdownd, v systemd-importd přibyla podpora gpg2, systemd-networkd umí nově tunely vti6, ...</div>
+    <span><a href="/lide/ladislav.hagara">Ladislav Hagara</a>
+    | <a href="/zpravicky/systemd-220" title="poslední&nbsp;dnes 18:14">Komentářů:&nbsp;59</a></span>
+                    <hr>
+<!-- ad position 'sl-mini' -->
+<!-- BBelements one2many Pozice: AbcLinuxu.cz(14398) / Zbytek webu(2) / textbox-spodni(7) / Uživatelem definovaný rozměr 250x250(64) -->
+<!-- HowTo: Place this code into the html page there the ad should appear. -->
+<div id='bmone2n-14398.2.7.64'>
+<noscript><div style='display:inline'><a href='http://go.cz.bbelements.com/please/redirect/14398/2/7/64/'><img src='http://go.cz.bbelements.com/please/showit/14398/2/7/64/?typkodu=img' width='250' height='250' style='border-width:0' alt='' /></a></div></noscript>
+</div>
+
+<div id="jobs" class="noext">
+    <div class="jobs-ad-box">
+        <div class="jobs-ad-header"><a href="http://www.jobs.cz/" class="jobs-ad-title" title="Jobs.cz - aktuální nabídka práce nejen v informačních technologiích">Práce v IT</a>
+        <a href="http://www.jobs.cz/" class="jobs-ad-logo" title="Jobs.cz - aktuální nabídka práce"></a>
+        <div class="jobs-ad-cb"></div>
+    </div>
+        <div id="jobs-in">
+            <ul id="jobs-lst">
+    <li><a href="http://www.jobs.cz/pd/981551190/?rps=74?fc=a-jobs&amp;fg=a-produkt&amp;fs=abclinuxu.cz&amp;fm=aliance&amp;ff=box&amp;fi=stickfish&amp;fb=it" rel="nofollow">technik specialista – sítě a bezpečnost</a></li>
+    <li><a href="http://www.jobs.cz/pd/954864602/?rps=74?fc=a-jobs&amp;fg=a-produkt&amp;fs=abclinuxu.cz&amp;fm=aliance&amp;ff=box&amp;fi=stickfish&amp;fb=it" rel="nofollow">SalesForce Developer (00288662)</a></li>
+    <li><a href="http://www.jobs.cz/pd/981936415/?rps=74?fc=a-jobs&amp;fg=a-produkt&amp;fs=abclinuxu.cz&amp;fm=aliance&amp;ff=box&amp;fi=stickfish&amp;fb=it" rel="nofollow">Migration content to Wordpress</a></li>
+    <li><a href="http://www.jobs.cz/pd/55407565/?rps=74?fc=a-jobs&amp;fg=a-produkt&amp;fs=abclinuxu.cz&amp;fm=aliance&amp;ff=box&amp;fi=stickfish&amp;fb=it" rel="nofollow">Inženýra vývoj SW (m/ž)- C, C++ nové projekty</a></li>
+    <li><a href="http://www.jobs.cz/pd/145904230/?rps=74?fc=a-jobs&amp;fg=a-produkt&amp;fs=abclinuxu.cz&amp;fm=aliance&amp;ff=box&amp;fi=stickfish&amp;fb=it" rel="nofollow">Inženýra pro testování SW (m/ž) - 2015</a></li>
+    <li><a href="http://www.jobs.cz/pd/968664623/?rps=74?fc=a-jobs&amp;fg=a-produkt&amp;fs=abclinuxu.cz&amp;fm=aliance&amp;ff=box&amp;fi=stickfish&amp;fb=it" rel="nofollow">CPE ENGINEER (DATA)</a></li>
+            </ul>
+            <a class="jobs-ad-more" href="http://it.jobs.cz" title="Zobrazit další nabídky práce na serveru Jobs.cz nejen z IT">více nabídek práce &raquo;</a>
+            <div class="jobs-ad-cb"></div>
+        </div>
+    </div>
+<div class="jobs-bottom"><span>Tip:</span> <a href="http://www.jobs.cz/kurzy-a-skoleni/" title="Kurzy, školení, rekvalifikace, semináře - nová sekce vzdělávání na Jobs.cz">Školení, kurzy, semináře a rekvalifikace &raquo;</a></div>
+</div>
+<div style="height: 15px"></div>
+        <div class="st_nadpis no_overflow">
+            <a href="/zpravicky/falesna-verze-putty" title="Falešná verze PuTTY">Falešná verze PuTTY</a>
+        </div>
+    <span>21.5. 21:21 | Bezpečnostní upozornění</span>
+        <div class="zpr_telo">Symantec v <a href="http://www.symantec.com/connect/blogs/check-your-sources-trojanized-open-source-ssh-software-used-steal-information">příspěvku</a> na svém <a href="http://www.symantec.com/connect/symantec-blogs/security-response">blogu</a> věnovaném počítačové bezpečnosti upozorňuje na falešnou verzi populárního telnet a ssh klienta <a href="/software/nastroje/putty">PuTTY</a>, jež předává informace o úspěšném spojení (SSH URI) útočníkovi.</div>
+    <span><a href="/lide/ladislav.hagara">Ladislav Hagara</a>
+    | <a href="/zpravicky/falesna-verze-putty" title="poslední&nbsp;dnes 17:54">Komentářů:&nbsp;22</a><span title="V diskusi jsou nové komentáře" class="new_comment_mark">*</span></span>
+                    <hr>
+<!-- ad position 'skyscraper' -->
+<!-- iBILLBOARD Ad Server one2many Pozice: go.cz.bbelements.com AbcLinuxu.cz(14398) / Zbytek webu(2) / skyscraper(4) / 468x60(1)-->
+<!-- HowTo: Place this code into the html page where the ad should appear. -->
+<div id='bmone2n-14398.2.4.1'>
+<noscript><div style='display:inline'><a href='http://go.cz.bbelements.com/please/redirect/14398/2/4/1/'><img src='http://go.cz.bbelements.com/please/showit/14398/2/4/1/?typkodu=img' width='0' height='0' style='border-width:1' alt='' /></a></div></noscript>
+</div><!-- the advertisement position double-sky is not active -->
+        <div class="st_nadpis no_overflow">
+            <a href="/zpravicky/linux-voice-issue-6-september-2014" title="Linux Voice / Issue 6 / September 2014">Linux Voice / Issue 6 / September 2014</a>
+        </div>
+    <span>21.5. 21:21 | Zajímavý článek</span>
+        <div class="zpr_telo"><a href="http://www.linuxvoice.com/download-linux-voice-issue-6/">Bylo uvolněno</a> šesté číslo časopisu <a href="http://www.linuxvoice.com/">Linux Voice</a> z loňského září. K dispozici je jak jedno velké <a href="http://www.linuxvoice.com/issues/006/Linux-Voice-Issue-006.pdf">PDF</a> o 116 stranách (71 MB), tak PDF jednotlivých článků a ePub ve <a href="http://www.linuxvoice.com/issues/006/Linux-Voice-Issue-006.epub">vysokém</a> i <a href="http://www.linuxvoice.com/issues/006/Linux-Voice-Issue-006-small.epub">nízkém</a> rozlišení.</div>
+    <span><a href="/lide/ladislav.hagara">Ladislav Hagara</a>
+    | <a href="/zpravicky/linux-voice-issue-6-september-2014" title="">Komentářů:&nbsp;0</a></span>
+                    <hr>
+
+        <div class="st_nadpis no_overflow">
+            <a href="/zpravicky/logjam-nova-zranitelnost-tls" title="Logjam, nová zranitelnost TLS">Logjam, nová zranitelnost TLS</a>
+        </div>
+    <span>21.5. 00:29 | Bezpečnostní upozornění</span>
+        <div class="zpr_telo">Zranitelnost <a href="http://www.securityweek.com/logjam-tls-vulnerability-exposes-websites-mail-servers-researchers">pojmenovaná</a> <a href="https://weakdh.org/">Logjam</a> se týká protokolu Transport Layer Security (TLS) a může být zneužita v pozici Man-In-the-Middle (MitM) k downgradu na 512-bit klíč. Útočník může využít chybu ke čtení šifrovaných dat, případně k manipulaci s těmito daty. GnuTLS je v <a href="http://article.gmane.org/gmane.comp.encryption.gpg.gnutls.devel/8157">pořádku</a>. [<a href="https://csirt.cz/page/2844/">CSIRT.CZ</a>]</div>
+    <span><a href="/lide/ladislav.hagara">Ladislav Hagara</a>
+    | <a href="/zpravicky/logjam-nova-zranitelnost-tls" title="poslední&nbsp;včera 15:43">Komentářů:&nbsp;32</a></span>
+                    <hr>
+
+        <div class="st_nadpis no_overflow">
+            <a href="/zpravicky/qt-slavi-20-let" title="Qt slaví 20 let">Qt slaví 20 let</a>
+        </div>
+    <span>20.5. 23:59 | Komunita</span>
+        <div class="zpr_telo">Multiplatformní framework <a href="/software/programovani/knihovny/qt">Qt</a> <a href="https://dot.kde.org/2015/05/20/qt-20-years-leading-cross-platform-development">slaví 20 let</a>. Dvacátého května 1995 byla první verze Qt, verze 0.90, nahrána na sunsite.unc.edu. O 6 dní později to bylo <a href="http://diswww.mit.edu/bloom-picayune.mit.edu/linuxch-announce/598">oznámeno</a> v diskusní skupině comp.os.linux.announce.</div>
+    <span><a href="/lide/ladislav.hagara">Ladislav Hagara</a>
+    | <a href="/zpravicky/qt-slavi-20-let" title="poslední&nbsp;včera 14:19">Komentářů:&nbsp;2</a></span>
+                    <hr>
+
+        <div class="st_nadpis no_overflow">
+            <a href="/zpravicky/konference-it-15-bude-uz-pristi-tyden" title="Konference IT 15 bude už příští týden">Konference IT 15 bude už příští týden</a>
+        </div>
+    <span>20.5. 14:19 | Pozvánky</span>
+        <div class="zpr_telo">Příští čtvrtek se v Národní technické knihovně v pražských Dejvicích uskuteční již 10. konference <a href="https://www.nic.cz/it15/">Internet a Technologie</a> (IT 15). I letos bude největší pozornost věnována bezpečnostním tématům, která odprezentují zástupci NIX.CZ, CSIRT.CZ nebo ACTIVE 24. Dále budou na programu přednáška předsedy Rady ČTÚ nebo prezentace o aktualitách v projektu Turris. 
+&hellip;&nbsp;<i><a href="/zpravicky/konference-it-15-bude-uz-pristi-tyden">více&nbsp;&raquo;</a></i></div>
+    <span><a href="/lide/vilems">Vilem Sladek</a>
+    | <a href="/zpravicky/konference-it-15-bude-uz-pristi-tyden" title="poslední&nbsp;20.5. 15:15">Komentářů:&nbsp;1</a></span>
+                    <hr>
+<!-- the advertisement position sl-dole is not active -->
+        <div class="st_nadpis no_overflow">
+            <a href="/zpravicky/google-chrome-43" title="Google Chrome 43">Google Chrome 43</a>
+        </div>
+    <span>20.5. 13:35 | Nová verze</span>
+        <div class="zpr_telo">Google Chrome 43 byl <a href="http://googlechromereleases.blogspot.cz/2015/05/stable-channel-update_19.html">prohlášen za stabilní</a>. Nejnovější stabilní verze  43.0.2357.65 přináší například <a href="http://blog.chromium.org/2015/04/chrome-43-beta-web-midi-and-upgrading.html">podporu</a> <a href="http://webaudio.github.io/web-midi-api/">Web MIDI API</a> nebo lepší podporu displejů s vysokým rozlišením (HiDPI) na Linuxu. Opraveno bylo 37 bezpečnostních chyb. Za nalezení nejvážnějších z nich bylo vyplaceno dohromady 38337 dolarů. Řada chyb byla odhalena pomocí nástrojů <a href="http://code.google.com/p/address-sanitizer/wiki/AddressSanitizer">AddressSanitizer</a> a <a href="https://code.google.com/p/memory-sanitizer/wiki/MemorySanitizer">MemorySanitizer</a>.</div>
+    <span><a href="/lide/ladislav.hagara">Ladislav Hagara</a>
+    | <a href="/zpravicky/google-chrome-43" title="">Komentářů:&nbsp;0</a></span>
+                    <hr>
+
+        <div class="st_nadpis no_overflow">
+            <a href="/zpravicky/meizu-mx4-s-ubuntu" title="Meizu MX4 s Ubuntu">Meizu MX4 s Ubuntu</a>
+        </div>
+    <span>19.5. 07:09 | IT novinky</span>
+        <div class="zpr_telo">Společnost Canonical <a href="https://insights.ubuntu.com/2015/05/17/meizu-launches-the-ubuntu-mx4-for-developers-in-china/">oznámila</a>, že se v Číně začal prodávat mobilní telefon Meizu MX4 s Ubuntu. Prodej telefonu je plánován také v Evropě. Prvním telefonem s Ubuntu na evropském trhu byl BQ Aquaris E4.5 Ubuntu Edition (<a href="/zpravicky/bq-aquaris-e4.5-ubuntu-edition-prvni-telefon-s-ubuntu-v-evrope">zprávička</a>).</div>
+    <span><a href="/lide/ladislav.hagara">Ladislav Hagara</a>
+    | <a href="/zpravicky/meizu-mx4-s-ubuntu" title="poslední&nbsp;dnes 15:49">Komentářů:&nbsp;21</a></span>
+                    <hr>
+                </div>
+                <div class="s_odkaz">
+                    <a href="/zpravicky">Centrum</a> |
+                    <a href="/zpravicky/edit?action=add" rel="nofollow">Napsat</a> |
+                    <a href="/History?type=news&amp;from=10&amp;count=15">Starší</a>
+                </div>
+            </div>
+
+            <!-- ANKETA -->
+
+                <div class="s_nadpis">
+                   <a class="s_nadpis-pravy-odkaz" href="/pozadavky?categoryPosition=0">navrhněte&nbsp;&raquo;</a>
+                   <a href="/ankety">Anketa</a>
+                </div>
+                <div class="s_sekce">
+                    <form action="/EditPoll/403522" method="POST">
+                     <div class="ank-otazka">Nešifrované HTTP</div>
+                        <div class="ank-odpov">
+                          <label><input type="radio" name="voteId" value="0">by mělo zmizet</label>&nbsp;(<span title="108">6%</span>)<br>
+                          <div class="ank-sloup-okraj" style="width: 6px">
+                            <div class="ank-sloup"></div>
+                          </div>
+                        </div>
+                        <div class="ank-odpov">
+                          <label><input type="radio" name="voteId" value="1">je postačující, dokud nejsou přenášena důvěrná data</label>&nbsp;(<span title="1835">94%</span>)<br>
+                          <div class="ank-sloup-okraj" style="width: 94px">
+                            <div class="ank-sloup"></div>
+                          </div>
+                        </div>
+                     <div>
+                      <input name="submit" type="submit" class="button" value="Hlasuj" alt="Hlasuj">
+                        Celkem 1943 hlasů
+                      <input type="hidden" name="url" value="/ankety/nesifrovane-http">
+                      <input type="hidden" name="action" value="vote">
+                     </div>
+                    </form>
+                </div>
+                <div>&nbsp;<a href="/ankety/nesifrovane-http">Komentářů: 54</a>, poslední včera 16:58
+<!-- the advertisement position anketa is not active -->                </div>
+
+<!-- the advertisement position sl-jobscz is not active --><!-- ad position 'sl-abcprace' -->
+<!-- abcprace.cz -->
+<div class="s_nadpis noext">
+   <a href="http://www.abcprace.cz/co-nabizime/" class="s_nadpis-pravy-odkaz">inzerujte »</a>
+   <a href="http://www.abcprace.cz" title="Spojujeme lidi s prací v IT.">Pracovní nabídky</a>
+</div>
+
+<div class="s_sekce noext">
+   <ul><li><a href="http://www.abcprace.cz/ck-topinka/vek-16-pomocny-uklid-8000-kc-mesic-strava-ubytovani-2">Věk 16+ Pomocný úklid 8000 Kč/měsíc, strava, ubytování</a></li>
+</ul></div>
+
+<!-- ad position 'sl-doporucujeme' -->
+<div class="s_nadpis">Reklama</div>
+<div class="s_sekce noext">
+  <ul>
+    <li><a href="http://www.hosting90.cz">Hosting 90</a></li>
+    <li><a href="http://www.linux.cz" rel="nofollow">linux.cz</a></li>
+    
+    <!--<li><a rel="nofollow" href="http://www.diit.cz">Deep in IT</a></li>
+    <li><a href="http://www.svethardware.cz"  title="Informační technologie, počítače, hardware, recenze, testy, zpravodajství, diskuzní fórum">Svethardware.cz</a></li>
+    <li><a href="http://www.tvfreak.cz"  title="Spotřební elektronika, televizní vysílání, video, recenze, testy, zpravodajství, diskuzní fórum">TVFreak.cz</a></li>-->
+  </ul>
+</div>
+
+<div style="position: absolute; visibility: hidden">
+    <a href="http://www.autonavody.cz/autoskola-testy-online">Autoškola testy online</a>
+    <a href="http://www.autonavody.cz/levny-benzin">Levný benzín</a>
+    </div>
+
+<div style="width:250px; margin: 0.5em auto;" class="noext">
+    <script src="http://www.argonit.cz/tmp/64bit.js"></script>
+</div>
+<!-- the advertisement position sl-placene-odkazy is not active -->
+        </div> <!-- s -->
+    </div> <!-- obal_ls -->
+
+        <div class="obal_ps">
+            <div class="ps"><div class="s">
+               
+<!-- the advertisement position hypertext2nahore is not active -->
+    <div class="s_nadpis">
+<a href="/lide/bystroushaak">Bystroushaak</a>         - <a href="/blog/bystroushaak">Bystroushaakův blog</a>
+    </div>
+    <div class="s_sekce">
+        <p>Do tohoto blogu se snažím psát jen věci, které ostatním něco dají.</p>
+
+<p>Pokud se vám líbilo něco z mé produkce, můžete svou přízeň vyjádřit v kryptoměnách:</p>
+
+<ul>
+ <li>BTC: <code>13CS7yKTcqPQUH2hrcuFsqf1AKr4gThZTD</code></li>
+ <li><a href="/blog/bystroushaak/2013/12/11/385574">DOGe</a>: <code>DBkgb9xiaeQ5FKaULaxQwMr1LbLQE7HxWy</code></li>
+</ul>
+
+<p>Ne že bych je nějak potřeboval, ale patří to k věcem, které autory obecně potěší a jasně ukazují, že jsou lidi, kteří ty hodiny času stráveného psaním umí ocenit.</p>
+
+<hr>
+
+<p>Od určité doby jsou všechny texty které zde publikuji <a href="https://github.com/Bystroushaak/clanky">verzované na Githubu</a>. Pokud najdete chybu, kterou by jste chtěli opravit, nepište mi to do diskuze, ale pošlete pull request. Github má online editor, není to skoro žádná práce a podstatně mi tím usnadníte život :)</p>
+    </div>
+
+
+
+
+        <div class="s_nadpis">Správa zápisku</div>
+        <div class="s_sekce">
+            <ul>
+                        <li><a href="/blog/edit/400957?action=toggleDigest&amp;ticket=805cKn1vvI">Odstranit z digestu</a></li>
+                    <li><a href="/blog/edit/400957?action=toggleBlogBan&amp;ticket=805cKn1vvI">Nevhodný pro HP</a></li>
+                    <hr />
+                    <li><a href="/blog/edit/400957?action=edit">Uprav zápis</a></li>
+                    <li><a href="/blog/edit/400957?action=remove">Smaž zápis</a></li>
+                    <li><a href="/blog/inset/400957?action=addScreenshot">Přidej obrázek</a></li>
+                    <li><a href="/videa/edit/400957?action=add&amp;redirect=/blog/bystroushaak/2015/2/bolest-proxy">Přidej video</a></li>
+                    <li><a href="/EditPoll?action=add&amp;rid=400957">Vlož anketu</a></li>
+                    <li><a href="/blog/inset/400957?action=manage">Správa příloh</a></li>
+            </ul>
+        </div>
+
+            <div class="s_nadpis">Správa blogu</div>
+            <div class="s_sekce">
+                <ul>
+                    <li><a href="/blog/edit/302556?action=add">Vlož nový zápis</a></li>
+                    <li><a href="/blog/edit/302556?action=custom">Nastavit blog</a></li>
+                    <li><a href="/blog/edit/302556?action=rename">Přejmenovat blog</a></li>
+                    <li><a href="/blog/edit/302556?action=categories">Správa kategorií</a></li>
+                    <li><a href="/blog/edit/302556?action=links">Upravit odkazy</a></li>
+                    <li><a href="/blog/bystroushaak/export">Export do Movable Type</a></li>
+                </ul>
+            </div>
+
+    <div class="s_nadpis">Aktuální zápisy</div>
+    <div class="s_sekce">
+        <ul>
+            <li><a href="/blog/bystroushaak/2015/5/andreas-eschbach">Andreas Eschbach</a></li>
+            <li><a href="/blog/bystroushaak/2015/5/passages-from-the-life-of-a-philosopher">Passages from the Life of a Philosopher</a></li>
+            <li><a href="/blog/bystroushaak/2015/3/strach-z-konkurence">Strach z konkurence</a></li>
+            <li><a href="/blog/bystroushaak/2015/2/recenze-untrusted">Recenze: Untrusted</a></li>
+            <li><a href="/blog/bystroushaak/2015/2/bolest-proxy">Bolest proxy</a></li>
+        </ul>
+    </div>
+
+    <div class="s_nadpis">
+            <a class="info" href="#">?<span class="tooltip">Přístup k archivovaným zápisům za jednotlivé měsíce.</span></a>
+            <a href="/blog/bystroushaak/archiv">Archív</a>
+    </div>
+    <div class="s_sekce">
+        <ul>
+            <li><a href="/blog/bystroushaak/2015/5/">květen 2015 (2)</a></li>
+            <li><a href="/blog/bystroushaak/2015/3/">březen 2015 (1)</a></li>
+            <li><a href="/blog/bystroushaak/2015/2/">únor 2015 (2)</a></li>
+            <li><a href="/blog/bystroushaak/2015/1/">leden 2015 (1)</a></li>
+            <li><a href="/blog/bystroushaak/2014/9/">září 2014 (1)</a></li>
+            <li><a href="/blog/bystroushaak/2014/8/">srpen 2014 (1)</a></li>
+        </ul>
+    </div>
+
+<!-- ad position 'square' -->
+<!-- BBelements AdServer one2many Pozice: go.cz.bbelements.com AbcLinuxu.cz(14398) / Zbytek webu(2) / square dynamic(14) / square(2)-->
+<!-- HowTo: Place this code into the html page there the ad should appear. -->
+<div id='bmone2n-14398.2.14.2'>
+<noscript><div style='display:inline'><a href='http://go.cz.bbelements.com/please/redirect/14398/2/14/2/'><img src='http://go.cz.bbelements.com/please/showit/14398/2/14/2/?typkodu=img' width='0' height='0' style='border-width:0' alt='' /></a></div></noscript>
+</div>
+
+        <div class="s_nadpis">
+            <a class="info" href="#">?<span class="tooltip">Poslední screenshot mého desktopu.</span></a>
+            Současný desktop
+        </div>
+        <div class="s_sekce" align="center">
+            <a href="/desktopy/bystroushaak-20140223" title="Macbook" class="thumb">
+                <img src="/images/screenshots/9/2/203929-macbook-listing-1412939213675169072.png" alt="Macbook" border="0">
+            </a>
+        </div>
+
+    <div class="s_nadpis">
+        <a class="info" href="#">?<span class="tooltip">Přístup na osobní hlavní stranu a na hlavní stranu všech blogů.</span></a>
+        Navigace
+    </div>
+    <div class="s_sekce">
+        <ul>
+                <li><a href="/blog/bystroushaak">Bystroushaakův blog, hlavní strana</a></li>
+            <li><a href="/blog/bystroushaak/souhrn">Bystroushaakův blog, stručný souhrn</a></li>
+            <li><a href="/auto/blog/bystroushaak.rss">RSS kanál</a></li>
+            <li><a href="/blog">Všechny blogy</a></li>
+            <li><a href="/blog/souhrn">Všechny blogy, stručný souhrn</a></li>
+        </ul>
+    </div>
+
+    <div class="s_nadpis"><a href="/nej">Nej blogů na AbcLinuxu</a></div>
+    <div class="s_sekce">
+            <b>Nejčtenější za poslední měsíc</b>
+            <ul>
+                    <li><a href="/blog/nejen_o_linuxu/2015/5/proc-nepouzivat-facebook-2">Proč nepoužívat Facebook</a></li>
+                    <li><a href="/blog/andreeeeelog/2015/4/vyber-notebooku">Výber notebooku</a></li>
+                    <li><a href="/blog/Supi_hnizdo/2015/5/k-cemu-je-nvidia-optimus-nehracovi">K čemu je Nvidia Optimus nehráčovi?</a></li>
+            </ul>
+
+            <b>Nejkomentovanější za poslední měsíc</b>
+            <ul>
+                    <li><a href="/blog/andreeeeelog/2015/4/vyber-notebooku">Výber notebooku</a></li>
+                    <li><a href="/blog/nejen_o_linuxu/2015/5/proc-nepouzivat-facebook-2">Proč nepoužívat Facebook</a></li>
+                    <li><a href="/blog/bystroushaak/2015/5/passages-from-the-life-of-a-philosopher">Passages from the Life of a Philosopher</a></li>
+            </ul>
+    </div>
+
+<!-- the advertisement position hypertext2dole is not active -->
+
+            </div></div> <!-- ps, s -->
+        </div> <!-- obal_ps -->
+
+    <div class="st" id="st">
+        <a name="obsah"></a>
+
+<!-- the advertisement position obsah-box-uzky is not active -->
+            <div class="pwd-box">
+                <div class="do-zalozek">
+                        <a href="/auto/blog/bystroushaak.rss"><img src="/images/site2/feed16.png" width="16" height="16" border="0"></a>
+                        <form action="/EditBookmarks/19684" style="display: inline">
+                            <input type="submit" class="button" value="do záložek">
+                            <input type="hidden" name="action" value="add">
+                            <input type="hidden" name="rid" value="400957">
+                            <input type="hidden" name="prefix" value="/blog">
+                            <input type="hidden" name="ticket" value="805cKn1vvI">
+                        </form>
+                </div>
+                <div class="pwd">
+                    <a href="/">AbcLinuxu</a>:/
+                        <a href="/blog">Blogy</a>
+                         / 
+                        <a href="/blog/bystroushaak">Bystroushaakův blog</a>
+                         / 
+                        <a href="/blog/bystroushaak/2015/2/bolest-proxy">Bolest proxy</a>
+                        
+                </div>
+            </div>
+
+<!-- error: no variant available for position 'stitky', code 'null' -->
+                <div class="tag-box">
+                    <a href="/stitky">Štítky</a>:
+                    <span id="prirazeneStitky">
+                                <a href="/stitky/bezpecnost" title="Zobrazit objekty, které mají přiřazen štítek „bezpečnost“.">bezpečnost</a>, 
+                                <a href="/stitky/programovani" title="Zobrazit objekty, které mají přiřazen štítek „programování“.">programování</a>, 
+                                <a href="/stitky/proxy" title="Zobrazit objekty, které mají přiřazen štítek „proxy“.">proxy</a>, 
+                                <a href="/stitky/python" title="Zobrazit objekty, které mají přiřazen štítek „Python“.">Python</a>
+                    </span>
+                </div>
+
+
+
+<h2>Bolest proxy</h2>
+<p class="meta-vypis">
+    10.2. 18:01
+    | Přečteno: 1668&times;
+            | Obecné IT
+        | <img src="/images/site2/digest.png" class="blog_digest" alt="Výběrový blog" title="Kvalitní zápisek vybraný do výběru z blogů">
+        | poslední úprava: 10.2. 18:59
+</p>
+
+<p>Občas se stane, že potřebujete přistupovat k nějakému zdroji na internetu nepřímo. Pokud se jedná o desítky až stovky requestů, a neplánujete dělat nic <i>ošklivého</i>, dá se použít třeba VPS, nebo VPN. Pokud však potřebujete například postahovat nějakou větší databázi, která vám zabere tisíce a statisíce requestů, je většinou dobré, či přímo nutné, použít proxy.</p>
+
+
+
+
+<!-- original -->
+<!--
+(19:59:32) bystrousak: ale s proxy je desivy srani
+(19:59:45) bystrousak: to a) musis proverit, jestli to fakt funguje, coz je samo o sobe bolestivy proces
+(20:00:03) bystrousak: b) nektery proxy funguji treba na 5 requestu a pak ti zacnou cpat do/misto obsahu reklamy
+(20:00:38) bystrousak: c) ruzne to timeoutuje, specialitou jsou pak proxy, co po par requestech jedou treba 10 bajtu za vterinu a requesty tedy chodi, jen to trva asi tak pul dne :D (neco jako slowloris)
+(20:00:55) bystrousak: d) v case se to meni, to ze neco fungovalo pred hodinou neznamena, ze to funguje porad
+(20:01:01) bystrousak: to dela programovani hodne komplikovanym
+(20:01:39) bystrousak: e) musis checkovat jestli to fakt skryva IP, ptze nektery ne :D
+-->
+<!-- /original -->
+
+
+<h2>Kdy použít proxy</h2>
+<p>Obecně platí, že proxy server(y) je vhodné použít pouze tehdy, pokud chcete <i><strong>zmást</strong></i> cílový systém, aby si myslel, že jste někdo jiný.</p>
+
+
+<p>To může vypadat jako zcela samozřejmá informace, důležitý je ale důraz na slovo <i><strong>zmást</strong></i>, neboť cílem je zmatení, nikoliv neprůstřelná bezpečnost.</p>
+
+
+<p>Nad použitými proxy většinou nemáme žádnou kontrolu a přestože se dají řetězit, čímž se bezpečnostní hledisko zvětšuje, nikdy nevíte, jestli proxy neloguje všechny přístupy do souboru, který její provozovatelé s radostí vydají každému, kdo si o něj řekne. Dnes je také běžné, že povinnost logovat přístupy na úrovni &quot;<i>kdy-kdo-kam</i>&quot; mají všichni poskytovatelé.</p>
+
+
+<p><strong>Pokud nad proxy serverem nemáte kontrolu, nespoléhejte na něj jako na anonymizační prvek!</strong></p>
+
+
+<p>Kdy je tedy vhodné použít proxy? Všude tam, kde není předpoklad, že se někdo bude vaší identitou zabývat. Z hlavy mě napadá například vytěžování databází, trolling, obcházení limitů na jeden účet či jednu IP adresu. Obecně tehdy, když chcete zabránit podezření, že mnoho přístupů ve skutečnosti pochází z jednoho zdroje.</p>
+
+
+<p>Výjimky z tohoto principu můžete udělat pouze tehdy, pokud vám nezáleží na zjistitelnosti stroje, ze kterého požadavky přichází, či pokud máte v cestě zapojeny další anonymizační prvky (TOR třeba).</p>
+
+
+<p>Při použití proxy je také nutno brát v úvahu, že provozovatel může číst veškerá přenášená data, pokud přes to netaháte ještě nějaký vlastní šifrovaný tunel. Nevyplatí se tedy přenášet loginy k systémům, na kterých vám záleží.</p>
+
+
+<h2>Druhy proxy</h2>
+<p>Pro ty kdo se s proxy servery nikdy nesetkali zde v krátkosti uvedu jednotlivé parametry, které běžně proxy listy zobrazují:</p>
+
+
+<h3>Typ</h3>
+<p>HTTP - proxy přes kterou je možné směřovat HTTP požadavky. Vhodné k procházení webu. Port většinou 80 či 8080, ale může být i jiný.</p>
+
+
+<p>HTTPS - to samé jako předchozí, jen fungující skrz šifrovaný tunel na portu 443.</p>
+
+
+<p>SOCKS - Pokud někde uvidíte jen <a href="http://en.wikipedia.org/wiki/SOCKS">SOCKS</a>, může se jednat o SOCKS4 či SOCKS5 proxy. SOCKS4 umožňuje přenos libovolného protokolu, neboť pracuje přímo se socketem a spojeními, nikoliv s HTTP requesty.</p>
+
+
+<p>SOCKS5 - Vůbec nejlepší, neboť umožňuje jak IPv4, tak i IPv6 requesty, libovolné protokoly, autentizaci a tak dále. Navíc je docela vysokoúrovňová co se protokolu týče.</p>
+
+
+<p>Většinu času vám nejspíš vystačí HTTP proxy, neboť je nejjednodušší na použití a zcela dostatečná pro spoustu případů. V pythonu jsem napsal klienta <a href="https://github.com/Bystroushaak/httpkie">httpkie</a>, který umožňuje pro každou instanci použít jinou proxy. Tohle může být trochu problém u SOCKS, kde je v pythonu většinou <a href="https://github.com/Anorov/PySocks">nahrazován celý socket</a>, což může znesnadňovat paraelizaci.</p>
+
+
+<h3>Míra anonymity</h3>
+<p><i>Transparent</i> - pro běžné účely k ničemu, neboť tato proxy vyzrazuje vaší IP adresu přes hlavičku <tt>HTTP_X_FORWARDED_FOR</tt>. Občas se dá použít k obejití hloupějších firewallů.</p>
+
+
+<p><i>Anonymous</i> - proxy která vaší IP adresu maskuje tou svojí. Z <a href="http://www.freeproxy.ru/en/free_proxy/faq/proxy_anonymity.htm">hlaviček</a> se dá zjistit samotný fakt, že používáte proxy.</p>
+
+
+<p><i>Elite</i> - proxy která skrývá vaší IP adresu a nedá se jednoduše zjistit, že se jedná o proxy server.</p>
+
+
+<p>Pro většinu potřeb postačuje <i>Anonymous</i> proxy, neboť jsou dostatečně rychlé a když se nikdo nedívá, tak ani nezjistí, že se jedná o proxy.</p>
+
+
+<h3>Port</h3>
+<p>Port, na kterém proxy naslouchá. Najít se dají v podstatě všechny možné, imho je nejžádoucnější chtít co nejvyšší, od deseti tisíc začínaje, protože ten většinou nenajdou ti, kdo se dívají zda se jedná o proxy zpětným scannem. Pro většinu použití však stačí ty běžné - 80, 443, 8000, 8080 atd..</p>
+
+
+<h3>Ping</h3>
+<p>Dalším často uváděným parametrem je <a href="http://cs.wikipedia.org/wiki/Ping">ping</a>. Někde se jedná o pouhé pingnutí proxy serveru, jinde je měřeno jak dlouho trvá jeden request.</p>
+
+
+<p>Tahle hodnota se v čase pořád mění podle zátěže, ale vždy chcete co nejnižší.</p>
+
+
+<h3>Země</h3>
+<p>Poslední často uváděnou hodnotou je země, kde se proxy server nachází. Většinou je dobré volit jinou zemi, než kde se zrovna nacházíte a vyhnout se zemím jako Čína, kde je vše monitorované. V některých případech také cílíte na službu, která bere pouze přístupy z čech (registrace na wz.cz například).</p>
+
+
+<p>V praxi tohle pole moc neznamená, protože je detekováno na základě <a href="http://jecas.cz/geoip">geoip</a> a <a href="http://cs.wikipedia.org/wiki/Whois">whois</a> a vše může být úplně jinak, jen proto že poskytovatel byl moc líný měnit záznamy.</p>
+
+
+<h2>Kde vzít proxy</h2>
+<p>Máte tedy několik možností - proxy si zaplatit, což stojí peníze a také to klade větší nároky na zachování alespoň zdání anonymity, nebo se naučit pracovat s různými nestandardními chováními, které se dají nalézt u proxy zdarma.</p>
+
+
+<p>Třetí možnost, která vyžaduje vytvoření vlastního botnetu zde nebudu uvažovat, protože jestli zvládnete tohle, tak tenhle problém vůbec nemusíte řešit a rovnou můžete použít cílové počítače pro běh vašeho programu.</p>
+
+
+<h3>Placené proxy</h3>
+<p>Co se týče placených proxy serverů, nekupujete si konkrétní údaje pro proxy, ale v drtivé většině případů přístup k neustále updatovanému proxy listu, kde by se teoreticky měly nacházet jen kvalitnější servery, které alespoň pár hodin budou vykazovat konzistentní chování.</p>
+
+
+<p>Není na tom moc co řešit - prostě převedete peníze na účet poskytovatele a zpět dostanete login na server, kde máte přístupný seznam několika stovek až tisíc proxy-serverů, většinou i s metadaty ohledně typu (Transparent/Anonymous/High anonymous, Sock/HTTP), odezvy a země původu.</p>
+
+
+<p>Někdy se platí za čas (<a href="http://incloak.com/proxy-list/">incloak</a>), jindy je přístup doživotní (<a href="http://proxylist.hidemyass.com/">hidemyass</a>).</p>
+
+
+<h3>Neplacené proxy</h3>
+<p>Neplacených proxy listů není tak moc - většinou se jedná jen o živé ukázky pro placené servery. To nám ovšem nijak nebrání napsat parser a strojově je zpracovávat.</p>
+
+
+<p>Příklady:</p>
+
+<ul>
+<li><a href="http://incloak.com/proxy-list/">http://incloak.com/proxy-list/</a></li>
+<li><a href="http://proxylist.hidemyass.com/">http://proxylist.hidemyass.com/</a></li>
+<li><a href="http://www.ip-adress.com/proxy_list/">http://www.ip-adress.com/proxy_list/</a></li>
+<li><a href="http://proxies.org">http://proxies.org</a></li>
+</ul>
+
+
+<p>Psaní jednotlivých parserů nechám na vás - za sebe můžu říct, že jsem napsal parsery na všechny uvedené a většina z nich nezabrala skoro žádnou práci, stačí k tomu prostě <a href="http://docs.python-requests.org/">stahovátko</a>, <a href="https://github.com/Bystroushaak/pyDHTMLParser">HTML parser</a> a trocha pythonu. Nejvíc ze všech mi dal zabrat server hidemyass.com, kde rychle zjistíte že vše je obfuscované a kompletní parser tedy vyžaduje částečnou implementaci Javascriptu a CSS. Jako bonus dostanete při opakovaných přístupech ban, takže potřebujete proxy, aby jste mohli stáhnout seznam proxy ;)</p>
+
+
+<p>Jako příklad zde uvádím implementaci HTTP proxy (!) grabberu na prvně jmenovaný server:</p>
+
+<pre class="brush: python">#! /usr/bin/env python
+# -*- coding: utf-8 -*-
+#
+# Interpreter version: python 2.7
+#
+# Imports =====================================================================
+import httpkie
+import dhtmlparser as d
+
+
+# Functions &amp; objects =========================================================
+def getProxies():
+    &quot;&quot;&quot;
+    Return array of dicts following this structure:
+    {
+        ip: str(ip),
+        port: int(port),
+        ping: int(ms)
+    }
+    &quot;&quot;&quot;
+    down = httpkie.Downloader()
+
+    dom = d.parseString(
+        down.download(&quot;http://incloak.com/proxy-list/?type=h&amp;anon=234&quot;)
+    )
+
+    proxies = []
+    for tr in dom.find(&quot;table&quot;)[6].find(&quot;tr&quot;)[1:]:
+        proxy = {
+            &quot;ip&quot;: tr.find(&quot;td&quot;)[0].getContent(),
+            &quot;port&quot;: 8080,
+            &quot;ping&quot;: int(tr.find(&quot;div&quot;)[-1].getContent().split()[0])
+        }
+        proxies.append(proxy)
+
+    return proxies
+
+
+if __name__ == '__main__':
+    import json
+    print json.dumps(getProxies())
+    print len(getProxies())
+</pre>
+
+<p>Jak vidíte, nejedná se o nic sofistikovaného a napsat celý script mi zabralo tak 30 minut.</p>
+
+
+<h2>Bolest</h2>
+<p>Takže co existuje za proxy víte. Kde je vzít víte. Script, který stáhne šedesát čtyři nově publikovaných máte. Teď už vám nic nebrání v jejich použití. Celé to zakomponujete do existujícího programu a spustíte váš ďábelský plán. Teď už jen hromy, blesky a váš šílený chechot, který se line nocí..</p>
+
+
+<p>Jenže ouha, celé to po chvíli vymrzlo. Chechot se mění do bolestného vytí a vás čekají dlouhé hodiny debugování a zjišťování, co je vlastně špatně.</p>
+
+
+<h2>Co je vlastně špatně</h2>
+<p>Všechno to, co jste si mohli přečíst až sem jsou obecně známé informace, které jde poměrně lehce najít všude možně po internetu. To co bude následovat dál jsou zkušenosti, které většinou musíte získat tou horší, bolestivější cestou, protože o nich nikdo moc nepíše.</p>
+
+
+<h3>Časová osa</h3>
+<p>V ideálním světě by vznikla proxy, někdo by jí zaindexoval do proxy listu a vy by jste jí mohli používat. Proxy by byla neomezeně rychlá, plně anonymní a hlavně stále stejná, tedy konzistentní, až do konce světa.</p>
+
+
+<p>Ve skutečném světě vznikne proxy, někdo jí zaindexuje a vy jí můžete používat. Na první request odpoví okamžitě, na druhý za 10 sekund a na další neodpoví nikdy. Nebo na něj bude odpovídat půl hodiny, či půl dne, písmenko za písmenkem, každou minutu jedno. </p>
+
+
+<p>Proxy list nepoužíváte jen vy, ale zároveň pár (desítek) tisíc uživatelů, takže na každou proxy, která se tam vyskytne se automaticky vrhne i spousta dalších lidí. To že proxy server minutu funguje, další půl hodinu je zahlcen a potom znova funguje je zcela běžný stav.</p>
+
+
+<p>Dál je také nutné poznamenat, že žádná proxy nebude fungovat do nekonečna. Život většiny z nich je docela jepičí a měří se na dny, přičemž nikdy nevíte, jak dlouho se ta vámi používaná povaluje na proxylistu.</p>
+
+
+<h3>Lidi jsou svině</h3>
+<p>Najdete servery, které vám na prvních 5 požadavků odpoví bleskově a potom začnou odpovídat už jen reklamní stránkou.</p>
+
+
+<p>Taky jsem viděl servery, které modifikují přenášená data a vkládají do nich reklamy, či <a href="https://blog.haschek.at/post/fd9bc">škodlivý kód</a> pomocí &quot;on the fly&quot; modifikace binárních souborů.</p>
+
+
+<p>Velmi zřídka narazíte i na servery, které jsou několik requestů anonymní a potom se najednou přepnou na <i>transparent</i>.</p>
+
+
+<p>Už jsem psal, že život proxy je jepičí, ale nutno taky zdůraznit, že jejich umírání je skokové. Jak je jednou odhalí, tak budou vypnuty z milisekundy na milisekundu, dle zákona schválnosti nejčastěji právě uprostřed vašeho datového přenosu.</p>
+
+
+<h3>Na seznamy se nedá spolehnout</h3>
+<p>Dostali jste ze seznamu krásnou Elite proxy s malým pingem? Jak to víte?</p>
+
+
+<p>Nemá smysl věřit údajům, které si stáhnete ze seznamu, jsou spíš jen takové orientační, sloužící k filtrování ostatních záznamů co vás nezajímají.</p>
+
+
+<h3>Seznamy se mění</h3>
+<p>Pište si unittesty na vaše parsery proxy serverů. Ochrany na jednotlivých serverech se čas od času mění, stejně jako se mění design a layout stránky. To že nějaký grabber funguje teď neznamená, že bude fungovat i zítra, proto testujte, co vlastně vrací a jestli náhodou nepadl na tom, že server vás zabanoval, změnil adresu, nebo úplně přestal existovat.</p>
+
+
+<p>Není nic víc otravného, než když se po měsíci přihlásíte na VPS, aby jste zkopírovali výsledky dlouhé sklizně a zjistíte, že celý script stál na tom, že mu vyschl proxy pool, protože nebylo odkud brát. Na tohle by vás měl program proaktivně upozornit mnohem dřív!</p>
+
+
+<h2>Jak s tím bojovat</h2>
+<p>Řešení je na dvou úrovních - na úrovni kódu a na úrovni filtrování proxy.</p>
+
+
+<h3>Filtrování získaných proxy</h3>
+<p>Všechny proxy servery, které ze seznamu získáte si musíte prověřit na zde popsané jevy, před tím než je můžete použít. V krátkosti:</p>
+
+
+<ol>
+<li>První věc co s nově získanou proxy uděláte je, že jí vyzkoušíte. Zkusíte přes ní stáhnout nějakou důvěrně známou stránku, která zároveň ideálně zobrazuje poslané hlavičky a IP adresu. Já za tímhle účelem používám <a href="http://anoncheck.security-portal.cz/">anoncheck od security-portálu</a>, protože už na něj mám napsané parsery. Ideálnější je však stránka, která vrací data nějak víc strukturovaně, například v XML.</li>
+
+
+<li>Poté co prověříte, že proxy skutečně funguje (=nedošlo k chybě a dostali jste nějaká data) ověříte co se vám vlastně vrátilo. Zde je nutné provádět kontrolu celého obsahu, jestli z ní náhodou proxy něco nevyhodila, něco nenahradila či místo obsahu neposlala něco úplně jiného. Taky prověřte IP adresu, kterou proxy ukazuje a jestli v hlavičkách neposílá vaší původní.</li>
+
+
+<li>Proveďte 5 requestů na náhodné stránky, například novinky, zprávy, zkuste různé domény v různých zemích.</li>
+
+
+<li>Zopakujte kroky 1 a 2, ideálně přes jiný anoncheck, aby jste nedostali zpět cacheovaný výsledek odminule a tentokrát si zapisujte čas. Pokud je vše v pořádku a jestliže proxy stále vyhovuje maximálnímu času, který jste ochotni tolerovat, přidejte jí do databáze.</li>
+
+
+<li>Krok 1 a 2 opakujte každých N minut (například 60, 120 atd..), aby jste odhalili proxy, které se časem mění, či jsou vypnuty.</li>
+</ol>
+
+
+<h3>Na úrovni kódu</h3>
+<p>Pokud sklízíte nějaké větší objemy dat a program poběží déle, než jen pár hodin, je nutné počítat s tím, že nebudete zadávat jen jednu proxy při spuštění a musí být přítomna nějaká cesta, jak z filtru nových proxy serverů načítat další a případně dát zpět vědět, že by měl filtr přesunout nefunkční proxy na banlist.</p>
+
+
+<p>Dál je nutné počítat s načítáním a ukládáním stavu - tohle přímo nesouvisí s proxy, ale je dobré počítat s tím, že program může zhavarovat a po startu by měl začít tam kde přestal, nikoliv dělat vše úplně odznova.  </p>
+
+
+<p>Na úrovni funkce, která stahuje data z internetu je nutné počítat s několika efekty:</p>
+
+<ol>
+<li>Cokoliv co stahujete může z ničeho nic zhavarovat. Pokud se to stane, zkuste to znova. Pokud to opět zhavaruje, potřebujete novou proxy a starou přidat na banlist. Skvěle se mi v tomhle ohledu osvědčil <tt>@retry</tt> dekorátor z balíku <a href="https://github.com/rholder/retrying">retrying</a>.</li>
+
+
+<li>Cokoliv co stahujete může trvat nehorázně dlouho. Pokud se to stane, je nutné vyvolat timeout, k čemuž jsem si napsal vlastní dekorátor <tt>@timeout</tt>, jenž je možné nalézt v balíku <a href="https://github.com/Bystroushaak/timeout_wrapper">timeout_wrapper</a>. Jestliže se situace opakuje, použijte novou proxy a starou přidejte na banlist.</li>
+
+
+<li>Volitelně můžete kontrolovat integritu stahovaných dat. Pokud například sklízíte nějaký server, koukejte se po okolí začátku a konci HTML, jestli tam najednou proxy nezačala cpát reklamy. Někdy to vadí, někdy ne, to záleží na vás, projekt od projektu.</li>
+</ol>
+
+<h2>Ideální architektura</h2>
+<p>Ideální architektura by vypadala nějak takhle:</p>
+
+
+<p>Máte samostatně fungující stahovače, které pročesávají proxylisty a stahují z nich informace. Tyto informace cpou do fronty příchozích proxy.</p>
+
+
+<p>Frontu sleduje spouštěč prověřovačů. Pokud se v ní objeví nová proxy, která není na banlistu, je spuštěn proces prověřovače s timeoutem pár minut, který proxy prověří a případně jí schválí, či umístí na banlist, aby s ní příště neztrácel čas.</p>
+
+
+<p>Schválené proxy jsou přesunovány do fronty ověřených proxy listů, odkud si je berou aplikace. Pokud aplikace proxy použije, resetuje timeout do dalšího prověření. Jestliže se proxy během použití ukáže jako nevhodná, je přidána na banlist.</p>
+
+
+<p>Pokud je proxy ve frontě ověřených proxy listů déle jak N minut, je znova předána na prověření.</p>
+
+<!-- 
+base64 -d << EOF | gunzip
+H4sIAIQczlQAA51VwW7bMAw9N19B5NJL4gE7FkWALgWKHTYUTXfoqZBtJhEqi54kJzWG/fsoxZbl
+xhmG+SRRFPn4+CjPalG8iR3Co6H39sGIPEdj4dcM+CuUsBaEJrdHA8LCvF+XdNSKRIlmDre3mwU8
+GES9WnUX/fdCzfUBYUcO+ArIEkUWDn/PkuB7tldtSMPh4y4rqLoY+T4mhy2ZaB5dnkgldcG33kKi
+bv0/abqrXXzO0DN4L5zIhUUOcRUzUlVJvQs5v8bdzwYb9HmfF/CCStExJr56EkeofS+g5HiwNVSd
+9hHArmtSFi3L5TKuN7KqVQtKWge0BVnf1GRcT0fS1ZqjHrAM0O76zd+QzR+IynkHzqI5XMSwJu2E
+1J4AZq4SThJvRE6Niz41E7EAhsLykBXrw8GRoTQWy+hTUKOdaRdegrqtpOO68IAqOghdgiUgfV5f
+rrgtgQVf4Jd+d6G2L6L8l8K+idYj5JyM2MPmisDR0BrJime1VxymIAZX7IUuMJ4r4dBkg3QG9S/N
+cjXo5QbqxtlZr9jJw34Us+z8LGpyUxhZOztIMoz5eo/FWzfRwcA4g2UOU8NwFfxtR5AjECppgXNG
+5o1DCyVaTpcnDZQahHGyUHjeoEc0kkpZPDYuZ7QnMJ3NV+GNk7PZw+n5Z5WPB4SzjgW9OLESzx2E
+jFzJMKFyG8+7wFgmnRocWQ+rEY2ec6XsbERt8OpnrOvKIMnMN20cI3TgQ5DgFm/1vf1I3LJZnssj
+VDiLQ34CPb4Yc0a1/GDx2zWVyRPGajevNqgodMi7XFs4WS7IZeTDvwoGFbn1k+P2nsejdPsPjSPN
+ZfCEaHQJ9UkRTEcC6AZ2yISkEANjCe2GFOldOhCtdVg9E6lkKNaGM09V8tTwu8UvjmnhOzC5XubT
+L8NdUZApfV2sqg1PPb9Yg6B4TslgteAo0kK0V+L9tVfxJ/i8gOQ3o9DahIQAMWuyiS4aBjn7AziU
+zkLIBwAA
+EOF
+ -->
+
+<img src="/images/screenshots/0/9/210590-bolest-proxy-6017333664768008869.png" />
+
+<p> </p>
+
+
+<h2>Neideální architektura</h2>
+<p>Pokud nejste zas tak moc zruční programátoři, nebo prostě a jednoduše nemáte moc času, celé se to dá udělat <i>špinavě</i> a <i>ošklivě</i>, podmínkou však je, že váš program umí pokračovat tam, kde přestal.</p>
+
+
+<p>K tomu jsou zapotřebí dvě věci:</p>
+
+
+<h3>doitfaggot</h3>
+<p>Již dlouhá léta používám tento maximálně triviální scriptík, který jsem nazval <tt>doitfaggot</tt>:</p>
+
+<pre class="brush: bash">#!/bin/sh
+while ! $*; do
+    :;
+    sleep 2;
+done
+</pre>
+
+<p>Jediné co tento script dělá je, že spouští parametr do té doby, dokud se neukončí s nulovým výstupním kódem.</p>
+
+
+<h3>timeout</h3>
+<p><a href="http://linux.die.net/man/1/timeout">timeout</a> je linuxový program, který spustí parametr a čeká na ukončení maximálně nějakou stanovenou dobu. Pokud program běží déle, je násilně ukončen.</p>
+
+
+<h3>quick n' dirty</h3>
+<p>Asi už vám došlo, jak to celé bude fungovat:</p>
+
+<pre class="brush: bash">doitfaggot timeout 10m my_program.py -p `./get_proxy.py | head -n 1`</pre>
+
+<p>Celé to funguje tak, že <tt>doitfaggot</tt> spouští váš program dokud timeoutuje (=<tt>timeout</tt> vrací kód &gt;0), což se děje každých 10 minut. Jakmile se váš program korektně ukončí, <tt>timeout</tt> vrátí 0, čímž se vypne i <tt>doitfaggot</tt>. Proxy server je při každém zavolání načten jako parametr vašeho programu.</p>
+
+
+<p>Tento přístup je z programátorského hlediska neskutečná prasečina, ale dá se docela úspěšně použít na menší věci. V podstatě veškeré uvedené dobré rady a možné chybové chování ignoruje a hrubou silou to zkouší stále znova a znova a znova a zase, dokud neuspěje.</p>
+
+
+<!--
+    Written in CherryTree, converted to HTML by cherrytree2html.py
+
+    - http://www.giuspen.com/cherrytree/
+    - https://github.com/Bystroushaak/cherrytree2html.py
+-->
+<!-- -->
+    
+    <div class="rating">
+      <h3>Hodnocení:
+          <span title="Hlasů: 15">100 %</span>
+        </h3>
+        <div class="stupnice">
+          <div class="rtut" style="width: 78px"></div>
+        </div>
+      
+        <div class="hlasy">
+        
+           <a href="/blog/rating/400957?action=rate&amp;rvalue=0&amp;ticket=805cKn1vvI" target="rating" rel="nofollow">špatné</a>
+           &bull;
+           <a href="/blog/rating/400957?action=rate&amp;rvalue=3&amp;ticket=805cKn1vvI" target="rating" rel="nofollow">dobré</a>
+        
+        </div>
+        <iframe name="rating" frameborder="0" height="20" scrolling="no" class="rating_iframe"></iframe>
+    </div>
+
+
+
+
+    <p class="page_tools">
+        <a href="/blog/bystroushaak/2015/2/bolest-proxy?varianta=print" rel="nofollow" class="bez-slovniku">Tiskni</a>
+    </p>
+
+    <h3>Komentáře</h3>
+    <div class="ds_toolbox">
+     <b>Nástroje:</b>
+                <a href="/blog/EditMonitor/400959?action=stop&amp;ticket=805cKn1vvI">Přestaň sledovat</a>
+    <span title="Počet lidí, kteří sledují tento dokument nebo sekci">(2)</span>
+    <a class="info" href="#">?<span class="tooltip">Zašle upozornění na váš email při vložení nového komentáře.</span></a>
+,
+         <a href="/blog/show/400959?varianta=print" rel="nofollow">Tisk</a>
+    </div>
+
+    <p>
+            <a href="/blog/EditDiscussion?action=add&amp;dizId=210591&amp;threadId=0&amp;rid=400959" rel="nofollow">
+                Vložit další komentář
+            </a>
+    </p>
+
+
+    <div class="ds_hlavicka" id="1">
+        <div class="ds_reseni" style="display:none">
+        </div>
+
+
+        10.2. 19:34
+
+<a href="/lide/manasekp">manasekp</a>             | skóre: 27
+             | blog: <a href="/blog/manasekp">manasekp</a>
+             | Brno
+
+        <br>
+
+            <span class="ds_control_sbalit2" id="comment1_toggle2">
+                <a onClick="schovej_vlakno(1)" title="Schová nebo rozbalí celé vlákno">Rozbalit</a>
+                <a onClick="rozbal_vse(1)" title="Schová nebo rozbalí vše pod tímto komentářem">Rozbalit vše</a>
+            </span>
+
+        Re: Bolest proxy
+
+
+            <div id="comment1_controls">
+                
+                <a href="/blog/EditDiscussion/400959?action=add&amp;dizId=210591&amp;threadId=1">Odpovědět</a>
+                    | <a onClick="schovej_vlakno(1)" id="comment1_toggle1" title="Schová nebo rozbalí celé vlákno"
+                       class="ds_control_sbalit3">Sbalit</a>
+                    
+                    | <a href="#1" title="Přímá adresa na tento komentář">Link</a>
+                    | <a href="/EditUser?action=toBlacklist&amp;bUid=9480&amp;ticket=805cKn1vvI&amp;url=/blog/show/400959#1" title="Přidá autora na seznam blokovaných uživatelů">Blokovat</a>
+                | <a href="/blog/EditRequest/400959?action=comment&amp;threadId=1" title="Žádost o přesun diskuse, stížnost na komentář">Admin</a>
+            </div>
+
+    </div>
+
+    <div id="comment1" class="ds_text_user9480">
+            <div class="ds_text">
+                scrapebox
+            </div>
+
+            <div class="signature"><a href="http://www.manasekp.com" rel="nofollow">manasekp</a> | <a href="http://recshop.cz" rel="nofollow">Recshop</a> | Cas od casu se pokousim nekoho srazit k zemi abych se tam nevalel sam.</div>
+
+        <div class="ds_odsazeni">
+
+    <div class="ds_hlavicka ds_hlavicka_me" id="2">
+        <div class="ds_reseni" style="display:none">
+        </div>
+
+                <img src="/images/avatars/19684.png" id="comment2_avatar" alt="Bystroushaak avatar" class="ds_avatar">
+
+        10.2. 21:19
+
+<a href="/lide/bystroushaak">Bystroushaak</a>             | skóre: 26
+             | blog: <a href="/blog/bystroushaak">Bystroushaakův blog</a>
+             | Praha
+
+        <br>
+
+            <span class="ds_control_sbalit2" id="comment2_toggle2">
+                <a onClick="schovej_vlakno(2)" title="Schová nebo rozbalí celé vlákno">Rozbalit</a>
+                <a onClick="rozbal_vse(2)" title="Schová nebo rozbalí vše pod tímto komentářem">Rozbalit vše</a>
+            </span>
+
+        Re: Bolest proxy
+
+
+            <div id="comment2_controls">
+                
+                <a href="/blog/EditDiscussion/400959?action=add&amp;dizId=210591&amp;threadId=2">Odpovědět</a>
+                    | <a onClick="schovej_vlakno(2)" id="comment2_toggle1" title="Schová nebo rozbalí celé vlákno"
+                       class="ds_control_sbalit3">Sbalit</a>
+                    | <a href="#1" title="Odkaz na komentář o jednu úroveň výše">Výše</a>
+                    | <a href="#2" title="Přímá adresa na tento komentář">Link</a>
+                    | <a href="/EditUser?action=toBlacklist&amp;bUid=19684&amp;ticket=805cKn1vvI&amp;url=/blog/show/400959#2" title="Přidá autora na seznam blokovaných uživatelů">Blokovat</a>
+                | <a href="/blog/EditRequest/400959?action=comment&amp;threadId=2" title="Žádost o přesun diskuse, stížnost na komentář">Admin</a>
+            </div>
+
+    </div>
+
+    <div id="comment2" class="ds_text_user19684">
+            <div class="ds_text">
+                To vypadá jako něco, co bych fakt nechtěl provozovat na serveru.
+            </div>
+
+            <div class="signature"><a href="http://www.prozeny.cz/magazin/zdravi-a-zivotni-styl/tajemno/39988-datum-narozeni-co-o-vas-odhali-numerologicka-mrizka" rel="nofollow">Sudoku pro blondýny.</a></div>
+
+        <div class="ds_odsazeni">
+
+    <div class="ds_hlavicka" id="9">
+        <div class="ds_reseni" style="display:none">
+        </div>
+
+
+        11.2. 15:21
+
+<a href="/lide/manasekp">manasekp</a>             | skóre: 27
+             | blog: <a href="/blog/manasekp">manasekp</a>
+             | Brno
+
+        <br>
+
+            <span class="ds_control_sbalit2" id="comment9_toggle2">
+                <a onClick="schovej_vlakno(9)" title="Schová nebo rozbalí celé vlákno">Rozbalit</a>
+                <a onClick="rozbal_vse(9)" title="Schová nebo rozbalí vše pod tímto komentářem">Rozbalit vše</a>
+            </span>
+
+        Re: Bolest proxy
+
+
+            <div id="comment9_controls">
+                
+                <a href="/blog/EditDiscussion/400959?action=add&amp;dizId=210591&amp;threadId=9">Odpovědět</a>
+                    | <a onClick="schovej_vlakno(9)" id="comment9_toggle1" title="Schová nebo rozbalí celé vlákno"
+                       class="ds_control_sbalit3">Sbalit</a>
+                    | <a href="#2" title="Odkaz na komentář o jednu úroveň výše">Výše</a>
+                    | <a href="#9" title="Přímá adresa na tento komentář">Link</a>
+                    | <a href="/EditUser?action=toBlacklist&amp;bUid=9480&amp;ticket=805cKn1vvI&amp;url=/blog/show/400959#9" title="Přidá autora na seznam blokovaných uživatelů">Blokovat</a>
+                | <a href="/blog/EditRequest/400959?action=comment&amp;threadId=9" title="Žádost o přesun diskuse, stížnost na komentář">Admin</a>
+            </div>
+
+    </div>
+
+    <div id="comment9" class="ds_text_user9480">
+            <div class="ds_text">
+                ja to provozuju na widlich ve virtualboxu. Neni s tim zadny problem.
+            </div>
+
+            <div class="signature"><a href="http://www.manasekp.com" rel="nofollow">manasekp</a> | <a href="http://recshop.cz" rel="nofollow">Recshop</a> | Cas od casu se pokousim nekoho srazit k zemi abych se tam nevalel sam.</div>
+
+        <div class="ds_odsazeni">
+        </div>
+    </div>
+        </div>
+    </div>
+        </div>
+    </div>
+
+    <div class="ds_hlavicka" id="3">
+        <div class="ds_reseni" style="display:none">
+        </div>
+
+
+        10.2. 21:53
+
+               Tomáškova máma
+
+        <br>
+
+            <span class="ds_control_sbalit2" id="comment3_toggle2">
+                <a onClick="schovej_vlakno(3)" title="Schová nebo rozbalí celé vlákno">Rozbalit</a>
+                <a onClick="rozbal_vse(3)" title="Schová nebo rozbalí vše pod tímto komentářem">Rozbalit vše</a>
+            </span>
+
+        Re: Bolest proxy
+
+
+            <div id="comment3_controls">
+                
+                <a href="/blog/EditDiscussion/400959?action=add&amp;dizId=210591&amp;threadId=3">Odpovědět</a>
+                    | <a onClick="schovej_vlakno(3)" id="comment3_toggle1" title="Schová nebo rozbalí celé vlákno"
+                       class="ds_control_sbalit3">Sbalit</a>
+                    
+                    | <a href="#3" title="Přímá adresa na tento komentář">Link</a>
+                    | <a href="/EditUser?action=toBlacklist&amp;bName=Tom%C3%A1%C5%A1kova%20m%C3%A1ma&amp;ticket=805cKn1vvI&amp;url=/blog/show/400959#3" title="Přidá autora na seznam blokovaných uživatelů">Blokovat</a>
+                | <a href="/blog/EditRequest/400959?action=comment&amp;threadId=3" title="Žádost o přesun diskuse, stížnost na komentář">Admin</a>
+            </div>
+
+    </div>
+
+    <div id="comment3" >
+            <div class="ds_text">
+                Možná by stačilo, kdyby ses začal z té pedofílie léčit a nemusel bys nic skrývat, úchyle!
+            </div>
+
+            
+
+        <div class="ds_odsazeni">
+
+    <div class="ds_hlavicka ds_hlavicka_me" id="4">
+        <div class="ds_reseni" style="display:none">
+        </div>
+
+                <img src="/images/avatars/19684.png" id="comment4_avatar" alt="Bystroushaak avatar" class="ds_avatar">
+
+        10.2. 22:07
+
+<a href="/lide/bystroushaak">Bystroushaak</a>             | skóre: 26
+             | blog: <a href="/blog/bystroushaak">Bystroushaakův blog</a>
+             | Praha
+
+        <br>
+
+            <span class="ds_control_sbalit2" id="comment4_toggle2">
+                <a onClick="schovej_vlakno(4)" title="Schová nebo rozbalí celé vlákno">Rozbalit</a>
+                <a onClick="rozbal_vse(4)" title="Schová nebo rozbalí vše pod tímto komentářem">Rozbalit vše</a>
+            </span>
+
+        Re: Bolest proxy
+
+
+            <div id="comment4_controls">
+                
+                <a href="/blog/EditDiscussion/400959?action=add&amp;dizId=210591&amp;threadId=4">Odpovědět</a>
+                    | <a onClick="schovej_vlakno(4)" id="comment4_toggle1" title="Schová nebo rozbalí celé vlákno"
+                       class="ds_control_sbalit3">Sbalit</a>
+                    | <a href="#3" title="Odkaz na komentář o jednu úroveň výše">Výše</a>
+                    | <a href="#4" title="Přímá adresa na tento komentář">Link</a>
+                    | <a href="/EditUser?action=toBlacklist&amp;bUid=19684&amp;ticket=805cKn1vvI&amp;url=/blog/show/400959#4" title="Přidá autora na seznam blokovaných uživatelů">Blokovat</a>
+                | <a href="/blog/EditRequest/400959?action=comment&amp;threadId=4" title="Žádost o přesun diskuse, stížnost na komentář">Admin</a>
+            </div>
+
+    </div>
+
+    <div id="comment4" class="ds_text_user19684">
+            <div class="ds_text">
+                <i>*šťouchne do trolla*</i>
+<p class="separator"></p>
+Možná by stačilo, kdyby sis přečetl první část s titulkem "Kdy použít proxy".
+            </div>
+
+            <div class="signature"><a href="http://www.prozeny.cz/magazin/zdravi-a-zivotni-styl/tajemno/39988-datum-narozeni-co-o-vas-odhali-numerologicka-mrizka" rel="nofollow">Sudoku pro blondýny.</a></div>
+
+        <div class="ds_odsazeni">
+        </div>
+    </div>
+        </div>
+    </div>
+
+    <div class="ds_hlavicka" id="5">
+        <div class="ds_reseni" style="display:none">
+        </div>
+
+
+        10.2. 22:24
+
+<a href="/lide/snajpa">snajpa</a>             | skóre: 19
+             | blog: <a href="/blog/snajpuv_blocek">snajpuv_blocek</a>
+             | Brno
+
+        <br>
+
+            <span class="ds_control_sbalit2" id="comment5_toggle2">
+                <a onClick="schovej_vlakno(5)" title="Schová nebo rozbalí celé vlákno">Rozbalit</a>
+                <a onClick="rozbal_vse(5)" title="Schová nebo rozbalí vše pod tímto komentářem">Rozbalit vše</a>
+            </span>
+
+        Re: Bolest proxy
+
+
+            <div id="comment5_controls">
+                
+                <a href="/blog/EditDiscussion/400959?action=add&amp;dizId=210591&amp;threadId=5">Odpovědět</a>
+                    | <a onClick="schovej_vlakno(5)" id="comment5_toggle1" title="Schová nebo rozbalí celé vlákno"
+                       class="ds_control_sbalit3">Sbalit</a>
+                    
+                    | <a href="#5" title="Přímá adresa na tento komentář">Link</a>
+                    | <a href="/EditUser?action=toBlacklist&amp;bUid=17030&amp;ticket=805cKn1vvI&amp;url=/blog/show/400959#5" title="Přidá autora na seznam blokovaných uživatelů">Blokovat</a>
+                | <a href="/blog/EditRequest/400959?action=comment&amp;threadId=5" title="Žádost o přesun diskuse, stížnost na komentář">Admin</a>
+            </div>
+
+    </div>
+
+    <div id="comment5" class="ds_text_user17030">
+            <div class="ds_text">
+                Respekt za doitfaggot naming :-D
+            </div>
+
+            <div class="signature">--- <a href="http://vpsfree.cz" rel="nofollow">vpsFree.cz</a> (Stále přijímáme nové členy) --- Virtuální servery svobodně</div>
+
+        <div class="ds_odsazeni">
+        </div>
+    </div>
+
+    <div class="ds_hlavicka" id="6">
+        <div class="ds_reseni" style="display:none">
+        </div>
+
+
+        11.2. 00:34
+
+<a href="/lide/backinabag">backinabag</a>            
+             | blog: <a href="/blog/backinabag">backinabag</a>
+            
+
+        <br>
+
+            <span class="ds_control_sbalit2" id="comment6_toggle2">
+                <a onClick="schovej_vlakno(6)" title="Schová nebo rozbalí celé vlákno">Rozbalit</a>
+                <a onClick="rozbal_vse(6)" title="Schová nebo rozbalí vše pod tímto komentářem">Rozbalit vše</a>
+            </span>
+
+        Re: Bolest proxy
+
+
+            <div id="comment6_controls">
+                
+                <a href="/blog/EditDiscussion/400959?action=add&amp;dizId=210591&amp;threadId=6">Odpovědět</a>
+                    | <a onClick="schovej_vlakno(6)" id="comment6_toggle1" title="Schová nebo rozbalí celé vlákno"
+                       class="ds_control_sbalit3">Sbalit</a>
+                    
+                    | <a href="#6" title="Přímá adresa na tento komentář">Link</a>
+                    | <a href="/EditUser?action=toBlacklist&amp;bUid=23919&amp;ticket=805cKn1vvI&amp;url=/blog/show/400959#6" title="Přidá autora na seznam blokovaných uživatelů">Blokovat</a>
+                | <a href="/blog/EditRequest/400959?action=comment&amp;threadId=6" title="Žádost o přesun diskuse, stížnost na komentář">Admin</a>
+            </div>
+
+    </div>
+
+    <div id="comment6" class="ds_text_user23919">
+            <div class="ds_text">
+                Dalsi moznost je zaplatit si za Bitcoiny VPS server (napr. https://bitvps.com/ $10 za mesic nebo https://www.lunanode.com/ $0.005 za hodinu).
+            </div>
+
+            
+
+        <div class="ds_odsazeni">
+
+    <div class="ds_hlavicka ds_hlavicka_me" id="7">
+        <div class="ds_reseni" style="display:none">
+        </div>
+
+                <img src="/images/avatars/19684.png" id="comment7_avatar" alt="Bystroushaak avatar" class="ds_avatar">
+
+        11.2. 00:36
+
+<a href="/lide/bystroushaak">Bystroushaak</a>             | skóre: 26
+             | blog: <a href="/blog/bystroushaak">Bystroushaakův blog</a>
+             | Praha
+
+        <br>
+
+            <span class="ds_control_sbalit2" id="comment7_toggle2">
+                <a onClick="schovej_vlakno(7)" title="Schová nebo rozbalí celé vlákno">Rozbalit</a>
+                <a onClick="rozbal_vse(7)" title="Schová nebo rozbalí vše pod tímto komentářem">Rozbalit vše</a>
+            </span>
+
+        Re: Bolest proxy
+
+
+            <div id="comment7_controls">
+                
+                <a href="/blog/EditDiscussion/400959?action=add&amp;dizId=210591&amp;threadId=7">Odpovědět</a>
+                    | <a onClick="schovej_vlakno(7)" id="comment7_toggle1" title="Schová nebo rozbalí celé vlákno"
+                       class="ds_control_sbalit3">Sbalit</a>
+                    | <a href="#6" title="Odkaz na komentář o jednu úroveň výše">Výše</a>
+                    | <a href="#7" title="Přímá adresa na tento komentář">Link</a>
+                    | <a href="/EditUser?action=toBlacklist&amp;bUid=19684&amp;ticket=805cKn1vvI&amp;url=/blog/show/400959#7" title="Přidá autora na seznam blokovaných uživatelů">Blokovat</a>
+                | <a href="/blog/EditRequest/400959?action=comment&amp;threadId=7" title="Žádost o přesun diskuse, stížnost na komentář">Admin</a>
+            </div>
+
+    </div>
+
+    <div id="comment7" class="ds_text_user19684">
+            <div class="ds_text">
+                To je dost drahé a navíc to neřeší všechny problémy, kdy se potřebuješ tvářit jako že velké množství requestů nejde od tebe.
+            </div>
+
+            <div class="signature"><a href="http://www.prozeny.cz/magazin/zdravi-a-zivotni-styl/tajemno/39988-datum-narozeni-co-o-vas-odhali-numerologicka-mrizka" rel="nofollow">Sudoku pro blondýny.</a></div>
+
+        <div class="ds_odsazeni">
+
+    <div class="ds_hlavicka" id="8">
+        <div class="ds_reseni" style="display:none">
+        </div>
+
+
+        11.2. 01:13
+
+<a href="/lide/backinabag">backinabag</a>            
+             | blog: <a href="/blog/backinabag">backinabag</a>
+            
+
+        <br>
+
+            <span class="ds_control_sbalit2" id="comment8_toggle2">
+                <a onClick="schovej_vlakno(8)" title="Schová nebo rozbalí celé vlákno">Rozbalit</a>
+                <a onClick="rozbal_vse(8)" title="Schová nebo rozbalí vše pod tímto komentářem">Rozbalit vše</a>
+            </span>
+
+        Re: Bolest proxy
+
+
+            <div id="comment8_controls">
+                
+                <a href="/blog/EditDiscussion/400959?action=add&amp;dizId=210591&amp;threadId=8">Odpovědět</a>
+                    | <a onClick="schovej_vlakno(8)" id="comment8_toggle1" title="Schová nebo rozbalí celé vlákno"
+                       class="ds_control_sbalit3">Sbalit</a>
+                    | <a href="#7" title="Odkaz na komentář o jednu úroveň výše">Výše</a>
+                    | <a href="#8" title="Přímá adresa na tento komentář">Link</a>
+                    | <a href="/EditUser?action=toBlacklist&amp;bUid=23919&amp;ticket=805cKn1vvI&amp;url=/blog/show/400959#8" title="Přidá autora na seznam blokovaných uživatelů">Blokovat</a>
+                | <a href="/blog/EditRequest/400959?action=comment&amp;threadId=8" title="Žádost o přesun diskuse, stížnost na komentář">Admin</a>
+            </div>
+
+    </div>
+
+    <div id="comment8" class="ds_text_user23919">
+            <div class="ds_text">
+                Drahy mi to neprijde u te druhe nabidky to jsou 3 koruny za den (nevim jak dlouho to chces provozovat), a hlavne se s tim pracuje mnohem lip nez s free proxy serverama. Ale pokud potrebujes ruzne IP tak to je nanic... ja jsem tohle jednou resil pres Amazon Web Services, muzes si tam programove priradit nahodnou IP adresu z celkem velkeho rozsahu, ale neco to stoji a Amazon zna tvoji identitu.
+            </div>
+
+            
+
+        <div class="ds_odsazeni">
+        </div>
+    </div>
+        </div>
+    </div>
+        </div>
+    </div>
+
+    <div class="ds_hlavicka" id="10">
+        <div class="ds_reseni" style="display:none">
+        </div>
+
+                <img src="/images/avatars/14600.png" id="comment10_avatar" alt="Jendа avatar" class="ds_avatar">
+
+        11.2. 16:24
+
+<a href="/lide/hrachj">Jendа</a>             | skóre: 70
+             | blog: <a href="/blog/jenda">Výlevníček</a>
+             | JO70FB
+
+        <br>
+
+            <span class="ds_control_sbalit2" id="comment10_toggle2">
+                <a onClick="schovej_vlakno(10)" title="Schová nebo rozbalí celé vlákno">Rozbalit</a>
+                <a onClick="rozbal_vse(10)" title="Schová nebo rozbalí vše pod tímto komentářem">Rozbalit vše</a>
+            </span>
+
+        Re: Bolest proxy
+
+
+            <div id="comment10_controls">
+                
+                <a href="/blog/EditDiscussion/400959?action=add&amp;dizId=210591&amp;threadId=10">Odpovědět</a>
+                    | <a onClick="schovej_vlakno(10)" id="comment10_toggle1" title="Schová nebo rozbalí celé vlákno"
+                       class="ds_control_sbalit3">Sbalit</a>
+                    
+                    | <a href="#10" title="Přímá adresa na tento komentář">Link</a>
+                    | <a href="/EditUser?action=toBlacklist&amp;bUid=14600&amp;ticket=805cKn1vvI&amp;url=/blog/show/400959#10" title="Přidá autora na seznam blokovaných uživatelů">Blokovat</a>
+                | <a href="/blog/EditRequest/400959?action=comment&amp;threadId=10" title="Žádost o přesun diskuse, stížnost na komentář">Admin</a>
+            </div>
+
+    </div>
+
+    <div id="comment10" class="ds_text_user14600">
+            <div class="ds_text">
+                Někdy by se hodilo mít Tor, který nebude stavět okruh ze 3 hopů, ale payload pošle rovnou exitnodu zabalený jenom v jedné vrstvě. Bude to rychlejší a exitnody podle mě nebývají tak zákeřné jako open proxy.
+            </div>
+
+            <div class="signature"><a href="http://mirror.vpsfree.cz/videohrach/video/brm/2014-09-13-postavte-si-vlastni-nsa.mkv" rel="nofollow">Postavte si vlastní NSA</a> || <a href="http://mirror.vpsfree.cz/videohrach/video/brm/2014-09-12-brmlab-tour.mkv" rel="nofollow">Tour de brmlab</a> (záznam prezentace)</div>
+
+        <div class="ds_odsazeni">
+        </div>
+    </div>
+
+    <div class="ds_hlavicka" id="11">
+        <div class="ds_reseni" style="display:none">
+        </div>
+
+                <img src="/images/avatars/16571.jpg" id="comment11_avatar" alt="Bedňa avatar" class="ds_avatar">
+
+        11.2. 19:52
+
+<a href="/lide/bednic">Bedňa</a>             | skóre: 30
+             | blog: <a href="/blog/Linux_nieje_jadro_ale_komunita">Žumpa</a>
+             | Horňany
+
+        <br>
+
+            <span class="ds_control_sbalit2" id="comment11_toggle2">
+                <a onClick="schovej_vlakno(11)" title="Schová nebo rozbalí celé vlákno">Rozbalit</a>
+                <a onClick="rozbal_vse(11)" title="Schová nebo rozbalí vše pod tímto komentářem">Rozbalit vše</a>
+            </span>
+
+        Re: Bolest proxy
+
+
+            <div id="comment11_controls">
+                
+                <a href="/blog/EditDiscussion/400959?action=add&amp;dizId=210591&amp;threadId=11">Odpovědět</a>
+                    | <a onClick="schovej_vlakno(11)" id="comment11_toggle1" title="Schová nebo rozbalí celé vlákno"
+                       class="ds_control_sbalit3">Sbalit</a>
+                    
+                    | <a href="#11" title="Přímá adresa na tento komentář">Link</a>
+                    | <a href="/EditUser?action=toBlacklist&amp;bUid=16571&amp;ticket=805cKn1vvI&amp;url=/blog/show/400959#11" title="Přidá autora na seznam blokovaných uživatelů">Blokovat</a>
+                | <a href="/blog/EditRequest/400959?action=comment&amp;threadId=11" title="Žádost o přesun diskuse, stížnost na komentář">Admin</a>
+            </div>
+
+    </div>
+
+    <div id="comment11" class="ds_text_user16571">
+            <div class="ds_text">
+                Dík moc za podnetný blog.
+            </div>
+
+            <div class="signature">Pokecajte si s KUbotom na <a href="http://www.kernelultras.org/" rel="nofollow">http://www.kernelultras.org/</a> - Phone <a href="http://linuxos.sk/clanok/chytry-telefon-s-ubuntu/" rel="nofollow">Ubuntu Phone</a> - My <a href="http://linuxos.sk/clanok/linux-slobodny-softver-cnc-freza/" rel="nofollow">LinuxCNC</a></div>
+
+        <div class="ds_odsazeni">
+        </div>
+    </div>
+
+    <div class="ds_hlavicka" id="12">
+        <div class="ds_reseni" style="display:none">
+        </div>
+
+
+        11.2. 22:33
+
+               tom11111
+
+        <br>
+
+            <span class="ds_control_sbalit2" id="comment12_toggle2">
+                <a onClick="schovej_vlakno(12)" title="Schová nebo rozbalí celé vlákno">Rozbalit</a>
+                <a onClick="rozbal_vse(12)" title="Schová nebo rozbalí vše pod tímto komentářem">Rozbalit vše</a>
+            </span>
+
+        Re: Bolest proxy
+
+
+            <div id="comment12_controls">
+                
+                <a href="/blog/EditDiscussion/400959?action=add&amp;dizId=210591&amp;threadId=12">Odpovědět</a>
+                    | <a onClick="schovej_vlakno(12)" id="comment12_toggle1" title="Schová nebo rozbalí celé vlákno"
+                       class="ds_control_sbalit3">Sbalit</a>
+                    
+                    | <a href="#12" title="Přímá adresa na tento komentář">Link</a>
+                    | <a href="/EditUser?action=toBlacklist&amp;bName=tom11111&amp;ticket=805cKn1vvI&amp;url=/blog/show/400959#12" title="Přidá autora na seznam blokovaných uživatelů">Blokovat</a>
+                | <a href="/blog/EditRequest/400959?action=comment&amp;threadId=12" title="Žádost o přesun diskuse, stížnost na komentář">Admin</a>
+            </div>
+
+    </div>
+
+    <div id="comment12" >
+            <div class="ds_text">
+                Když už se mluví o zmatení cílových serverů, nepomohlo by u některých ( a u některých naopak uškodilo) prohlásit se za indexovacího robota (třeba googlebot)? Pak by mohli být (někteří) vstřícnější k většímu množství dotazů s vysokou frekvencí.
+            </div>
+
+            
+
+        <div class="ds_odsazeni">
+
+    <div class="ds_hlavicka ds_hlavicka_me" id="13">
+        <div class="ds_reseni" style="display:none">
+        </div>
+
+                <img src="/images/avatars/19684.png" id="comment13_avatar" alt="Bystroushaak avatar" class="ds_avatar">
+
+        12.2. 01:03
+
+<a href="/lide/bystroushaak">Bystroushaak</a>             | skóre: 26
+             | blog: <a href="/blog/bystroushaak">Bystroushaakův blog</a>
+             | Praha
+
+        <br>
+
+            <span class="ds_control_sbalit2" id="comment13_toggle2">
+                <a onClick="schovej_vlakno(13)" title="Schová nebo rozbalí celé vlákno">Rozbalit</a>
+                <a onClick="rozbal_vse(13)" title="Schová nebo rozbalí vše pod tímto komentářem">Rozbalit vše</a>
+            </span>
+
+        Re: Bolest proxy
+
+
+            <div id="comment13_controls">
+                
+                <a href="/blog/EditDiscussion/400959?action=add&amp;dizId=210591&amp;threadId=13">Odpovědět</a>
+                    | <a onClick="schovej_vlakno(13)" id="comment13_toggle1" title="Schová nebo rozbalí celé vlákno"
+                       class="ds_control_sbalit3">Sbalit</a>
+                    | <a href="#12" title="Odkaz na komentář o jednu úroveň výše">Výše</a>
+                    | <a href="#13" title="Přímá adresa na tento komentář">Link</a>
+                    | <a href="/EditUser?action=toBlacklist&amp;bUid=19684&amp;ticket=805cKn1vvI&amp;url=/blog/show/400959#13" title="Přidá autora na seznam blokovaných uživatelů">Blokovat</a>
+                | <a href="/blog/EditRequest/400959?action=comment&amp;threadId=13" title="Žádost o přesun diskuse, stížnost na komentář">Admin</a>
+            </div>
+
+    </div>
+
+    <div id="comment13" class="ds_text_user19684">
+            <div class="ds_text">
+                To je dobrý nápad, někdy to budu muset vyzkoušet.
+            </div>
+
+            <div class="signature"><a href="http://www.prozeny.cz/magazin/zdravi-a-zivotni-styl/tajemno/39988-datum-narozeni-co-o-vas-odhali-numerologicka-mrizka" rel="nofollow">Sudoku pro blondýny.</a></div>
+
+        <div class="ds_odsazeni">
+        </div>
+    </div>
+
+    <div class="ds_hlavicka" id="14">
+        <div class="ds_reseni" style="display:none">
+        </div>
+
+
+        12.2. 11:46
+
+               RD
+
+        <br>
+
+            <span class="ds_control_sbalit2" id="comment14_toggle2">
+                <a onClick="schovej_vlakno(14)" title="Schová nebo rozbalí celé vlákno">Rozbalit</a>
+                <a onClick="rozbal_vse(14)" title="Schová nebo rozbalí vše pod tímto komentářem">Rozbalit vše</a>
+            </span>
+
+        Re: Bolest proxy
+
+
+            <div id="comment14_controls">
+                
+                <a href="/blog/EditDiscussion/400959?action=add&amp;dizId=210591&amp;threadId=14">Odpovědět</a>
+                    | <a onClick="schovej_vlakno(14)" id="comment14_toggle1" title="Schová nebo rozbalí celé vlákno"
+                       class="ds_control_sbalit3">Sbalit</a>
+                    | <a href="#12" title="Odkaz na komentář o jednu úroveň výše">Výše</a>
+                    | <a href="#14" title="Přímá adresa na tento komentář">Link</a>
+                    | <a href="/EditUser?action=toBlacklist&amp;bName=RD&amp;ticket=805cKn1vvI&amp;url=/blog/show/400959#14" title="Přidá autora na seznam blokovaných uživatelů">Blokovat</a>
+                | <a href="/blog/EditRequest/400959?action=comment&amp;threadId=14" title="Žádost o přesun diskuse, stížnost na komentář">Admin</a>
+            </div>
+
+    </div>
+
+    <div id="comment14" >
+            <div class="ds_text">
+                V závislosti na cíli to pomoci může. Obecně však pomůže dočasně. Rozhodně ne trvale.
+            </div>
+
+            
+
+        <div class="ds_odsazeni">
+        </div>
+    </div>
+        </div>
+    </div>
+
+    <div class="ds_hlavicka" id="15">
+        <div class="ds_reseni" style="display:none">
+        </div>
+
+
+        23.2. 16:47
+
+               b
+
+        <br>
+
+            <span class="ds_control_sbalit2" id="comment15_toggle2">
+                <a onClick="schovej_vlakno(15)" title="Schová nebo rozbalí celé vlákno">Rozbalit</a>
+                <a onClick="rozbal_vse(15)" title="Schová nebo rozbalí vše pod tímto komentářem">Rozbalit vše</a>
+            </span>
+
+        Re: Bolest proxy
+
+
+            <div id="comment15_controls">
+                
+                <a href="/blog/EditDiscussion/400959?action=add&amp;dizId=210591&amp;threadId=15">Odpovědět</a>
+                    | <a onClick="schovej_vlakno(15)" id="comment15_toggle1" title="Schová nebo rozbalí celé vlákno"
+                       class="ds_control_sbalit3">Sbalit</a>
+                    
+                    | <a href="#15" title="Přímá adresa na tento komentář">Link</a>
+                    | <a href="/EditUser?action=toBlacklist&amp;bName=b&amp;ticket=805cKn1vvI&amp;url=/blog/show/400959#15" title="Přidá autora na seznam blokovaných uživatelů">Blokovat</a>
+                | <a href="/blog/EditRequest/400959?action=comment&amp;threadId=15" title="Žádost o přesun diskuse, stížnost na komentář">Admin</a>
+            </div>
+
+    </div>
+
+    <div id="comment15" >
+            <div class="ds_text">
+                Díky za pěkný shrnutí, především za to schéma ;)
+            </div>
+
+            
+
+        <div class="ds_odsazeni">
+        </div>
+    </div>
+
+        <p>
+            <a href="/blog/EditDiscussion?action=add&amp;threadId=0&amp;dizId=210591&amp;rid=400959" rel="nofollow">
+            Založit nové vlákno</a> &#8226;
+            <a href="#www-abclinuxu-cz">Nahoru</a>
+        </p>
+
+    </div> <!-- st -->
+
+    <div class="s_nadpis linkbox_nadpis">Píšeme jinde</div>
+    
+<div class="linkbox kontejner noext">
+    <table border="0">
+        <tr>
+                <td style="vertical-align:top">
+                    <a href="http://www.itbiz.cz/clanky/erp-novinky-na-trhu-a-jejich-vyuziti?utm_medium=linkbox&utm_campaign=linkbox" title="ERP: Novinky na trhu a jejich využití"><img src="http://www.itbiz.cz/images/upload/g/grasko-dollar-photo-club_s.jpg" width="180" height="120" alt="ERP: Novinky na trhu a jejich využití"></a>
+                    <p class="nazev_clanku"><a href="http://www.itbiz.cz/clanky/erp-novinky-na-trhu-a-jejich-vyuziti?utm_medium=linkbox&utm_campaign=linkbox">ERP: Novinky na trhu a jejich využití</a></p>
+                </td>
+                <td style="vertical-align:top">
+                    <a href="http://hdmag.cz/clanek/equalizer-recenze-blu-ray?utm_medium=linkbox&utm_campaign=linkbox" title="Equalizer (recenze Blu-ray)"><img src="http://linkbox.argonit.cz/images/equalizer-recenze-blu-ray.jpg" width="180" height="120" alt="Equalizer (recenze Blu-ray)"></a>
+                    <p class="nazev_clanku"><a href="http://hdmag.cz/clanek/equalizer-recenze-blu-ray?utm_medium=linkbox&utm_campaign=linkbox">Equalizer (recenze Blu-ray)</a></p>
+                </td>
+                <td style="vertical-align:top">
+                    <a href="http://www.abclinuxu.cz/clanky/hw-novinky-s-tsmc-vsechno-spatne?utm_medium=linkbox&utm_campaign=linkbox" title="TSMC odhaluje pravdu o chystaných technologiích"><img src="http://linkbox.argonit.cz/images/tsmc-odhaluje-pravdu-o-chystanych-technologiich.jpg" width="180" height="120" alt="TSMC odhaluje pravdu o chystaných technologiích"></a>
+                    <p class="nazev_clanku"><a href="http://www.abclinuxu.cz/clanky/hw-novinky-s-tsmc-vsechno-spatne?utm_medium=linkbox&utm_campaign=linkbox">TSMC odhaluje pravdu o chystaných technologiích</a></p>
+                </td>
+                <td style="vertical-align:top">
+                    <a href="http://droneandroid.cz/narazum-rezistentni-zachranarsky-dron-vyhral-1-milion-dolaru/?utm_medium=linkbox&utm_campaign=linkbox" title="Nárazům rezistentní dron vyhrál 1 milion dolarů"><img src="http://linkbox.argonit.cz/images/narazum-rezistentni-dron-vyhral-1-milion-dolaru.jpg" width="180" height="120" alt="Nárazům rezistentní dron vyhrál 1 milion dolarů"></a>
+                    <p class="nazev_clanku"><a href="http://droneandroid.cz/narazum-rezistentni-zachranarsky-dron-vyhral-1-milion-dolaru/?utm_medium=linkbox&utm_campaign=linkbox">Nárazům rezistentní dron vyhrál 1 milion dolarů</a></p>
+                </td>
+                <td style="vertical-align:top">
+                    <a href="http://www.itbiz.cz/clanky/za-diru-v-prohlizeci-spartan-microsoft-vyplati-az-15-000-dolaru?utm_medium=linkbox&utm_campaign=linkbox" title="Za díru v prohlížeči Spartan Microsoft vyplatí až 15 000 dolarů"><img src="http://www.itbiz.cz/images/upload/w/windows-10-spartan_s.jpg" width="180" height="120" alt="Za díru v prohlížeči Spartan Microsoft vyplatí až 15 000 dolarů"></a>
+                    <p class="nazev_clanku"><a href="http://www.itbiz.cz/clanky/za-diru-v-prohlizeci-spartan-microsoft-vyplati-az-15-000-dolaru?utm_medium=linkbox&utm_campaign=linkbox">Za díru v prohlížeči Spartan Microsoft vyplatí až 15 000 dolarů</a></p>
+                </td>
+        </tr>
+    </table>
+</div>
+
+    <div class="dl noext">
+        <div class="dl_vlevo">ISSN 1214-1267 &nbsp; Powered by
+            <a href="http://www.hosting90.cz" title="Server hosting, VPS, virtuální servery, webhosting">Hosting 90</a>
+            <a href="http://www.hosting90.cz"><img src="/images/clanky/reklama/hosting90.png" alt="Server hosting" style="vertical-align: bottom; padding-left: 1ex"></a>
+            
+        </div>
+        <div class="dl_vpravo">
+            <a href="/redakce">Redakce</a> |
+            <a href="/reklama">Inzerce</a> |
+            <a href="/doc/podminky-pouziti">Podmínky použití</a> |
+            <a href="/doc/osobni-udaje">Osobní údaje</a>
+        </div>
+        &copy; 1999-2015 <a href="http://www.nitemedia.cz">Nitemedia s. r. o.</a> Všechna práva vyhrazena.
+    </div>
+
+</div> <!-- obal -->
+
+<!-- ad position 'gg-anal' -->
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+var pageTracker = _gat._getTracker("UA-3151434-1");
+pageTracker._initData();
+pageTracker._trackPageview();
+</script><!-- ad position 'ad-end' -->
+<!-- BBelements one2many code -->
+<!-- HowTo: All the ad codes must be above this code! -->
+<!-- HowTo: It is good idea to place this code just below the last ad code. -->
+<!-- https://go.eu.bbelements.com/bb/bb_one2n.js -->
+<script type="text/javascript" charset='utf-8' src="https://go.eu.bbelements.com/bb/bb_one2n.js"></script>
+
+<script type='text/javascript'>/* <![CDATA[ */ 
+bmone2n.addPosition('14398.1.4.64','');
+bmone2n.addPosition('14398.1.2.64','');
+bmone2n.addPosition('14398.1.3.64','');
+bmone2n.addPosition('14398.1.5.64','');
+bmone2n.addPosition('14398.1.7.64','');
+bmone2n.addPosition('14398.1.8.1','');
+bmone2n.addPosition('14398.1.1.2','');
+bmone2n.addPosition('14398.2.8.1','');
+bmone2n.addPosition('14398.2.4.64','');
+bmone2n.addPosition('14398.2.2.64','');
+bmone2n.addPosition('14398.2.3.64','');
+bmone2n.addPosition('14398.2.5.64','');
+bmone2n.addPosition('14398.2.7.64','');
+bmone2n.addPosition('14398.2.1.2','');
+bmone2n.addPosition('14398.2.8.1','');
+bmone2n.addPosition('14398.2.14.2','');
+bmone2n.addPosition('14398.1.14.2','');
+bmone2n.addPosition('14398.1.4.7','');
+bmone2n.addPosition('14398.2.4.1','');
+
+
+bmone2n.getAd('go.eu.bbelements.com','',''+(typeof(bburlparam)=='string'?'&'+bburlparam:''));
+/* ]]> */</script>
+<div id='bmone2t-14398.1.8.1' style='display:none'><script type='text/javascript'>/* <![CDATA[ */ bmone2n.makeAd('14398.1.8.1'); /* ]]> */</script></div>
+<div id='bmone2t-14398.1.4.64' style='display:none'><script type='text/javascript'>/* <![CDATA[ */ bmone2n.makeAd('14398.1.4.64'); /* ]]> */</script></div>
+<div id='bmone2t-14398.1.2.64' style='display:none'><script type='text/javascript'>/* <![CDATA[ */ bmone2n.makeAd('14398.1.2.64'); /* ]]> */</script></div>
+<div id='bmone2t-14398.1.3.64' style='display:none'><script type='text/javascript'>/* <![CDATA[ */ bmone2n.makeAd('14398.1.3.64'); /* ]]> */</script></div>
+<div id='bmone2t-14398.1.5.64' style='display:none'><script type='text/javascript'>/* <![CDATA[ */ bmone2n.makeAd('14398.1.5.64'); /* ]]> */</script></div>
+<div id='bmone2t-14398.1.7.64' style='display:none'><script type='text/javascript'>/* <![CDATA[ */ bmone2n.makeAd('14398.1.7.64'); /* ]]> */</script></div>
+<div id='bmone2t-14398.1.1.2' style='display:none'><script type='text/javascript'>/* <![CDATA[ */ bmone2n.makeAd('14398.1.1.2'); /* ]]> */</script></div>
+<div id='bmone2t-14398.2.8.1' style='display:none'><script type='text/javascript'>/* <![CDATA[ */ bmone2n.makeAd('14398.2.8.1'); /* ]]> */</script></div>
+<div id='bmone2t-14398.2.4.64' style='display:none'><script type='text/javascript'>/* <![CDATA[ */ bmone2n.makeAd('14398.2.4.64'); /* ]]> */</script></div>
+<div id='bmone2t-14398.2.2.64' style='display:none'><script type='text/javascript'>/* <![CDATA[ */ bmone2n.makeAd('14398.2.2.64'); /* ]]> */</script></div>
+<div id='bmone2t-14398.2.3.64' style='display:none'><script type='text/javascript'>/* <![CDATA[ */ bmone2n.makeAd('14398.2.3.64'); /* ]]> */</script></div>
+<div id='bmone2t-14398.2.5.64' style='display:none'><script type='text/javascript'>/* <![CDATA[ */ bmone2n.makeAd('14398.2.5.64'); /* ]]> */</script></div>
+<div id='bmone2t-14398.2.7.64' style='display:none'><script type='text/javascript'>/* <![CDATA[ */ bmone2n.makeAd('14398.2.7.64'); /* ]]> */</script></div>
+<div id='bmone2t-14398.2.1.2' style='display:none'><script type='text/javascript'>/* <![CDATA[ */ bmone2n.makeAd('14398.2.1.2'); /* ]]> */</script></div>
+<div id='bmone2t-14398.2.14.2' style='display:none'><script type='text/javascript'>/* <![CDATA[ */ bmone2n.makeAd('14398.2.14.2'); /* ]]> */</script></div>
+<div id='bmone2t-14398.1.14.2' style='display:none'><script type='text/javascript'>/* <![CDATA[ */ bmone2n.makeAd('14398.1.14.2'); /* ]]> */</script></div>
+<div id='bmone2t-14398.1.4.7' style='display:none'><script type='text/javascript'>/* <![CDATA[ */ bmone2n.makeAd('14398.1.4.7'); /* ]]> */</script></div>
+<div id='bmone2t-14398.2.4.1' style='display:none'><script type='text/javascript'>/* <![CDATA[ */ bmone2n.makeAd('14398.2.4.1'); /* ]]> */</script></div>
+<script type='text/javascript'>/* <![CDATA[ */ bmone2n.moveAd(); /* ]]> */</script>
+</body>
+</html>
