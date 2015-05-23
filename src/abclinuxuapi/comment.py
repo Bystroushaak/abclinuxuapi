@@ -111,14 +111,23 @@ class Comment(object):
         return response_to_link.split("#")[-1]
 
     @staticmethod
+    def _parse_text(body_tag):
+        text_tag = body_tag.find("div", {"class": "ds_text"})
+
+        return first(text_tag).getContent()
+
+    @staticmethod
     def _from_head_and_body(head_tag, body_tag):
         c = Comment()
+
+        # fill object
+        c.url = Comment._parse_url(head_tag)
+        c.text = Comment._parse_text(body_tag)
+        c.response_to = Comment._response_to(head_tag)
         c.timestamp = Comment._izolate_timestamp(head_tag)
         c.username, c.registered_user = Comment._izolate_username(head_tag)
-        c.url = Comment._parse_url(head_tag)
-        c.response_to = Comment._response_to(head_tag)
 
-        assert False
+        return c
 
     @staticmethod
     def comments_from_html(html):
