@@ -120,3 +120,11 @@ def test_parse_url(unreg_header):
 
 def test_parse_url_reg(reg_header):
     assert Comment._parse_url(reg_header) == BLOG_URL + "#9"
+
+
+def test_response_to(unreg_header):
+    assert Comment._response_to(unreg_header) is None
+
+
+def test_response_to_reg(reg_header):
+    assert Comment._response_to(reg_header) == "2"

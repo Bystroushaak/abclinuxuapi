@@ -95,13 +95,28 @@ class Comment(object):
         return url_context("/blog/show/%s#%s" % (blog_id, comment_id))
 
     @staticmethod
+    def _response_to(head_tag):
+        response_to_tag = head_tag.find(
+            "a",
+            fn=lambda x: x.getContent() == "Výše"
+        )
+
+        if not response_to_tag:
+            return None
+
+        # <a href="#2" title="...">Výše</a> -> #2
+        response_to_link = first(response_to_tag).params["href"]
+
+        # #2 -> 2
+        return response_to_link.split("#")[-1]
+
+    @staticmethod
     def _from_head_and_body(head_tag, body_tag):
         c = Comment()
         c.timestamp = Comment._izolate_timestamp(head_tag)
         c.username, c.registered_user = Comment._izolate_username(head_tag)
-
-        print head_tag
-        # print body_tag
+        c.url = Comment._parse_url(head_tag)
+        c.response_to = Comment._response_to(head_tag)
 
         assert False
 
