@@ -273,14 +273,12 @@ class Blogpost(object):
         self._dom = dhtmlparser.parseString(data)
         self._content_tag = None
 
-        # comments
-        # comments_n
-
         self._parse_title()
         self._parse_text()
         self._parse_tags()
         self._parse_rating()
         self._parse_meta()
+
         self.comments = Comment.comments_from_html(self._dom)
         self.comments_n = len(self.comments)
 

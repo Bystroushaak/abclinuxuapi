@@ -85,6 +85,9 @@ class Comment(object):
         # /blog/EditDiscussion/400959;jsessii... -> /blog/EditDiscussion/400959
         response_link = response_link.split(";")[0]
 
+        # /blog/EditDiscussion/400959?action=a.. -> /blog/EditDiscussion/400959
+        response_link = response_link.split("?")[0]
+
         # /blog/EditDiscussion/400959 -> 400959
         blog_id = first(
             token
@@ -159,9 +162,18 @@ class Comment(object):
         # flat-nested lists
 
         # pick all header divs
+        def header_div_class(item):
+            """
+            Identify header dicts. Sometimes there is class="ds_hlavicka" and
+            sometimes there is class="ds_hlavicka ds_hlavicka_me".
+            """
+            class_descr = item.params.get("class", "")
+
+            return class_descr.startswith("ds_hlavicka")
+
         head_dict = {
             head_div.params["id"]: head_div
-            for head_div in dom.find("div", {"class": "ds_hlavicka"})
+            for head_div in dom.find("div", fn=header_div_class)
         }
 
         def id_from_comment_div(comment_div):
@@ -179,4 +191,4 @@ class Comment(object):
             for comment_div in dom.find("div", {"class": "ds_text"})
         ]
 
-
+        return comment_list
