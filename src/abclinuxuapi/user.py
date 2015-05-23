@@ -12,6 +12,7 @@ import dhtmlparser
 
 import shared
 from shared import first
+from shared import url_context
 from shared import ABCLINUXU_URL
 from concept import Concept, check_error_div
 from blogpost import Blogpost
@@ -40,9 +41,7 @@ class User(object):
 
     @staticmethod
     def from_user_id(user_id):  # TODO: test this!
-        data = shared.download(
-            urljoin(ABCLINUXU_URL, "/lide/%s" % str(user_id))
-        )
+        data = shared.download(url_context("/lide/" + str(user_id)))
         dom = dhtmlparser.parseString(data)
         dhtmlparser.makeDoubleLinked(dom)
 
