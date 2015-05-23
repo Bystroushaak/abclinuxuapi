@@ -1,6 +1,11 @@
 Changelog
 =========
 
+0.3.0
+-----
+    - Added parsing of comments under blogposts.
+    - Fixed bugs.
+
 0.2.0
 -----
     - Added a lot of features.
