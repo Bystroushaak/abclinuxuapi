@@ -14,6 +14,7 @@ import dhtmlparser
 import shared
 from shared import first
 from shared import url_context
+from shared import parse_timestamp
 from shared import date_to_timestamp
 from comment import Comment
 
@@ -123,24 +124,6 @@ class Blogpost(object):
             return Rating(int(rating[1]), int(rating[3]))
 
     @staticmethod
-    def _parse_timestamp(meta):
-        """
-        Parse numeric timestamp from the date representation.
-
-        Args:
-            meta (str): Meta html from the blogpost body.
-
-        Returns:
-            int: Timestamp.
-        """
-        date = filter(
-            lambda x: ":" in x and "." in x,
-            str(meta).splitlines()
-        )
-
-        return date_to_timestamp(date[0])
-
-    @staticmethod
     def from_html(html):
         title_tag = first(html.find("h2", {"class": "st_nadpis"}))
         rel_link = first(title_tag.find("a")).params["href"]
@@ -156,7 +139,7 @@ class Blogpost(object):
         blog.title = title
         blog.intro = Blogpost._parse_intro(html, meta, title_tag)
         blog.rating = Blogpost._parse_rating_from_preview(meta)
-        blog.created_ts = Blogpost._parse_timestamp(meta)
+        blog.created_ts = parse_timestamp(meta)
         blog.comments_n = Blogpost._parse_comments_n(meta)
 
         return blog
@@ -267,7 +250,7 @@ class Blogpost(object):
         # get clean string - another thing which is not semantic at all
         lines = dhtmlparser.removeTags(meta_vypis_tag)
 
-        self.created_ts = Blogpost._parse_timestamp(lines)
+        self.created_ts = parse_timestamp(lines)
 
         # rest will be picked one by one
         lines = lines.strip().splitlines()

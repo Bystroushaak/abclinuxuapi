@@ -38,5 +38,25 @@ def date_to_timestamp(date):
     return time.mktime(time.strptime(date, "%d.%m.%Y %H:%M"))
 
 
+def parse_timestamp(meta):
+    """
+    Parse numeric timestamp from the date representation.
+
+    Args:
+        meta (str): Meta html from the blogpost body.
+
+    Returns:
+        int: Timestamp.
+    """
+    date = filter(
+        lambda x: ":" in x and "." in x,
+        str(meta).splitlines()
+    )
+
+    assert date, "Date not found!"
+
+    return date_to_timestamp(date[0])
+
+
 def url_context(url):
     return urljoin(ABCLINUXU_URL, url)
