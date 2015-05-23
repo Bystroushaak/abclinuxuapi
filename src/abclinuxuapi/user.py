@@ -8,7 +8,7 @@ import time
 from urlparse import urljoin
 
 import requests
-import dhtmlparser as d
+import dhtmlparser
 
 import shared
 from shared import first
@@ -38,6 +38,35 @@ class User(object):
     def init(self):
         self.blog_url = self._parse_blogname()
 
+    @staticmethod
+    def from_user_id(user_id):  # TODO: test this!
+        data = shared.download(
+            urljoin(ABCLINUXU_URL, "/lide/%s" % str(user_id))
+        )
+        dom = dhtmlparser.parseString(data)
+        dhtmlparser.makeDoubleLinked(dom)
+
+        # <li><a href="/lide/unittest/objekty" rel="nofollow">Seznam příspěvků
+        # na abclinuxu.cz</a>
+        a_tags = dom.match(
+            ["li"],
+            {
+                "tag_name": "a",
+                "fn": lambda x: x.params.get("href", "").startswith("/lide/")
+            }
+        )
+
+        # pick only links which have content that starts with Seznam
+        links = [
+            a_tag.params["href"]
+            for a_tag in a_tags
+            if a_tag.getContent().startswith("Seznam")
+        ]
+
+        username = links[-1].split("/")[2]
+
+        return User(username)
+
     def _get_user_id(self):
         """
         Resolve user's ID number for logged user.
@@ -49,7 +78,7 @@ class User(object):
             return self._user_id
 
         self.login()
-        dom = d.parseString(self._get(ABCLINUXU_URL))
+        dom = dhtmlparser.parseString(self._get(ABCLINUXU_URL))
 
         # resolve user's navigation panel
         nav_bar = dom.match(
@@ -76,7 +105,7 @@ class User(object):
     def _parse_blogname(self):
         data = self._get(self._compose_profile_url())
 
-        dom = d.parseString(data)
+        dom = dhtmlparser.parseString(data)
         blogname = filter(
             lambda x: x.getContent().strip().startswith("Můj blog: "),
             dom.find("h2")
@@ -146,7 +175,7 @@ class User(object):
         ).text.encode("utf-8")
 
         # test, whether the user is successfully logged in
-        dom = d.parseString(data)
+        dom = dhtmlparser.parseString(data)
 
         # TODO: přepsat na .match()
         logged_in = dom.find("div", {"class": "hl"})
@@ -195,7 +224,7 @@ class User(object):
             )[0]
             data = data.split('<div class="st" id="st">')[1]
 
-            dom = d.parseString(data)
+            dom = dhtmlparser.parseString(data)
             for blog in dom.find("div", {"class": "cl"}):
                 parsed.append(Blogpost.from_html(blog))
 
@@ -226,7 +255,7 @@ class User(object):
 
         data = data.split('<div class="s_nadpis">Rozepsané zápisy</div>')[1]
 
-        dom = d.parseString(data)
+        dom = dhtmlparser.parseString(data)
         concept_list = dom.find("div", {"class": "s_sekce"})[0]
 
         # links to concepts are stored in <li>
@@ -276,7 +305,7 @@ class User(object):
 
         self.login()
 
-        dom = d.parseString(self._get(self.blog_url))
+        dom = dhtmlparser.parseString(self._get(self.blog_url))
 
         # get section with links to new blog
         s_sekce = filter(
@@ -298,7 +327,7 @@ class User(object):
 
         # get "add blog" page
         data = self._get(ABCLINUXU_URL + add_blog_link)
-        dom = d.parseString(data)
+        dom = dhtmlparser.parseString(data)
 
         form_action = dom.find("form", {"name": "form"})[0].params["action"]
 
@@ -308,7 +337,7 @@ class User(object):
                 "cid": 0,
                 "publish": User._ts_to_concept_date(ts_of_pub),
                 "content": text,
-                "title": d.removeTags(title),
+                "title": dhtmlparser.removeTags(title),
                 "delay": "Do konceptů",
                 "action": "add2"
             }
@@ -345,7 +374,7 @@ class User(object):
         )
 
         # check for errors
-        dom = d.parseString(data.text.encode("utf-8"))
+        dom = dhtmlparser.parseString(data.text.encode("utf-8"))
         errors = dom.find("p", {"class": "error"})
         if errors:
             raise ValueError(first(errors).getContent())
