@@ -9,6 +9,7 @@ import copy
 import dhtmlparser
 
 from shared import first
+from shared import url_context
 from shared import parse_timestamp
 
 
@@ -17,13 +18,17 @@ class Comment(object):
     def __init__(self):
         self.url = None
         self.text = None
-        self.username = None
         self.timestamp = None
-        self.comment_id = None
+
+        self.username = None
         self.registered_user = False
 
         self.responses = []  #: Reference to all response comments
         self.response_to = None  #: Reference to parent comment
+
+    @property
+    def comment_id(self):
+        return self.url.split("#")[-1]
 
     @staticmethod
     def _izolate_timestamp(head_tag):
@@ -63,6 +68,31 @@ class Comment(object):
         username = lines[lines.index(line_with_time) + 1]
 
         return username.strip(), False  # unregistered
+
+    @staticmethod
+    def _parse_url(head_tag):
+        comment_id = head_tag.params["id"]
+
+        # parse full link from
+        # <a href="/blog/EditDiscussion/400959;jsessionid=kufis2spplnh6gu671mxq
+        # e2j?action=add&amp;dizId=210591&amp;threadId=9">Odpovědět</a>
+        response_tag = head_tag.find(
+            "a",
+            fn=lambda x: x.getContent() == "Odpovědět"
+        )
+        response_link = first(response_tag).params["href"]
+
+        # /blog/EditDiscussion/400959;jsessii... -> /blog/EditDiscussion/400959
+        response_link = response_link.split(";")[0]
+
+        # /blog/EditDiscussion/400959 -> 400959
+        blog_id = first(
+            token
+            for token in response_link.split("/")
+            if token.isdigit()
+        )
+
+        return url_context("/blog/show/%s#%s" % (blog_id, comment_id))
 
     @staticmethod
     def _from_head_and_body(head_tag, body_tag):
@@ -111,6 +141,7 @@ class Comment(object):
         }
 
         def id_from_comment_div(comment_div):
+            # <div id="comment3"> -> 3
             id_str = comment_div.parent.params["id"]
 
             return id_str.replace("comment", "")

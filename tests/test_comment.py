@@ -11,6 +11,10 @@ import dhtmlparser
 from abclinuxuapi import Comment
 
 
+# Variables ===================================================================
+BLOG_URL = "https://www.abclinuxu.cz/blog/show/400959"
+
+
 # Fixtures ====================================================================
 @pytest.fixture
 def reg_header():
@@ -108,3 +112,11 @@ def test_izolate_name_reg(reg_header):
 
     assert username == "manasekp"
     assert registered
+
+
+def test_parse_url(unreg_header):
+    assert Comment._parse_url(unreg_header) == BLOG_URL + "#3"
+
+
+def test_parse_url_reg(reg_header):
+    assert Comment._parse_url(reg_header) == BLOG_URL + "#9"
