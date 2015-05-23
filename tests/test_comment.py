@@ -94,3 +94,17 @@ def test_izolate_timestamp_reg(reg_header):
     ts = Comment._izolate_timestamp(reg_header)
 
     assert ts == 1423664460
+
+
+def test_izolate_name(unreg_header):
+    username, registered = Comment._izolate_username(unreg_header)
+
+    assert username == "Tomáškova máma"
+    assert not registered
+
+
+def test_izolate_name_reg(reg_header):
+    username, registered = Comment._izolate_username(reg_header)
+
+    assert username == "manasekp"
+    assert registered

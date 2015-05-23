@@ -17,12 +17,13 @@ class Comment(object):
     def __init__(self):
         self.url = None
         self.text = None
-        self.poster_id = None
-        self.poster_name = None
+        self.username = None
         self.timestamp = None
+        self.comment_id = None
+        self.registered_user = False
 
-        self.response_to = None  #: Reference to parent comment
         self.responses = []  #: Reference to all response comments
+        self.response_to = None  #: Reference to parent comment
 
     @staticmethod
     def _izolate_timestamp(head_tag):
@@ -34,12 +35,42 @@ class Comment(object):
         return parse_timestamp(lines)
 
     @staticmethod
+    def _izolate_username(head_tag):
+        user_tag = head_tag.find("a", {"href": "/lide/manasekp"})
+
+        if user_tag:
+            user_link = first(user_tag).params["href"]
+
+            # /lide/manasekp -> manasekp
+            real_username = user_link.split("/")[2]
+
+            return real_username, True  # registered
+
+        # parse unregistered username from unstructured HTML like:
+        #         10.2. 21:53
+        #
+        #       Tomáškova máma
+
+        str_repr = dhtmlparser.removeTags(head_tag.getContent())
+
+        # remove blank lines
+        lines = [x.strip() for x in str_repr.splitlines() if x.strip()]
+
+        # izolate line with time
+        line_with_time = first(x for x in lines if ":" in x and "." in x)
+
+        # pick line next to line with time
+        username = lines[lines.index(line_with_time) + 1]
+
+        return username.strip(), False  # unregistered
+
+    @staticmethod
     def _from_head_and_body(head_tag, body_tag):
-        def izolate_name(head_tag):
-            pass
+        c = Comment()
+        c.timestamp = Comment._izolate_timestamp(head_tag)
+        c.username, c.registered_user = Comment._izolate_username(head_tag)
 
         print head_tag
-        print Comment._izolate_timestamp(head_tag)
         # print body_tag
 
         assert False
