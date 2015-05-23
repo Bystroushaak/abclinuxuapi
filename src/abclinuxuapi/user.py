@@ -40,19 +40,18 @@ class User(object):
         self.blog_url = self._parse_blogname()
 
     @staticmethod
-    def from_user_id(user_id):  # TODO: test this!
-        data = shared.download(url_context("/lide/" + str(user_id)))
+    def from_user_id(user_id):
+        data = shared.download(url_context("/Profile/" + str(user_id)))
         dom = dhtmlparser.parseString(data)
         dhtmlparser.makeDoubleLinked(dom)
 
+        shared.handle_errors(dom)
+
         # <li><a href="/lide/unittest/objekty" rel="nofollow">Seznam příspěvků
         # na abclinuxu.cz</a>
-        a_tags = dom.match(
-            ["li"],
-            {
-                "tag_name": "a",
-                "fn": lambda x: x.params.get("href", "").startswith("/lide/")
-            }
+        a_tags = dom.find(
+            "a",
+            fn=lambda x: x.params.get("href", "").startswith("/lide/")
         )
 
         # pick only links which have content that starts with Seznam

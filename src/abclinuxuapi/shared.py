@@ -71,3 +71,22 @@ def parse_timestamp(meta):
 
 def url_context(url):
     return urljoin(ABCLINUXU_URL, url)
+
+
+def handle_errors(dom):
+    error = dom.find(
+        "h1",
+        {"class": "st_nadpis"},
+        fn=lambda x: x.getContent() == "Chyba"
+    )
+
+    if error:
+        error = first(error)
+
+        # I want <p> next to <h1> with error
+        elements = error.parent.childs
+        elements = elements[elements.index(error):]
+
+        error_msg = first(x for x in elements if x.getTagName() == "p")
+
+        raise UserWarning(error_msg.getContent())
