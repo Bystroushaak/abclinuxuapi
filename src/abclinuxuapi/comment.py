@@ -27,7 +27,7 @@ class Comment(object):
         self.response_to = None  #: Reference to parent comment
 
     @property
-    def comment_id(self):
+    def id(self):
         return self.url.split("#")[-1]
 
     @staticmethod
@@ -136,10 +136,14 @@ class Comment(object):
     def comments_from_html(html):
         dom = html
 
+        # make sure, that you don't modify `html` attribute
         if isinstance(html, basestring):
             dom = dhtmlparser.parseString(html)
         else:
             dom = copy.deepcopy(dom)
+
+        # comments are not stored in hierarchical structure, but in somehow
+        # flat-nested lists
 
         # pick the content tag
         dom = dom.find("div", {"class": "st", "id": "st"})
@@ -157,9 +161,6 @@ class Comment(object):
             dom.childs.pop(0)
 
         dom.childs.pop(0)
-
-        # comments are not stored in hierarchical structure, but in somehow
-        # flat-nested lists
 
         # pick all header divs
         def header_div_class(item):
@@ -182,7 +183,7 @@ class Comment(object):
 
             return id_str.replace("comment", "")
 
-        # go thru all comment lists
+        # parse list of all comments on the page
         comment_list = [
             Comment._from_head_and_body(
                 head_dict[id_from_comment_div(comment_div)],
@@ -190,5 +191,17 @@ class Comment(object):
             )
             for comment_div in dom.find("div", {"class": "ds_text"})
         ]
+
+        # {id: comment}
+        comment_dict = {
+            comment.id: comment
+            for comment in comment_list
+        }
+
+        # link comments into tree
+        for comment in comment_list:
+            if comment.response_to:
+                comment.response_to = comment_dict[comment.response_to]
+                comment.response_to.responses.append(comment)
 
         return comment_list
