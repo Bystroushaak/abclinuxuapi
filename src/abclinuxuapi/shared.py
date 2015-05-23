@@ -5,6 +5,7 @@
 #
 # Imports =====================================================================
 import time
+import types
 from urlparse import urljoin
 
 import requests
@@ -32,7 +33,7 @@ def first(inp_data):
 def date_to_timestamp(date):
     date = date.strip()
 
-    if len(date) <= 11:  # new blogs are without year
+    if len(date) <= 11:  # new items are without year
         date = date.replace(". ", ".%d " % time.localtime().tm_year)
 
     return time.mktime(time.strptime(date, "%d.%m.%Y %H:%M"))
@@ -48,14 +49,17 @@ def parse_timestamp(meta):
     Returns:
         int: Timestamp.
     """
+    if type(meta) not in [list, tuple, types.GeneratorType]:
+        meta = str(meta).splitlines()
+
     date = filter(
         lambda x: ":" in x and "." in x,
-        str(meta).splitlines()
+        meta
     )
 
     assert date, "Date not found!"
 
-    return date_to_timestamp(date[0])
+    return date_to_timestamp(first(date))
 
 
 def url_context(url):
