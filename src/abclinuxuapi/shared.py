@@ -6,6 +6,7 @@
 # Imports =====================================================================
 import time
 import types
+import datetime
 from urlparse import urljoin
 
 import requests
@@ -33,6 +34,12 @@ def first(inp_data):
 def date_to_timestamp(date):
     date = date.strip()
 
+    today = time.strftime("%d.%m.%Y", time.localtime())
+    yesterday = datetime.date.today() - datetime.timedelta(days=-1)
+
+    date = date.replace("dnes", today)
+    date = date.replace("včera", yesterday.strftime("%d.%m.%Y"))
+
     if len(date) <= 11:  # new items are without year
         date = date.replace(". ", ".%d " % time.localtime().tm_year)
 
@@ -52,10 +59,10 @@ def parse_timestamp(meta):
     if type(meta) not in [list, tuple, types.GeneratorType]:
         meta = str(meta).splitlines()
 
-    date = filter(
-        lambda x: ":" in x and "." in x,
-        meta
-    )
+    date = [
+        x for x in meta
+        if ":" in x and any(["." in x, "včera" in x, "dnes" in x])
+    ]
 
     assert date, "Date not found!"
 
