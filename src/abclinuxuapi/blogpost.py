@@ -124,7 +124,7 @@ class Blogpost(object):
             return Rating(int(rating[1]), int(rating[3]))
 
     @staticmethod
-    def from_html(html):
+    def from_html(html, lazy=True):
         title_tag = first(html.find("h2", {"class": "st_nadpis"}))
         rel_link = first(title_tag.find("a")).params["href"]
 
@@ -134,13 +134,14 @@ class Blogpost(object):
         # get meta
         meta = html.find("p", {"class": "meta-vypis"})[0]
 
-        blog = Blogpost(url=link, lazy=True)
+        blog = Blogpost(url=link, lazy=lazy)
 
-        blog.title = title
-        blog.intro = Blogpost._parse_intro(html, meta, title_tag)
-        blog.rating = Blogpost._parse_rating_from_preview(meta)
-        blog.created_ts = parse_timestamp(meta)
-        blog.comments_n = Blogpost._parse_comments_n(meta)
+        if lazy:
+            blog.title = title
+            blog.intro = Blogpost._parse_intro(html, meta, title_tag)
+            blog.rating = Blogpost._parse_rating_from_preview(meta)
+            blog.created_ts = parse_timestamp(meta)
+            blog.comments_n = Blogpost._parse_comments_n(meta)
 
         return blog
 
