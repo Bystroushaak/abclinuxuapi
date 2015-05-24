@@ -127,3 +127,11 @@ def test_meta_parsing(bpost):
     assert bpost.created_ts == 1423587660.0
     assert bpost.last_modified_ts >= 1423591140.0
     assert bpost.readed >= 1451
+
+
+def test_get_image_urls(bpost):
+    assert bpost.get_image_urls()
+    assert bpost.get_image_urls()[0] == (
+        "https://www.abclinuxu.cz/images/screenshots/0/9/"
+        "210590-bolest-proxy-6017333664768008869.png"
+    )

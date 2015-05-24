@@ -6,7 +6,6 @@
 # Imports =====================================================================
 import time
 import copy
-from urlparse import urljoin
 from collections import namedtuple
 
 import dhtmlparser
@@ -21,10 +20,24 @@ from comment import Comment
 
 # Functions & objects =========================================================
 class Rating(namedtuple("Rating", ["rating", "base"])):
-    pass
+    """
+    Container holding informations about rating.
+
+    Attr:
+        rating (int): Percentual rating of the blogpost.
+        base (int): How many people voted.
+    """
 
 
 class Tag(str):
+    """
+    Each blog may have many tags. This is container for informations about each
+    tag.
+
+    Attr:
+        name (str): Name of the tag.
+        url (str): URL to the informations about tag.
+    """
     def __new__(self, name, *args, **kwargs):
         return super(Tag, self).__new__(self, name)
 
@@ -269,6 +282,9 @@ class Blogpost(object):
             self.readed = int(reads)
 
     def pull(self):
+        """
+        Download page with blogpost. Parse text, comments and everything else.
+        """
         data = download(url=self.url)
 
         self._dom = dhtmlparser.parseString(data)
@@ -286,5 +302,21 @@ class Blogpost(object):
     def edit(self):
         raise NotImplementedError("Not implemented yet.")
 
-    def get_images(self):
-        pass
+    def get_image_urls(self):
+        """
+        Returns:
+            list: List of str containing absolute URL of the image.
+        """
+        image_links = (
+            image_tag.params["src"]
+            for image_tag in dhtmlparser.parseString(self.text).find("img")
+            if "src" in image_tag.params
+        )
+
+        def remote_link(link):
+            return link.startswith("http://") or link.startswith("https://")
+
+        return [
+            link if remote_link(link) else url_context(link)
+            for link in image_links
+        ]
