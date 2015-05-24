@@ -1,6 +1,11 @@
 Changelog
 =========
 
+0.3.1
+-----
+    - Fixed bugs in user.py.
+    - Added ``iter_blogposts()``, ``first_blog_page()`` functions for browsing the bloglist.
+
 0.3.0
 -----
     - Added parsing of comments under blogposts.
