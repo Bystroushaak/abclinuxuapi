@@ -234,7 +234,7 @@ class Blogpost(object):
 
         # <span> with voting info
         voting_spans = first(rating_tags).find("span")
-        
+
         if not voting_spans:
             return
 
