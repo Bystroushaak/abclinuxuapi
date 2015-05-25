@@ -174,11 +174,7 @@ class Blogpost(object):
         if self._content_tag:
             return self._content_tag
 
-        content_tags = self._dom.match(
-            ["div", {"class": "obal"}],
-            ["div", {"class": "st", "id": "st"}]
-        )
-
+        content_tags = self._dom.find("div", {"class": "st", "id": "st"})
         if not content_tags:
             raise ValueError("Can't find content - is this really blogpost?")
 
