@@ -10,6 +10,7 @@ import dhtmlparser
 
 from shared import first
 from shared import url_context
+from shared import date_izolator
 from shared import parse_timestamp
 
 
@@ -62,7 +63,7 @@ class Comment(object):
         lines = [x.strip() for x in str_repr.splitlines() if x.strip()]
 
         # izolate line with time
-        line_with_time = first(x for x in lines if ":" in x and "." in x)
+        line_with_time = first(date_izolator(lines))
 
         # pick line next to line with time
         username = lines[lines.index(line_with_time) + 1]

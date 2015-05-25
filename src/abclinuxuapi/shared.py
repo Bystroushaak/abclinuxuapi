@@ -46,6 +46,23 @@ def date_to_timestamp(date):
     return time.mktime(time.strptime(date, "%d.%m.%Y %H:%M"))
 
 
+def date_izolator(lines):
+    """
+    Return all lines, that looks like it may be date in one of three
+    abclinuxu formats.
+
+    Args:
+        lines (list): List of strings with lines which ma by dates.
+
+    Returns:
+        list: List of lines, which looks like they may contain dates.
+    """
+    return [
+        x for x in lines
+        if ":" in x and any(["." in x, "včera" in x, "dnes" in x])
+    ]
+
+
 def parse_timestamp(meta):
     """
     Parse numeric timestamp from the date representation.
@@ -59,11 +76,7 @@ def parse_timestamp(meta):
     if type(meta) not in [list, tuple, types.GeneratorType]:
         meta = str(meta).splitlines()
 
-    date = [
-        x for x in meta
-        if ":" in x and any(["." in x, "včera" in x, "dnes" in x])
-    ]
-
+    date = date_izolator(meta)
     assert date, "Date not found!"
 
     return date_to_timestamp(first(date))
