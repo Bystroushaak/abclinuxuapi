@@ -5,6 +5,7 @@ Changelog
 -----
     - Added date_izolator(). Fixed bugs in comments parsing with relative dates.
     - Fixed bug in parsing of Blogpost's content.
+    - Added blog iterator tor User object.
 
 0.3.2
 -----

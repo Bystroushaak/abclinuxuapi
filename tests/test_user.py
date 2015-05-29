@@ -97,3 +97,9 @@ def test_from_user_id():
     u = abclinuxuapi.User.from_user_id("19684")
 
     assert u.username == "bystroushaak"
+
+
+def test_iterator():
+    blogs = [blog for blog in abclinuxuapi.User("bystroushaak")]
+
+    assert len(blogs) > 56

@@ -209,22 +209,24 @@ class User(object):
         if not self.has_blog():
             return []
 
-        cnt = 0
-        posts = []
-        parsed = [1]  # just placeholder for first while iteration
-        while parsed:
-            parsed = []
-            data = self._get(self._compose_blogposts_url(cnt))
-
-            # clean crap, get just content
+        def cut_crap(data):
             data = data.split(
                 '<div class="s_nadpis linkbox_nadpis">Píšeme jinde</div>'
             )[0]
-            data = data.split('<div class="st" id="st">')[1]
 
-            dom = dhtmlparser.parseString(data)
-            for blog in dom.find("div", {"class": "cl"}):
-                parsed.append(Blogpost.from_html(blog))
+            return data.split('<div class="st" id="st">')[1]
+
+        cnt = 0
+        posts = []
+        parsed = [1]  # just placeholder for first iteration
+        while parsed:
+            data = self._get(self._compose_blogposts_url(cnt))
+
+            dom = dhtmlparser.parseString(cut_crap(data))
+            parsed = [
+                Blogpost.from_html(blog_html)
+                for blog_html in dom.find("div", {"class": "cl"})
+            ]
 
             posts.extend(parsed)
             cnt += BLOG_STEP
@@ -381,3 +383,7 @@ class User(object):
 
         if not self.has_blog():
             raise ValueError("Couldn't register new blog.")
+
+    def __iter__(self):
+        for blog in self.get_blogposts():
+            yield blog
