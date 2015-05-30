@@ -27,6 +27,12 @@ class Rating(namedtuple("Rating", ["rating", "base"])):
         rating (int): Percentual rating of the blogpost.
         base (int): How many people voted.
     """
+    def __repr__(self):
+        return "%s(%d%%@%d)" % (
+            self.__class__.__name__,
+            self.rating,
+            self.base
+        )
 
 
 class Tag(str):
@@ -138,10 +144,21 @@ class Blogpost(object):
 
     @staticmethod
     def from_html(html, lazy=True):
-        title_tag = first(html.find("h2", {"class": "st_nadpis"}))
-        rel_link = first(title_tag.find("a")).params["href"]
+        if not isinstance(html, dhtmlparser.HTMLElement):
+            html = dhtmlparser.parseString(html)
+            dhtmlparser.makeDoubleLinked(html)
 
-        link = url_context(rel_link)
+        # support for legacy blogs
+        title_tag = html.find("h2", {"class": "st_nadpis"})
+        if title_tag:
+            title_tag = first(title_tag)
+            rel_link = first(title_tag.find("a")).params["href"]
+            link = url_context(rel_link)
+        else:
+            title_tag = first(html.find("h2"))
+            link = first(html.find("link", {"rel": "canonical"}))
+            link = link.params["href"]
+
         title = dhtmlparser.removeTags(title_tag).strip()
 
         # get meta
@@ -178,7 +195,12 @@ class Blogpost(object):
         if not content_tags:
             raise ValueError("Can't find content - is this really blogpost?")
 
-        return first(content_tags)
+        self._content_tag = first(content_tags)
+
+        if not self._content_tag.isOpeningTag():
+            self._content_tag = self._content_tag.parent
+
+        return self._content_tag
 
     def _parse_text(self):
         content_tag = copy.deepcopy(self._parse_content_tag())
@@ -188,7 +210,7 @@ class Blogpost(object):
         h2_tag = first(content_tag.find("h2"))
         rating_tag = first(content_tag.find("div", {"class": "rating"}))
 
-        # throw everything to the h2_tag
+        # throw everything until the h2_tag
         while content_tag.childs[0] != h2_tag:
             content_tag.childs.pop(0)
 
@@ -285,6 +307,7 @@ class Blogpost(object):
 
         self._dom = dhtmlparser.parseString(data)
         self._content_tag = None
+        dhtmlparser.makeDoubleLinked(self._dom)
 
         self._parse_title()
         self._parse_text()
@@ -294,6 +317,10 @@ class Blogpost(object):
 
         self.comments = Comment.comments_from_html(self._dom)
         self.comments_n = len(self.comments)
+
+        # memory cleanup - this saves a LOT of memory
+        self._dom = None
+        self._content_tag = None
 
     def edit(self):
         raise NotImplementedError("Not implemented yet.")
@@ -316,3 +343,6 @@ class Blogpost(object):
             link if remote_link(link) else url_context(link)
             for link in image_links
         ]
+
+    def __repr__(self):
+        return "%s(%s)" % (self.__class__.__name__, self.title)
