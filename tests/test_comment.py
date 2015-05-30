@@ -148,7 +148,7 @@ def test_response_to_reg(reg_header):
     assert Comment._response_to(reg_header) == "2"
 
 
-def test_censored_comments(censored_comment):
+def test_censored_comment(censored_comment):
     assert not Comment._response_to(censored_comment)
 
     c = Comment._from_head_and_body(
@@ -164,3 +164,4 @@ def test_censored_comments(censored_comment):
     assert c.responses == []
 
     assert not c.response_to
+    assert c.id == "1"
