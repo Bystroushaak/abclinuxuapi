@@ -89,11 +89,20 @@ def unreg_header():
     """).find("div")[0]
 
 
-@pytest.fixture
-def censored_comment():
-    path = join(dirname(__file__), "mock_data/censored_comment.html")
+def read_test_file(fn):
+    path = join(dirname(__file__), "mock_data", fn)
     with open(path) as f:
         return dhtmlparser.parseString(f.read())
+
+
+@pytest.fixture
+def censored_comment():
+    return read_test_file("censored_comment.html")
+
+
+@pytest.fixture
+def censored_page():
+    return read_test_file("censored_page.html")
 
 
 # Tests =======================================================================
@@ -153,4 +162,5 @@ def test_censored_comments(censored_comment):
     assert c.username == ""
     assert not c.registered_user
     assert c.responses == []
+
     assert not c.response_to
