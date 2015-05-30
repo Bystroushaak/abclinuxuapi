@@ -160,8 +160,12 @@ def test_censored_comment(censored_comment):
     assert "administrátor" in c.text
     assert c.timestamp == 1222777500
     assert c.username == ""
-    assert not c.registered_user
+    assert not c.registered
     assert c.responses == []
 
     assert not c.response_to
     assert c.id == "1"
+
+
+def test_censored_comments_page(censored_page):
+    pass

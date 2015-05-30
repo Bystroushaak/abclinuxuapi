@@ -22,7 +22,8 @@ class Comment(object):
         self.timestamp = None
 
         self.username = None
-        self.registered_user = False
+        self.registered = False  # was the user registered?
+        self.censored = False
 
         self.responses = []  #: Reference to all response comments
         self.response_to = None  #: Reference to parent comment
@@ -125,15 +126,17 @@ class Comment(object):
 
     @staticmethod
     def _parse_text(body_tag):
+        censored = False
         text_tag = body_tag.find("div", {"class": "ds_text"})
 
         if not text_tag:
+            censored = True
             text_tag = body_tag.find("div", {"class": "cenzura"})
 
         if not text_tag:
             raise ValueError("Can't find comment body!")
 
-        return first(text_tag).getContent()
+        return first(text_tag).getContent(), censored
 
     @staticmethod
     def _from_head_and_body(head_tag, body_tag):
@@ -141,10 +144,10 @@ class Comment(object):
 
         # fill object
         c.url = Comment._parse_url(head_tag)
-        c.text = Comment._parse_text(body_tag)
+        c.text, c.censored = Comment._parse_text(body_tag)
         c.response_to = Comment._response_to(head_tag)
         c.timestamp = Comment._izolate_timestamp(head_tag)
-        c.username, c.registered_user = Comment._izolate_username(head_tag)
+        c.username, c.registered = Comment._izolate_username(head_tag)
 
         return c
 

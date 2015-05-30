@@ -1,6 +1,11 @@
 Changelog
 =========
 
+0.3.5
+-----
+    - Added ``Comment.censored``.
+    - ``Comment.registered_user`` renamed to ``Comment.registered``.
+
 0.3.4
 -----
     - Fixed parsing of censored comments.
