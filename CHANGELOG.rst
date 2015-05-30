@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.3.9
+-----
+    - Another attempt to solve shit in old blogs. There are missing tags, crossed tags and a lot of other shitfucks.
+
 0.3.8
 -----
     - Fixed bug in ``Blogpost._parse_content_tag()``.

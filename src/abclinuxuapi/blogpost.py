@@ -307,7 +307,11 @@ class Blogpost(object):
         """
         data = download(url=self.url)
 
-        self._dom = dhtmlparser.parseString(data)
+        # this is because of fucks who forgot to close elements like in this
+        # blogpost: https://www.abclinuxu.cz/blog/EmentuX/2005/10/all-in-one
+        blog_data, comments_data = data.split('<p class="page_tools">')
+
+        self._dom = dhtmlparser.parseString(blog_data)
         self._content_tag = None
         dhtmlparser.makeDoubleLinked(self._dom)
 
@@ -317,7 +321,7 @@ class Blogpost(object):
         self._parse_rating()
         self._parse_meta()
 
-        self.comments = Comment.comments_from_html(self._dom)
+        self.comments = Comment.comments_from_html(comments_data)
         self.comments_n = len(self.comments)
 
         # memory cleanup - this saves a LOT of memory
