@@ -1,6 +1,11 @@
 Changelog
 =========
 
+0.3.6
+-----
+    - Fixed problems with old blogs (different HTML).
+    - Implemented #6: ``.__repr__()`` for all important classes.
+
 0.3.5
 -----
     - Added ``Comment.censored``.

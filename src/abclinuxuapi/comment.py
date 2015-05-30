@@ -136,7 +136,7 @@ class Comment(object):
         if not text_tag:
             raise ValueError("Can't find comment body!")
 
-        return first(text_tag).getContent(), censored
+        return first(text_tag).getContent().strip(), censored
 
     @staticmethod
     def _from_head_and_body(head_tag, body_tag):
@@ -156,18 +156,14 @@ class Comment(object):
         dom = html
 
         # make sure, that you don't modify `html` attribute
-        if isinstance(html, basestring):
+        if not isinstance(html, dhtmlparser.HTMLElement):
             dom = dhtmlparser.parseString(html)
         else:
             dom = copy.deepcopy(dom)
+        dhtmlparser.makeDoubleLinked(dom)
 
         # comments are not stored in hierarchical structure, but in somehow
         # flat-nested lists
-
-        # pick the content tag
-        dom = dom.find("div", {"class": "st", "id": "st"})
-        dom = first(dom)
-        dhtmlparser.makeDoubleLinked(dom)
 
         # locate end of article
         ds_toolbox = dom.find("div", {"class": "ds_toolbox"})
@@ -175,8 +171,11 @@ class Comment(object):
         if not ds_toolbox:
             raise ValueError("Couldn't locate ds_toolbox!")
 
+        ds_toolbox = first(ds_toolbox)
+        dom = ds_toolbox.parent
+
         # ged rid of everything until end of the article
-        while dom.childs[0] != first(ds_toolbox):
+        while dom.childs[0] != ds_toolbox:
             dom.childs.pop(0)
 
         dom.childs.pop(0)
@@ -227,3 +226,6 @@ class Comment(object):
                 comment.response_to.responses.append(comment)
 
         return comment_list
+
+    def __repr__(self):
+        return "Comment(username=%s, id=%s)" % (self.username, self.id)
