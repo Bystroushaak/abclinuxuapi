@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.3.7
+-----
+    - Fixed #7 - blogs with opening HTML comments in perex.
+
 0.3.6
 -----
     - Fixed problems with old blogs (different HTML).

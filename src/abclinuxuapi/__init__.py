@@ -70,6 +70,13 @@ def iter_blogposts(start=0, end=None, lazy=True):
         )[0]
         data = data.split('<div class="st" id="st">')[1]
 
+        # some blogs have openning comment in perex, which fucks ups bloglist
+        # - this will close comments that goes over bloglist
+        data = data.replace(
+            '<div class="signature">',
+            '<!-- --><div class="signature">'
+        )
+
         # parse basic info about all blogs at page
         dom = _dhtmlparser.parseString(data)
         for bcnt, blog in enumerate(dom.findB("div", {"class": "cl"})):
