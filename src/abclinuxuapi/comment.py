@@ -72,6 +72,9 @@ class Comment(object):
         username = lines[lines.index(line_with_time) + 1]
 
         def clean_username(username):
+            if username == "Rozbalit":  # no username was found
+                return ""
+
             return username.strip()
 
         return clean_username(username), False  # unregistered
@@ -123,6 +126,12 @@ class Comment(object):
     @staticmethod
     def _parse_text(body_tag):
         text_tag = body_tag.find("div", {"class": "ds_text"})
+
+        if not text_tag:
+            text_tag = body_tag.find("div", {"class": "cenzura"})
+
+        if not text_tag:
+            raise ValueError("Can't find comment body!")
 
         return first(text_tag).getContent()
 

@@ -4,8 +4,10 @@
 # Interpreter version: python 2.7
 #
 # Imports =====================================================================
-import pytest
+from os.path import join
+from os.path import dirname
 
+import pytest
 import dhtmlparser
 
 from abclinuxuapi import Comment
@@ -87,6 +89,13 @@ def unreg_header():
     """).find("div")[0]
 
 
+@pytest.fixture
+def censored_comment():
+    path = join(dirname(__file__), "mock_data/censored_comment.html")
+    with open(path) as f:
+        return dhtmlparser.parseString(f.read())
+
+
 # Tests =======================================================================
 def test_izolate_timestamp(unreg_header):
     ts = Comment._izolate_timestamp(unreg_header)
@@ -128,3 +137,20 @@ def test_response_to(unreg_header):
 
 def test_response_to_reg(reg_header):
     assert Comment._response_to(reg_header) == "2"
+
+
+def test_censored_comments(censored_comment):
+    assert not Comment._response_to(censored_comment)
+
+    c = Comment._from_head_and_body(
+        censored_comment.find("div", {"class": "ds_hlavicka"})[0],
+        censored_comment.find("div", {"id": "comment1"})[0]
+    )
+
+    assert c.url == "https://www.abclinuxu.cz/blog/show/240961#1"
+    assert "administrátor" in c.text
+    assert c.timestamp == 1222777500
+    assert c.username == ""
+    assert not c.registered_user
+    assert c.responses == []
+    assert not c.response_to

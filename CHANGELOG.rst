@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.3.4
+-----
+    - Fixed parsing of censored comments.
+
 0.3.3
 -----
     - Added date_izolator(). Fixed bugs in comments parsing with relative dates.
