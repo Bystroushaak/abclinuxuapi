@@ -168,4 +168,6 @@ def test_censored_comment(censored_comment):
 
 
 def test_censored_comments_page(censored_page):
-    pass
+    comments = Comment.comments_from_html(censored_page)
+
+    assert comments[0].censored

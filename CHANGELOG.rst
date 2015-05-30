@@ -5,6 +5,7 @@ Changelog
 -----
     - Added ``Comment.censored``.
     - ``Comment.registered_user`` renamed to ``Comment.registered``.
+    - Fixed bug which skipped censored comments.
 
 0.3.4
 -----

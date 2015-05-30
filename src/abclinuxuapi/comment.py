@@ -202,13 +202,16 @@ class Comment(object):
 
             return id_str.replace("comment", "")
 
+        def comment_or_censored(tag):
+            return tag.params.get("class", "") in ("ds_text", "cenzura")
+
         # parse list of all comments on the page
         comment_list = [
             Comment._from_head_and_body(
                 head_dict[id_from_comment_div(comment_div)],
                 comment_div
             )
-            for comment_div in dom.find("div", {"class": "ds_text"})
+            for comment_div in dom.find("div", fn=comment_or_censored)
         ]
 
         # {id: comment}
