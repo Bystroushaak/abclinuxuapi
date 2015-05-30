@@ -42,7 +42,10 @@ class Comment(object):
 
     @staticmethod
     def _izolate_username(head_tag):
-        user_tag = head_tag.find("a", {"href": "/lide/manasekp"})
+        user_tag = head_tag.find(
+            "a",
+            fn=lambda x: x.params.get("href", "").startswith("/lide/")
+        )
 
         if user_tag:
             user_link = first(user_tag).params["href"]
@@ -68,7 +71,10 @@ class Comment(object):
         # pick line next to line with time
         username = lines[lines.index(line_with_time) + 1]
 
-        return username.strip(), False  # unregistered
+        def clean_username(username):
+            return username.strip()
+
+        return clean_username(username), False  # unregistered
 
     @staticmethod
     def _parse_url(head_tag):
