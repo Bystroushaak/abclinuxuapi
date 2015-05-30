@@ -211,15 +211,17 @@ class Blogpost(object):
         rating_tag = first(content_tag.find("div", {"class": "rating"}))
 
         # throw everything until the h2_tag
-        while content_tag.childs[0] != h2_tag:
-            content_tag.childs.pop(0)
+        h2_parent = h2_tag.parent
+        while h2_parent.childs[0] != h2_tag:
+            h2_parent.childs.pop(0)
 
         # throw everything after the rating_tag
-        while content_tag.childs[-1] != rating_tag:
-            content_tag.childs.pop()
+        rating_parent = rating_tag.parent
+        while rating_parent.childs[-1] != rating_tag:
+            rating_parent.childs.pop()
 
         # throw also the rating
-        content_tag.childs.pop()
+        rating_parent.childs.pop()
 
         meta_vypis_tag = content_tag.find("p", {"class": "meta-vypis"})
         if meta_vypis_tag:
