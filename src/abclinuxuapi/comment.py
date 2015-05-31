@@ -197,7 +197,15 @@ class Comment(object):
 
         def id_from_comment_div(comment_div):
             # <div id="comment3"> -> 3
-            id_str = comment_div.parent.params["id"]
+            id_str = comment_div.parent.params.get("id")
+
+            # see http://abclinuxu.cz/blog/Mostly_IMDB/2008/6/radeon-hd-4850-a\
+            # -tak-vubec#17 for details
+            if not id_str:
+                id_str = comment_div.parent.parent.params.get("id")
+
+            if not id_str:
+                id_str = comment_div.parent.parent.parent.params["id"]
 
             return id_str.replace("comment", "")
 

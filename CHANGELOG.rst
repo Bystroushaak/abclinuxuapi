@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.3.10
+------
+    - Fixed bug caused by http://abclinuxu.cz/blog/Mostly_IMDB/2008/6/radeon-hd-4850-a-tak-vubec#17
+
 0.3.9
 -----
     - Another attempt to solve shit in old blogs. There are missing tags, crossed tags and a lot of other shitfucks.
