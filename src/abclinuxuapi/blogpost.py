@@ -23,7 +23,7 @@ class Rating(namedtuple("Rating", ["rating", "base"])):
     """
     Container holding informations about rating.
 
-    Attr:
+    Attributes:
         rating (int): Percentual rating of the blogpost.
         base (int): How many people voted.
     """
@@ -40,7 +40,7 @@ class Tag(str):
     Each blog may have many tags. This is container for informations about each
     tag.
 
-    Attr:
+    Attributes:
         name (str): Name of the tag.
         url (str): URL to the informations about tag.
     """
@@ -55,7 +55,35 @@ class Tag(str):
 
 
 class Blogpost(object):
+    """
+    Informations about blogposts.
+
+    Attributes:
+        url (str): Absolute URL of the blogpost.
+        title (str): Tile of the blogpost.
+        intro (str): Perex. This is parsed only when returned from
+                     :class:`User`.
+        text (str): Full text of the blogpost.
+        tags (list): List of :class:`Tag` objects.
+        rating (obj): :class:`Rating` object with informations about rating.
+        has_tux (bool): Does this blog have a tux? Only good blogs get tux.
+        comments (list): List of :class:`.Comment` objects. Not used until
+                 :meth:`.pull` is called, or `lazy` parameter of
+                 :meth:`__init__` is set to ``True``.
+        comments_n (int): Number of comments. This information is in some cases
+                   known before the blog is parsed, just from perex.
+        readed (int): How many times was the blog readed?
+        object_ts (int): Timestamp of the creation of this object.
+        created_ts (int): Timestamp of the creation of the blogpost.
+        last_modified_ts (int): Timestamp of the last modification of blogpost.
+    """
     def __init__(self, url, lazy=True, **kwargs):
+        """
+        Args:
+            url (str): Url of the blogpost.
+            lazy (bool, default True): True == don't call :meth:`pull` right
+                 now.
+        """
         self.url = url
 
         self.title = None
@@ -144,6 +172,18 @@ class Blogpost(object):
 
     @staticmethod
     def from_html(html, lazy=True):
+        """
+        Convert HTML string to :class:`Blogpost` instance.
+
+        Args:
+            html (str): Input data.
+            lazy (bool, default True): Be lazy (don't pull data by yourself
+                 from the site). Call :meth:`pull` for active download of all
+                 required informations.
+
+        Returns:
+            obj: :class:`Blogpost` instance.
+        """
         if not isinstance(html, dhtmlparser.HTMLElement):
             html = dhtmlparser.parseString(html)
             dhtmlparser.makeDoubleLinked(html)
@@ -304,6 +344,14 @@ class Blogpost(object):
     def pull(self):
         """
         Download page with blogpost. Parse text, comments and everything else.
+
+        Until this is called, following attributes are not known/parsed:
+
+            - :attr:`text`
+            - :attr:`tags`
+            - :attr:`has_tux`
+            - :attr:`comments`
+            - :attr:`last_modified_ts`
         """
         data = download(url=self.url)
 
@@ -328,11 +376,10 @@ class Blogpost(object):
         self._dom = None
         self._content_tag = None
 
-    def edit(self):
-        raise NotImplementedError("Not implemented yet.")
-
     def get_image_urls(self):
         """
+        Get list of links to all images used in this blog.
+
         Returns:
             list: List of str containing absolute URL of the image.
         """
