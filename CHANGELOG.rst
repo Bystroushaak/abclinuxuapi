@@ -1,6 +1,11 @@
 Changelog
 =========
 
+0.3.11
+------
+    - Added a lot of documentation, fixed docstrings and so on.
+    - ``User.has_blog()`` changed to `bool` property ``User.has_blog``.
+
 0.3.10
 ------
     - Fixed bug caused by http://abclinuxu.cz/blog/Mostly_IMDB/2008/6/radeon-hd-4850-a-tak-vubec#17
