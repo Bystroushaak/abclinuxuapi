@@ -44,7 +44,7 @@ def user():
 
 # Tests =======================================================================
 def test_register_blog(user):
-    if user.has_blog():
+    if user.has_blog:
         return
 
     user.register_blog("Test user's blog")

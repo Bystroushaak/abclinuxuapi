@@ -19,12 +19,30 @@ from blogpost import Blogpost
 
 
 # Variables ===================================================================
-BLOG_STEP = 50  # sets how much blogpost can be at one page
+BLOG_STEP = 50  # Sets how much blogpost can be at one page
 
 
 # Functions & classes =========================================================
 class User(object):
+    """
+    Class that is used to hold informations about given `username`. You can
+    also command various operations, like get list of all blogs, or add new
+    concept.
+
+    Attributes:
+        username (str): 
+        password (str, default None): Password for logged user.
+        logged_in (bool): Is the user logged in?
+    """
     def __init__(self, username, password=None, lazy=False):
+        """
+        Args:
+            username (str): Users login.
+            password (str, default None): Optional password for given user.
+                     This will allow you to upload concepts.
+            lazy (bool, default False): Don't call :meth:`lazy_init` right when
+                 the object is created.
+        """
         self.username = username
         self.password = password
         self.logged_in = False
@@ -34,13 +52,30 @@ class User(object):
         self._user_id = None
 
         if not lazy:
-            self.init()
+            self.lazy_init()
 
-    def init(self):
+    @property
+    def has_blog(self):
+        """
+        Does the user have registered blog?
+        """
+        return self.blog_url is not None
+
+    def lazy_init(self):
+        """
+        Parse additional informations about user. This step require one request
+        to the site.
+        """
         self.blog_url = self._parse_blogname()
 
     @staticmethod
     def from_user_id(user_id):
+        """
+        Transform `user_id` to instance of :class:`User`.
+
+        Returns:
+            obj: :class:`User` instance parsed from the `user_id`.
+        """
         data = shared.download(url_context("/Profile/" + str(user_id)))
         dom = dhtmlparser.parseString(data)
         dhtmlparser.makeDoubleLinked(dom)
@@ -175,7 +210,6 @@ class User(object):
         # test, whether the user is successfully logged in
         dom = dhtmlparser.parseString(data)
 
-        # TODO: přepsat na .match()
         logged_in = dom.find("div", {"class": "hl"})
         if not logged_in:
             raise UserWarning("Bad username/password!")
@@ -190,23 +224,18 @@ class User(object):
 
         self.logged_in = True
 
-    def has_blog(self):
-        return self.blog_url is not None
-
     def _compose_blogposts_url(self, from_counter):
         return urljoin(self.blog_url, "?from=%d" % from_counter)
 
     def get_blogposts(self):
         """
-        Lists all of users PUBLISHED blogposts.
-
-        Warning:
-            Concepts are NOT icluded.
+        Lists all of users PUBLISHED blogposts. For unpublished, see 
+        :meth:`get_concepts`.
 
         Returns:
             list: sorted (old->new) list of Blogpost objects.
         """
-        if not self.has_blog():
+        if not self.has_blog:
             return []
 
         def cut_crap(data):
@@ -235,13 +264,12 @@ class User(object):
 
     def get_concepts(self):
         """
-        Returns:
-            list: of Concept objects.
+        Return all concepts (unpublished blogs).
 
-        Note:
-            Concepts are unpublished Blogpost and has almost same properties.
+        Returns:
+            list: List of Concept objects.
         """
-        if not self.has_blog():
+        if not self.has_blog:
             raise ValueError("User doesn't have blog!")
 
         self.login()
@@ -294,13 +322,10 @@ class User(object):
             title (str): Title of your contept. Do not use HTML in title!
             ts_of_pub (int/float, default None): Timestamp of the publication.
 
-        Warning:
-            timestamp_of_pub is currently not implemented.
-
         Raises:
             UserWarning: if the site is broken or user was logged out.
         """
-        if not self.has_blog():
+        if not self.has_blog:
             raise ValueError("User doesn't have blog!")
 
         self.login()
@@ -347,14 +372,15 @@ class User(object):
 
     def register_blog(self, blog_name):
         """
-        Register blog under `blog_name`.
+        Register blog under `blog_name`. Users doesn't have blogs
+        automatically, you have to create them manually.
 
         Raises:
             UserWarning: If user already have blog registered.
             ValueError: If it is not possible to register blog for user (see \
                         exception message for details).
         """
-        if self.has_blog():
+        if self.has_blog:
             raise UserWarning("User already have blog!")
 
         add_blog_url = urljoin(
@@ -381,7 +407,7 @@ class User(object):
 
         self.blog_url = self._parse_blogname()
 
-        if not self.has_blog():
+        if not self.has_blog:
             raise ValueError("Couldn't register new blog.")
 
     def __iter__(self):
