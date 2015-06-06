@@ -1,21 +1,21 @@
 abclinuxuapi package
 ====================
 
+.. automodule:: abclinuxuapi
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 Submodules
 ----------
 
 .. toctree::
 
-   abclinuxuapi.blogpost
-   abclinuxuapi.comment
-   abclinuxuapi.concept
-   abclinuxuapi.shared
-   abclinuxuapi.user
+   user
+   blogpost
+   comment
+   concept
 
-Module contents
----------------
+.. toctree::
 
-.. automodule:: abclinuxuapi
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   shared

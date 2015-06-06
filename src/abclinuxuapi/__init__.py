@@ -54,12 +54,12 @@ def iter_blogposts(start=0, end=None, lazy=True):
     Args:
         start (int, default 0): Start at this page.
         end (int, default None): End at this page.
-        lazy (bool, default True): Initialize :class:`Blogpost` objects only
+        lazy (bool, default True): Initialize :class:`.Blogpost` objects only
              with informations from listings. Don't download full text and
              comments.
 
     Yields:
-        obj: :class:`Blogpost` objects.
+        obj: :class:`.Blogpost` objects.
     """
     for cnt, url in enumerate(_next_blog_url(start)):
         data = _shared.download(url)

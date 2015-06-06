@@ -11,6 +11,7 @@ Whole API is splitted into four submodules:
 .. toctree::
     :maxdepth: 1
 
+    /api/abclinuxuapi.rst
     /api/user.rst
     /api/api.rst
     /api/blogpost.rst
