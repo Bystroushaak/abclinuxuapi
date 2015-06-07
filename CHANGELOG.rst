@@ -5,6 +5,7 @@ Changelog
 ------
     - Added a lot of documentation, fixed docstrings and so on.
     - ``User.has_blog()`` changed to `bool` property ``User.has_blog``.
+    - ``Concept`` class refactored.
 
 0.3.10
 ------

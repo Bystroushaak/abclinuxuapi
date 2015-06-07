@@ -4,8 +4,11 @@
 # Interpreter version: python 2.7
 #
 # Imports =====================================================================
-import dhtmlparser as d
+import dhtmlparser
 
+from shared import first
+from shared import download
+from shared import url_context
 from shared import check_error_div
 
 
@@ -16,22 +19,16 @@ class Concept(object):
         title (str): Title of the concept.
         link (str): Absolute URL of the concept.
     """
-    def __init__(self, title, link, session, server_url):
+    def __init__(self, title, link, session):
         self.title = title
-        self.server_url = server_url
-        self.link = server_url + link
+        self.link = url_context(link)
 
-        self.meta = None
-        self.session = session
-        self.data = None
-
-    def _get(self, url, params=None, as_text=True):
-        data = self.session.get(url, params=params)
-        return data.text.encode("utf-8") if as_text else data.content
+        self._meta = None
+        self._session = session
 
     def _init_metadata(self, data=None):
         if not data:
-            data = self._get(self.link)
+            data = download(self.link, session=self._session)
 
         if '<div class="s_nadpis">Správa zápisku</div>' not in data:
             raise ValueError(
@@ -40,16 +37,13 @@ class Concept(object):
 
         data = data.split('<div class="s_nadpis">Správa zápisku</div>')[1]
 
-        dom = d.parseString(data)
-        meta_list = dom.find("div", {"class": "s_sekce"})[0]
+        dom = dhtmlparser.parseString(data)
+        meta_list = first(dom.find("div", {"class": "s_sekce"}))
 
-        self.meta = {}
+        self._meta = {}
         for li in meta_list.find("li"):
-            a = li.find("a")[0]
-            self.meta[a.getContent().strip()] = a.params["href"]
-
-    def _refresh(self):
-        self.data = self._get(self.link)
+            a = first(li.find("a"))
+            self._meta[a.getContent().strip()] = a.params["href"]
 
     def get_content(self):
         """
@@ -58,20 +52,21 @@ class Concept(object):
         Returns:
             str: full HTML UTF-8 encoded text of the concept.
         """
-        data = self._get(self.link)
+        data = download(self.link, session=self._session)
 
-        if not self.meta:
+        if not self._meta:
             self._init_metadata(data)
 
-        # data = data.split('<div class="rating">')[0]
-        data = data.rsplit('<!-- -->', 1)[0]
+        data = first(data.rsplit('<!-- -->', 1))
 
         # find beginning of the concept text
-        dom = d.parseString(data)
+        dom = dhtmlparser.parseString(data)
         meta_vypis = dom.find("p", {"class": "meta-vypis"})
         if not meta_vypis:
             raise ValueError("Can't find meta-vypis <p>!")
-        data = data.split(str(meta_vypis[0]))[1]
+
+        meta_vypis = first(meta_vypis)
+        data = data.split(str(meta_vypis))[1]
 
         return data.strip()
 
@@ -83,20 +78,23 @@ class Concept(object):
             opened_file (file): opened file object
         """
         # init meta
-        if not self.meta:
+        if not self._meta:
             self._init_metadata()
 
         # get link to pic form
-        data = self._get(self.server_url + self.meta["Přidej obrázek"])
-        dom = d.parseString(data)
+        data = download(
+            url_context(self._meta["Přidej obrázek"]),
+            session=self._session
+        )
+        dom = dhtmlparser.parseString(data)
 
         # get information from pic form
-        form = dom.find("form", {"enctype": "multipart/form-data"})[0]
+        form = first(dom.find("form", {"enctype": "multipart/form-data"}))
         add_pic_url = form.params["action"]
 
         # send pic
-        data = self.session.post(
-            self.server_url + add_pic_url,
+        data = self._session.post(
+            url_context(add_pic_url),
             data={
                 "action": "addScreenshot2",
                 "finish": "Nahrát"
@@ -112,23 +110,23 @@ class Concept(object):
             list: List of URLs to pictures used in this concept.
         """
         # init meta
-        if not self.meta:
+        if not self._meta:
             self._init_metadata()
 
-        data = self._get(self.server_url + self.meta["Správa příloh"])
-        dom = d.parseString(data)
+        data = download(
+            url_context(self._meta["Správa příloh"]),
+            session=self._session
+        )
+        dom = dhtmlparser.parseString(data)
 
         form = dom.find("form", {"name": "form"})
-        assert len(form) > 0, "Can't find pic form!"
+        assert form, "Can't find pic form!"
 
-        urls = []
-        for a in form[0].find("a"):
-            if "href" not in a.params:
-                continue
-
-            urls.append(a.params["href"])
-
-        return urls
+        return [
+            a.params["href"]
+            for a in first(form).find("a")
+            if "href" in a.params
+        ]
 
     def edit(self, text, title=None, timestamp_of_pub=None):
         """
@@ -141,32 +139,37 @@ class Concept(object):
             timestamp_of_pub (int, default None): Timestamp determining when
                              the concept should be published.
         """
-        if not self.meta:
+        if not self._meta:
             self._init_metadata()
 
-        data = self._get(self.server_url + self.meta["Uprav zápis"])
-        dom = d.parseString(data)
+        data = download(
+            url_context(self._meta["Uprav zápis"]),
+            session=self._session
+        )
+        dom = dhtmlparser.parseString(data)
 
         form = dom.find("form", {"name": "form"})
 
-        assert len(form) > 0, "Can't find edit form!"
-        form = form[0]
+        assert form, "Can't find edit form!"
+        form = first(form)
 
         form_action = form.params["action"]
 
         if title is None:
-            title = form.find("input", {"name": "title"})[0].params["value"]
+            title = first(form.find("input", {"name": "title"}))
+            title = title.params["value"]
 
         date = ""
         if timestamp_of_pub is None:
-            date = form.find("input", {"name": "publish"})[0].params["value"]
-        elif type(timestamp_of_pub) in [str, unicode]:
+            date = first(form.find("input", {"name": "publish"}))
+            date = date.params["value"]
+        elif isinstance(timestamp_of_pub, basestring):
             date = timestamp_of_pub
         else:
             pass  # TODO: date processing
 
-        data = self.session.post(
-            self.server_url + form_action,
+        data = download(
+            url=url_context(form_action),
             data={
                 "cid": 0,
                 "publish": date,
@@ -174,9 +177,9 @@ class Concept(object):
                 "title": title,
                 "delay": "Ulož",
                 "action": "edit2"
-            }
+            },
+            session=self._session
         )
-        data = data.text.encode("utf-8")
         check_error_div(data, '<div class="error" id="contentError">')
 
     def __str__(self):
