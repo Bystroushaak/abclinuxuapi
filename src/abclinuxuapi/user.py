@@ -295,25 +295,13 @@ class User(object):
 
             concepts.append(
                 Concept(
-                    a.getContent().strip(),
-                    a.params["href"],
-                    self.session,
-                    ABCLINUXU_URL
+                    title=a.getContent().strip(),
+                    link=a.params["href"],
+                    session=self.session
                 )
             )
 
         return concepts
-
-    @staticmethod
-    def _ts_to_concept_date(timestamp):
-        if not timestamp:
-            return None
-
-        # required format: 2005-01-25 07:12
-        return time.strftime(
-            "%Y-%m-%d %H:%M",
-            time.localtime(timestamp)
-        )
 
     def add_concept(self, text, title, ts_of_pub=None):
         """
@@ -362,7 +350,7 @@ class User(object):
             ABCLINUXU_URL + form_action,
             data={
                 "cid": 0,
-                "publish": User._ts_to_concept_date(ts_of_pub),
+                "publish": shared.ts_to_concept_date(ts_of_pub),
                 "content": text,
                 "title": dhtmlparser.removeTags(title),
                 "delay": "Do konceptů",
