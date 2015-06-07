@@ -1,6 +1,20 @@
 Introduction
 ============
 
+.. image:: https://badge.fury.io/py/abclinuxuapi.png
+    :target: https://pypi.python.org/pypi/abclinuxuapi
+
+.. image:: https://img.shields.io/pypi/dm/abclinuxuapi.svg
+    :target: https://pypi.python.org/pypi/abclinuxuapi
+
+.. image:: https://readthedocs.org/projects/abclinuxuapi/badge/?version=latest
+    :target: http://abclinuxuapi.readthedocs.org/
+
+.. image:: https://img.shields.io/pypi/l/abclinuxuapi.svg
+
+.. image:: https://img.shields.io/github/issues/Bystroushaak/abclinuxuapi.svg
+    :target: https://github.com/Bystroushaak/abclinuxuapi/issues
+
 This module contains basic API for crawling the http://abclinuxu.cz website.
 
 Installation

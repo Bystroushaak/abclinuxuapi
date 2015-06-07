@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.4.0
+-----
+    - Added badges to README.
+
 0.3.11
 ------
     - Added a lot of documentation, fixed docstrings and so on.
@@ -9,21 +13,12 @@ Changelog
     - Added new parameter ``data`` for ``shared.download()``.
     - ``User.ts_to_concept_date`` moved to ``shared.ts_to_concept_date()``.
 
-0.3.10
-------
-    - Fixed bug caused by http://abclinuxu.cz/blog/Mostly_IMDB/2008/6/radeon-hd-4850-a-tak-vubec#17
-
-0.3.9
------
-    - Another attempt to solve shit in old blogs. There are missing tags, crossed tags and a lot of other shitfucks.
-
-0.3.8
------
-    - Fixed bug in ``Blogpost._parse_content_tag()``.
-
-0.3.7
------
+0.3.7 - 0.3.10
+--------------
     - Fixed #7 - blogs with opening HTML comments in perex.
+    - Fixed bug in ``Blogpost._parse_content_tag()``.
+    - Another attempt to solve shit in old blogs. There are missing tags, crossed tags and a lot of other shitfucks.
+    - Fixed bug caused by http://abclinuxu.cz/blog/Mostly_IMDB/2008/6/radeon-hd-4850-a-tak-vubec#17
 
 0.3.0 - 0.3.6
 -------------
