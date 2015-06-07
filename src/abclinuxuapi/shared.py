@@ -13,12 +13,27 @@ import requests
 
 
 # Variables ===================================================================
-ABCLINUXU_URL = "https://www.abclinuxu.cz"
-SESSION = requests.Session()
+ABCLINUXU_URL = "https://www.abclinuxu.cz"  #: Base URL of the abclinuxu.
+SESSION = requests.Session()  #: Session which is used in non-private requests.
 
 
 # Functions & classes =========================================================
 def download(url, params=None, method="GET", session=None, as_text=True):
+    """
+    Download data from `url` using `method`. Send `params` if defined.
+
+    Args:
+        url (str): Absolute URL from which the data will be downloaded.
+        params (dict, default None): Send parameters (GET/POST).
+        method (str, default "GET"): Use this method to send the request.
+        session (obj, default None): If ``None``, shared :attr:`SESSION` object
+                is used.
+        as_text (bool, default True): Return content as ``UTF-8`` encoded
+                string. If false ``bytes`` are returned.
+
+    Returns:
+        str/bytes: Content depending on the `as_text` attribute.
+    """
     if session is None:
         session = SESSION
 
@@ -28,10 +43,36 @@ def download(url, params=None, method="GET", session=None, as_text=True):
 
 
 def first(inp_data):
+    """
+    Return first element from `inp_data`, or raise StopIteration.
+
+    Note:
+        This function was created because it works for generators, lists,
+        iterators, tuples and so on same way, which indexing doesn't.
+
+        Also it have smaller cost than list(generator)[0], because it doesn't
+        convert whole `inp_data` to list.
+
+    Args:
+        inp_data (iterable): Any iterable object.
+
+    Raises:
+        StopIteration: When the `inp_data` is blank.
+    """
     return next(x for x in inp_data)
 
 
 def date_to_timestamp(date):
+    """
+    Convert abclinuxu `relative` or `absolute` date string in czech words to
+    timestamp.
+
+    Args:
+        date (str): One of many abclinuxu representations of date string.
+
+    Returns:
+        int: Timestamp.
+    """
     date = date.strip()
 
     today = time.strftime("%d.%m.%Y", time.localtime())
@@ -82,11 +123,29 @@ def parse_timestamp(meta):
     return date_to_timestamp(first(date))
 
 
-def url_context(url):
-    return urljoin(ABCLINUXU_URL, url)
+def url_context(rel_url):
+    """
+    Add `rel_url` to the absolute context with :attr:`ABCLINUXU_URL`.
+
+    Args:
+        rel_url (str): Relative URL.
+
+    Returns:
+        str: Absolute URL.
+    """
+    return urljoin(ABCLINUXU_URL, rel_url)
 
 
 def handle_errors(dom):
+    """
+    Look for error divs in given `dom` tree.
+
+    Args:
+        dom (obj): :class:`dhtmlparser.HTMLElement` instance.
+
+    Raises:
+        UserWarning: With content of the error div if the div was found.
+    """
     error = dom.find(
         "h1",
         {"class": "st_nadpis"},
@@ -106,6 +165,9 @@ def handle_errors(dom):
 
 
 def check_error_div(data, error_div):
+    """
+    Dunno about this, it was created long time ago and I have no idea.
+    """
     # no sophisticated parsing of the error is needed
     if error_div in data:
         data = data.split(error_div)[1]

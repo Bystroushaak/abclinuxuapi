@@ -1,5 +1,7 @@
-abclinuxuapi.shared module
-==========================
+shared submodule
+================
+
+Functions, objects and properties shared across many classes in this project.
 
 .. automodule:: abclinuxuapi.shared
     :members:
