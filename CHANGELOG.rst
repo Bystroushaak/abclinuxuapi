@@ -6,6 +6,8 @@ Changelog
     - Added a lot of documentation, fixed docstrings and so on.
     - ``User.has_blog()`` changed to `bool` property ``User.has_blog``.
     - ``Concept`` class refactored.
+    - Added new parameter ``data`` for ``shared.download()``.
+    - ``User.ts_to_concept_date`` moved to ``shared.ts_to_concept_date()``.
 
 0.3.10
 ------

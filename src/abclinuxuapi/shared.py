@@ -18,13 +18,16 @@ SESSION = requests.Session()  #: Session which is used in non-private requests.
 
 
 # Functions & classes =========================================================
-def download(url, params=None, method="GET", session=None, as_text=True):
+def download(url, params=None, method="GET", session=None, as_text=True,
+             data=None):
     """
     Download data from `url` using `method`. Send `params` if defined.
 
     Args:
         url (str): Absolute URL from which the data will be downloaded.
         params (dict, default None): Send parameters (GET/POST).
+        data (dict, default None): Data which will be sent as body of the
+             request.
         method (str, default "GET"): Use this method to send the request.
         session (obj, default None): If ``None``, shared :attr:`SESSION` object
                 is used.
@@ -37,9 +40,9 @@ def download(url, params=None, method="GET", session=None, as_text=True):
     if session is None:
         session = SESSION
 
-    data = session.request(method, url, params=params)
+    content = session.request(method, url, params=params, data=data)
 
-    return data.text.encode("utf-8") if as_text else data.content
+    return content.text.encode("utf-8") if as_text else content.content
 
 
 def first(inp_data):
@@ -121,6 +124,17 @@ def parse_timestamp(meta):
     assert date, "Date not found!"
 
     return date_to_timestamp(first(date))
+
+
+def ts_to_concept_date(timestamp):
+    if not timestamp:
+        return None
+
+    # required format: 2005-01-25 07:12
+    return time.strftime(
+        "%Y-%m-%d %H:%M",
+        time.localtime(timestamp)
+    )
 
 
 def url_context(rel_url):
