@@ -12,7 +12,9 @@ from shared import check_error_div
 # Class definition ============================================================
 class Concept(object):
     """
-    This class represents concept of the blog.
+    Attributes:
+        title (str): Title of the concept.
+        link (str): Absolute URL of the concept.
     """
     def __init__(self, title, link, session, server_url):
         self.title = title
@@ -105,6 +107,10 @@ class Concept(object):
         check_error_div(data, '<div class="error" id="screenshotError">')
 
     def list_pics(self):
+        """
+        Return:
+            list: List of URLs to pictures used in this concept.
+        """
         # init meta
         if not self.meta:
             self._init_metadata()
@@ -125,6 +131,16 @@ class Concept(object):
         return urls
 
     def edit(self, text, title=None, timestamp_of_pub=None):
+        """
+        Edit concept.
+
+        Args:
+            text (str): New text of the context.
+            title (str, default None): New title of the concept. If not set,
+                  old title is used.
+            timestamp_of_pub (int, default None): Timestamp determining when
+                             the concept should be published.
+        """
         if not self.meta:
             self._init_metadata()
 
@@ -165,9 +181,3 @@ class Concept(object):
 
     def __str__(self):
         return self.title
-
-    def remove(self):
-        raise NotImplementedError("Not implemented yet.")
-
-    def publish(self):
-        raise NotImplementedError("Not implemented yet.")
