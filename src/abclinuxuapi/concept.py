@@ -10,6 +10,7 @@ from shared import first
 from shared import download
 from shared import url_context
 from shared import check_error_div
+from shared import ts_to_concept_date
 
 
 # Class definition ============================================================
@@ -128,7 +129,7 @@ class Concept(object):
             if "href" in a.params
         ]
 
-    def edit(self, text, title=None, timestamp_of_pub=None):
+    def edit(self, text, title=None, date_of_pub=None):
         """
         Edit concept.
 
@@ -136,8 +137,12 @@ class Concept(object):
             text (str): New text of the context.
             title (str, default None): New title of the concept. If not set,
                   old title is used.
-            timestamp_of_pub (int, default None): Timestamp determining when
-                             the concept should be published.
+            date_of_pub (str/int, default None): Date string in abclinuxu
+                        format or timestamp determining when the concept should
+                        be automatically published.
+
+        Note:
+            `date_of_pub` can be string in format ``"%Y-%m-%d %H:%M"``.
         """
         if not self._meta:
             self._init_metadata()
@@ -160,13 +165,13 @@ class Concept(object):
             title = title.params["value"]
 
         date = ""
-        if timestamp_of_pub is None:
+        if date_of_pub is None:
             date = first(form.find("input", {"name": "publish"}))
             date = date.params["value"]
-        elif isinstance(timestamp_of_pub, basestring):
-            date = timestamp_of_pub
+        elif isinstance(date_of_pub, basestring):
+            date = date_of_pub
         else:
-            pass  # TODO: date processing
+            date = ts_to_concept_date(date_of_pub)
 
         data = download(
             url=url_context(form_action),
