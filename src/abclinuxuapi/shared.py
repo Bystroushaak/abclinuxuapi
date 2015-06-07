@@ -103,3 +103,12 @@ def handle_errors(dom):
         error_msg = first(x for x in elements if x.getTagName() == "p")
 
         raise UserWarning(error_msg.getContent())
+
+
+def check_error_div(data, error_div):
+    # no sophisticated parsing of the error is needed
+    if error_div in data:
+        data = data.split(error_div)[1]
+        data = data.split("</div>")[0]
+
+        raise ValueError(data)

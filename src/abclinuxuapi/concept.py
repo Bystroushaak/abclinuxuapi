@@ -4,24 +4,15 @@
 # Interpreter version: python 2.7
 #
 # Imports =====================================================================
-import requests
 import dhtmlparser as d
 
-
-#=Functions & objects =========================================================
-def check_error_div(data, error_div):
-    # no sophisticated parsing of the error is needed
-    if error_div in data:
-        data = data.split(error_div)[1]
-        data = data.split("</div>")[0]
-
-        raise ValueError(data)
+from shared import check_error_div
 
 
-class Concept:
+# Class definition ============================================================
+class Concept(object):
     """
-    This class represents concept of the blog - it has all attributes of the
-    blog, but it is invisible for the readers.
+    This class represents concept of the blog.
     """
     def __init__(self, title, link, session, server_url):
         self.title = title

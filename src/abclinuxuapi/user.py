@@ -14,7 +14,9 @@ import shared
 from shared import first
 from shared import url_context
 from shared import ABCLINUXU_URL
-from concept import Concept, check_error_div
+from shared import check_error_div
+
+from concept import Concept
 from blogpost import Blogpost
 
 
