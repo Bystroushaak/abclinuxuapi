@@ -16,20 +16,50 @@ from shared import parse_timestamp
 
 # Functions & classes =========================================================
 class Comment(object):
+    """
+    Comment representation.
+
+    Note:
+        For registered users, the :attr:`username` property contains `real`
+        username, which may differ from what you see, but this allows you to
+        identify the user.
+
+        This is because registered users can (and do) change their `visible`
+        usernames anytime they want.
+
+    Attributes:
+        url (str): Absolute URL of the comment.
+        text (str): Fulltext of the comment.
+        timestamp (int): Date of the publication as timestamp.
+        username (str): Username of the poster.
+        registered (bool): Was the user registered?
+        censored (bool): Is the comment censored? If so, you will need
+                 additional parsing of the comment, which is not yet
+                 implemented.
+        responses (list): List of :class:`Comment` instances responding to this
+                  comment.
+        response_to (obj): Reference to :class:`Comment` to which you are
+                    responding. ``None`` in cases where the object is at the
+                    top of the comment tree.
+    """
     def __init__(self):
         self.url = None
         self.text = None
         self.timestamp = None
 
         self.username = None
-        self.registered = False  # was the user registered?
+        self.registered = False
         self.censored = False
 
-        self.responses = []  #: Reference to all response comments
-        self.response_to = None  #: Reference to parent comment
+        self.responses = []
+        self.response_to = None
 
     @property
     def id(self):
+        """
+        Returns:
+            str: Identification of the comment.
+        """
         return self.url.split("#")[-1]
 
     @staticmethod
@@ -153,6 +183,17 @@ class Comment(object):
 
     @staticmethod
     def comments_from_html(html):
+        """
+        Parse comments in `html`, return list of connected :class:`Comment`
+        instances.
+
+        Args:
+            html (str): Webpage for parsing.
+
+        Returns:
+            list: List of :class:`Comment` instances linked also into trees \
+                  using :attr:`response_to` and :attr:`responses` properties.
+        """
         dom = html
 
         # make sure, that you don't modify `html` attribute
