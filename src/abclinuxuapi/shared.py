@@ -127,6 +127,15 @@ def parse_timestamp(meta):
 
 
 def ts_to_concept_date(timestamp):
+    """
+    Convert numeric `timestamp` into format used by abclinuxu for concepts.
+
+    Args:
+        timestamp (int): Timestamp as float/int.
+
+    Returns:
+        str: Converted `timestamp`.
+    """
     if not timestamp:
         return None
 
