@@ -81,9 +81,7 @@ def test_add_concept(user):
 
     assert len(content) > 0
 
-    # print content
-
-    # assert  == "Text of the new concept"
+    assert "Text of the new concept" in content
 
 
 def test_get_user_id(user):
