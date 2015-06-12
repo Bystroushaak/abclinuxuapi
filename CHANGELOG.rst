@@ -4,6 +4,7 @@ Changelog
 0.4.0
 -----
     - Added badges to README.
+    - ``Blogpost.comments`` are now by default blank list instead of None.
 
 0.3.11
 ------

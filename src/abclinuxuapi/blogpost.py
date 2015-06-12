@@ -93,7 +93,7 @@ class Blogpost(object):
         self.tags = None
         self.rating = None
         self.has_tux = False
-        self.comments = None
+        self.comments = []
         self.comments_n = -1
         self.readed = None
 

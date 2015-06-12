@@ -56,7 +56,7 @@ def test_constructor(bp_url):
     assert bp.intro is None
     assert bp.text is None
     assert bp.rating is None
-    assert bp.comments is None
+    assert bp.comments == []
     assert bp.comments_n == -1
     assert bp.created_ts is None
     assert bp.last_modified_ts is None
