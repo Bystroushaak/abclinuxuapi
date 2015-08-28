@@ -10,8 +10,13 @@ import os.path
 import getpass
 import argparse
 
-import abclinuxuapi
 import dhtmlparser as d
+
+sys.path.insert(
+    0,
+    os.path.join(os.path.dirname(__file__), "../src")
+)
+import abclinuxuapi
 
 
 # Variables ===================================================================
@@ -26,10 +31,10 @@ ALLOWED_IMAGES = [
 # Functions & objects =========================================================
 def get_body(dom):
     body = dom.find("body")
-    if not body:
-        return str(dom)
-    else:
+    if body:
         return body[0].getContent()
+
+    return str(dom)
 
 
 def upload_image(concept, image_path):
@@ -82,7 +87,7 @@ def upload_html(dom, args):
         a.params["href"] = upload_image(concept, a.params["href"])
 
     print
-    print "Uploading concept .."
+    print "Updating image links in concept .."
 
     try:
         concept.edit(get_body(dom))
@@ -141,7 +146,7 @@ if __name__ == '__main__':
     if args.title is None:
         title = dom.find("title")
 
-        if not title:
+        if not title or not title[0].getContent().strip():
             sys.stderr.write("Can't find <title> in your document.")
             sys.stderr.write("Use --title switch.\n")
             sys.exit(1)

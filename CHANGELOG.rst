@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.4.1
+-----
+    - Fixed bugs in uploader.
+
 0.4.0
 -----
     - Added badges to README.
