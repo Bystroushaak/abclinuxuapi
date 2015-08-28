@@ -10,6 +10,7 @@ import datetime
 from urlparse import urljoin
 
 import requests
+import dhtmlparser
 
 
 # Variables ===================================================================
@@ -197,3 +198,26 @@ def check_error_div(data, error_div):
         data = data.split("</div>")[0]
 
         raise ValueError(data)
+
+
+def check_error_page(data):
+    """
+    Handle other, special kind of errors.
+    """
+    dom = dhtmlparser.parseString(data)
+
+    title = dom.find("title")
+
+    if not title:
+        return
+
+    title = title[0].getContent()
+
+    if title != "Chyba":
+        return
+
+    p = dom.find("p")
+
+    error_text = p[0].getContent() if p else data
+
+    raise ValueError(error_text.strip())
