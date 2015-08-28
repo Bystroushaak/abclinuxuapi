@@ -4,7 +4,6 @@
 # Interpreter version: python 2.7
 #
 # Imports =====================================================================
-import time
 from urlparse import urljoin
 
 import requests
@@ -32,7 +31,7 @@ class User(object):
     concept.
 
     Attributes:
-        username (str): 
+        username (str):
         password (str, default None): Password for logged user.
         logged_in (bool): Is the user logged in?
     """
