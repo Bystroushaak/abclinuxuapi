@@ -10,6 +10,7 @@ from shared import first
 from shared import download
 from shared import url_context
 from shared import check_error_div
+from shared import check_error_page
 from shared import ts_to_concept_date
 
 
@@ -175,6 +176,7 @@ class Concept(object):
 
         data = download(
             url=url_context(form_action),
+            method="POST",
             data={
                 "cid": 0,
                 "publish": date,
@@ -186,6 +188,7 @@ class Concept(object):
             session=self._session
         )
         check_error_div(data, '<div class="error" id="contentError">')
+        check_error_page(data)
 
     def __str__(self):
         return self.title
