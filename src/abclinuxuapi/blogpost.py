@@ -60,6 +60,7 @@ class Blogpost(object):
 
     Attributes:
         url (str): Absolute URL of the blogpost.
+        uid (int): Unique identificator of the blogpost.
         title (str): Tile of the blogpost.
         intro (str): Perex. This is parsed only when returned from
                      :class:`User`.
@@ -86,6 +87,7 @@ class Blogpost(object):
         """
         self.url = url
 
+        self.uid = None
         self.title = None
         self.intro = None
         self.text = None
@@ -285,6 +287,54 @@ class Blogpost(object):
             if tag.params.get("href", "").startswith("/stitky/")
         ]
 
+    def _parse_uid(self):
+        def alt_uid():
+            lines = self._dom.__str__().splitlines()
+
+            # fined lines starting with Page.relationID
+            # Page.relationID = 412659; -> 412659;
+            relation_id = [
+                line.split("=", 1)[-1]
+                for line in lines
+                if line.strip().startswith("Page.relationID")
+            ]
+
+            if not relation_id:
+                return
+
+            # ` 412659;` -> 412659
+            relation_id = relation_id[0].split(";")[0].strip()
+
+            self.uid = int(relation_id)
+
+        content = self._parse_content_tag()
+        rating_tags = content.find("div", {"class": "rating"})
+
+        if not rating_tags:
+            return alt_uid()
+
+        a_tags = rating_tags[0].find(
+            "a",
+            fn=lambda x: x.params.get("href", "").startswith("/blog/rating/")
+        )
+
+        if not a_tags:
+            return alt_uid()
+
+        # <a href="/blog/rating/412659?action=rate&amp;rvalue=0&amp;
+        # ticket=805cKn1vvI" target="rating" rel="nofollow">špatné</a>
+        # -> /blog/rating/412659
+        url = a_tags[0].params["href"].split("?")[0]
+
+        # /blog/rating/412659 -> 412659
+        url = url.split("/")[-1]
+
+        # sometimes, there is something like ;jsessionid=bleh at the end
+        # 400957;jsessionid=16k4zpu2a663zrcv87fe0zp0d -> 400957
+        url = url.split(";")[0].strip()
+
+        self.uid = int(url)
+
     def _parse_rating(self):
         content = self._parse_content_tag()
         rating_tags = content.find("div", {"class": "rating"})
@@ -363,6 +413,7 @@ class Blogpost(object):
         self._content_tag = None
         dhtmlparser.makeDoubleLinked(self._dom)
 
+        self._parse_uid()
         self._parse_title()
         self._parse_text()
         self._parse_tags()

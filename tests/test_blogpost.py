@@ -52,6 +52,7 @@ def test_constructor(bp_url):
     bp = abclinuxuapi.Blogpost(bp_url)
 
     assert bp.url == bp_url
+    assert bp.uid is None
     assert bp.title is None
     assert bp.intro is None
     assert bp.text is None
@@ -66,6 +67,7 @@ def test_constructor(bp_url):
 def test_constructor_multi_params(bp_url):
     bp = abclinuxuapi.Blogpost(
         url=bp_url,
+        uid="uid",
         title="title",
         intro="intro",
         text="text",
@@ -78,6 +80,7 @@ def test_constructor_multi_params(bp_url):
     )
 
     assert bp.url == bp_url
+    assert bp.uid == "uid"
     assert bp.title == "title"
     assert bp.intro == "intro"
     assert bp.text == "text"
@@ -114,6 +117,10 @@ def test_Tag():
 def test_get_tags(bpost):
     assert bpost.tags
     assert "proxy" in bpost.tags
+
+
+def test_get_uid(bpost):
+    assert bpost.uid == 400957
 
 
 def test_get_rating(bpost):
