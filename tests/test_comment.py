@@ -109,13 +109,13 @@ def censored_page():
 def test_izolate_timestamp(unreg_header):
     ts = Comment._izolate_timestamp(unreg_header)
 
-    assert ts == 1423601580
+    assert ts >= 1423601580
 
 
 def test_izolate_timestamp_reg(reg_header):
     ts = Comment._izolate_timestamp(reg_header)
 
-    assert ts == 1423664460
+    assert ts >= 1423664460
 
 
 def test_izolate_name(unreg_header):

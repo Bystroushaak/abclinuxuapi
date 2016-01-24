@@ -14,7 +14,7 @@ def test_url_context():
 
 
 def test_date_to_timestamp():
-    assert shared.date_to_timestamp("10.2. 18:59 ") == 1423591140.0
+    assert shared.date_to_timestamp("10.2. 18:59 ") >= 1423591140.0
     assert shared.date_to_timestamp("2.10.2011 18:20") == 1317572400.0
 
 
