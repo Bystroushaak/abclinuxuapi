@@ -41,17 +41,21 @@ class Tag(str):
     tag.
 
     Attributes:
-        name (str): Name of the tag.
-        url (str): URL to the informations about tag.
+        tag (str): Human readable content of the tag.
+        norm (str): norm machine-readable version of tag.
     """
-    def __new__(self, name, *args, **kwargs):
-        return super(Tag, self).__new__(self, name)
+    def __new__(self, tag, *args, **kwargs):
+        return super(Tag, self).__new__(self, tag)
 
-    def __init__(self, name, url=None):
-        super(Tag, self).__init__(name)
+    def __init__(self, tag, norm=None):
+        super(Tag, self).__init__(tag)
 
-        self.name = name
-        self.url = url
+        self.tag = tag
+        self.norm = norm
+
+    @property
+    def url(self):
+        return url_context("/stitky/%s" % self.norm)
 
 
 class Blogpost(object):
@@ -272,19 +276,14 @@ class Blogpost(object):
         self.text = content_tag.getContent()
 
     def _parse_tags(self):
-        tag_tags = self._parse_content_tag().find("div", {"class": "tag-box"})
-
-        if not tag_tags:
-            self.tags = []
-            return
+        tag_xml = download(
+            url_context("/ajax/tags/assigned?rid=%d" % self.uid)
+        )
+        tag_dom = dhtmlparser.parseString(tag_xml)
 
         self.tags = [
-            Tag(
-                tag.getContent(),
-                url=url_context(tag.params["href"])
-            )
-            for tag in first(tag_tags).find("a")
-            if tag.params.get("href", "").startswith("/stitky/")
+            Tag(tag.params["l"], tag.params["i"])
+            for tag in tag_dom.find("s")
         ]
 
     def _parse_uid(self):

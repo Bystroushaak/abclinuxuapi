@@ -108,10 +108,11 @@ def test_get_text(bpost):
 
 
 def test_Tag():
-    tag = abclinuxuapi.Tag("hello", url="http://..")
+    tag = abclinuxuapi.Tag("hello", norm="_hello_")
 
     assert tag == "hello"
-    assert tag.url == "http://.."
+    assert tag.norm == "_hello_"
+    assert tag.url.startswith("http")
 
 
 def test_get_tags(bpost):
