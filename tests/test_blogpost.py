@@ -115,9 +115,20 @@ def test_Tag():
     assert tag.url.startswith("http")
 
 
-def test_get_tags(bpost):
+def test_tags(bpost):
     assert bpost.tags
     assert "proxy" in bpost.tags
+
+    # try to add and remove tag
+    new_tag = abclinuxuapi.Tag("nábytek", "nabytek")
+
+    bpost.remove_tag(new_tag, throw=False)
+    assert new_tag not in bpost.tags
+
+    bpost.add_tag(new_tag)
+    assert new_tag in bpost.tags
+
+    bpost.remove_tag(new_tag, throw=False)
 
 
 def test_get_uid(bpost):

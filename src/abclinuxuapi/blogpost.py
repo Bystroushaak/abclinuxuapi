@@ -177,6 +177,16 @@ class Blogpost(object):
             return Rating(int(rating[1]), int(rating[3]))
 
     @staticmethod
+    def _parse_tags(tags_xml):
+        tags_dom = dhtmlparser.parseString(tags_xml)
+
+        # see http://www.abclinuxu.cz/ajax/tags/list for details
+        return [
+            Tag(tag.params["l"], tag.params["i"])
+            for tag in tags_dom.find("s")
+        ]
+
+    @staticmethod
     def from_html(html, lazy=True):
         """
         Convert HTML string to :class:`Blogpost` instance.
@@ -274,17 +284,6 @@ class Blogpost(object):
             content_tag.removeChild(meta_vypis_tag, end_tag_too=True)
 
         self.text = content_tag.getContent()
-
-    def _parse_tags(self):
-        tag_xml = download(
-            url_context("/ajax/tags/assigned?rid=%d" % self.uid)
-        )
-        tag_dom = dhtmlparser.parseString(tag_xml)
-
-        self.tags = [
-            Tag(tag.params["l"], tag.params["i"])
-            for tag in tag_dom.find("s")
-        ]
 
     def _parse_uid(self):
         def alt_uid():
@@ -415,9 +414,13 @@ class Blogpost(object):
         self._parse_uid()
         self._parse_title()
         self._parse_text()
-        self._parse_tags()
         self._parse_rating()
         self._parse_meta()
+
+        # parse tags
+        tags_url = "/ajax/tags/assigned?rid=%d" % self.uid
+        tags_xml = download(url_context(tags_url))
+        self.tags = self.__class__._parse_tags(tags_xml)
 
         self.comments = Comment.comments_from_html(comments_data)
         self.comments_n = len(self.comments)
@@ -446,6 +449,97 @@ class Blogpost(object):
             link if remote_link(link) else url_context(link)
             for link in image_links
         ]
+
+    # Tag handlers ============================================================
+    @classmethod
+    def possible_tags(cls):
+        """
+        Get list of all possible tags which may be set.
+
+        Returns:
+            list: List of :class:`Tag` objects.
+        """
+        tags_xml = download(url_context("/ajax/tags/list"))
+
+        return cls._parse_tags(tags_xml)
+
+    def add_tag(self, tag):
+        """
+        Add new tag to the blogpost.
+
+        Args:
+            tag (Tag): :class:`Tag` instance. See :class:`possible_tags` for
+                list of all possible tags.
+
+        Raises:
+            KeyError: In case, that `tag` is not instance of :class:`Tag`.
+            ValueError: In case that :attr:`uid` is not set.
+
+        Returns:
+            list: List of :class:`Tag` objects.
+        """
+        if not isinstance(tag, Tag):
+            raise KeyError(
+                "Tag have instance of Tag and to be from .possible_tags()"
+            )
+
+        if not self.uid:
+            raise ValueError(
+                "Can't assign tag - .uid property not set. Call .pull() or "
+                "assign .uid manually."
+            )
+
+        tags_xml = download(url_context(
+            "/ajax/tags/assign?rid=%d&tagID=%s" % (self.uid, tag.norm)
+        ))
+
+        self.tags = self.__class__._parse_tags(tags_xml)
+
+        return self.tags
+
+    def remove_tag(self, tag, throw=False):
+        """
+        Remove tag from the tags currently assigned to blogpost.
+
+        Args:
+            tag (Tag): :class:`Tag` instance. See :class:`possible_tags` for
+                list of all possible tags.
+            throw (bool): Raise error in case you are trying to remove
+                tag that is not assigned to blogpost.
+
+        Raises:
+            KeyError: In case, that `tag` is not instance of :class:`Tag`.
+            IndexError: In case that you are trying to remove tag which is not
+                assigned to blogpost.
+            ValueError: In case that :attr:`uid` is not set.
+
+        Returns:
+            list: List of :class:`Tag` objects.
+        """
+        if not isinstance(tag, Tag):
+            raise KeyError(
+                "Tag have instance of Tag and to be from .tags()"
+            )
+
+        if tag not in self.tags:
+            if not throw:
+                return self.tags
+
+            raise IndexError("Can't remove unassigned tag.")
+
+        if not self.uid:
+            raise ValueError(
+                "Can't assign tag - .uid property not set. Call .pull() or "
+                "assign .uid manually."
+            )
+
+        tags_xml = download(url_context(
+            "/ajax/tags/unassign?rid=%d&tagID=%s" % (self.uid, tag.norm)
+        ))
+
+        self.tags = self.__class__._parse_tags(tags_xml)
+
+        return self.tags
 
     def __repr__(self):
         return "%s(%s)" % (self.__class__.__name__, self.title)
