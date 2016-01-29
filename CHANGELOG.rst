@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.4.3
+-----
+    - Added possibility to bypass lazy tag parsing.
+
 0.4.2
 -----
     - Parsing of the tags updated.

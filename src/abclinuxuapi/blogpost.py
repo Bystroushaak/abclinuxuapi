@@ -96,7 +96,6 @@ class Blogpost(object):
         self.intro = None
         self.text = None
 
-        self.tags = None
         self.rating = None
         self.has_tux = False
         self.comments = []
@@ -108,6 +107,7 @@ class Blogpost(object):
         self.last_modified_ts = None
 
         # those are used for caching to speed up parsing
+        self._tags = None
         self._dom = None
         self._content_tag = None
 
@@ -389,6 +389,23 @@ class Blogpost(object):
             reads = first(reads_line).split(":")[-1].split("&")[0]
             self.readed = int(reads)
 
+    @property
+    def tags(self):
+        if self._tags:
+            return self._tags
+
+        return self._get_tags()
+
+    @tags.setter
+    def tags(self, new_tags):
+        self._tags = new_tags
+
+    def _get_tags(self):
+        # parse tags
+        tags_url = "/ajax/tags/assigned?rid=%d" % self.uid
+        tags_xml = download(url_context(tags_url))
+        return self.__class__._parse_tags(tags_xml)
+
     def pull(self):
         """
         Download page with blogpost. Parse text, comments and everything else.
@@ -417,10 +434,7 @@ class Blogpost(object):
         self._parse_rating()
         self._parse_meta()
 
-        # parse tags
-        tags_url = "/ajax/tags/assigned?rid=%d" % self.uid
-        tags_xml = download(url_context(tags_url))
-        self.tags = self.__class__._parse_tags(tags_xml)
+        self._tags = self._get_tags()
 
         self.comments = Comment.comments_from_html(comments_data)
         self.comments_n = len(self.comments)
