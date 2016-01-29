@@ -1,6 +1,12 @@
 Changelog
 =========
 
+0.4.2
+-----
+    - Parsing of the tags updated.
+    - Added support for Blog.uid.
+    - Fixed bugs in tests (new year parsing).
+
 0.4.1
 -----
     - Fixed bugs in uploader.
