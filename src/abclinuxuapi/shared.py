@@ -84,6 +84,8 @@ def date_to_timestamp(date):
 
     date = date.replace("dnes", today)
     date = date.replace("včera", yesterday.strftime("%d.%m.%Y"))
+    if "|" in date:  # "%H:%M |" -> "%d.%m.%Y %H:%M"
+        date = today + " " + date.replace(" |", "")
 
     if len(date) <= 11:  # new items are without year
         date = date.replace(". ", ".%d " % time.localtime().tm_year)
@@ -104,7 +106,7 @@ def date_izolator(lines):
     """
     return [
         x for x in lines
-        if ":" in x and any(["." in x, "včera" in x, "dnes" in x])
+        if ":" in x and any(["." in x, "včera" in x, "dnes" in x, "|" in x])
     ]
 
 
