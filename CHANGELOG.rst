@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.4.4
+-----
+    - Fixed bug in date parsing function.
+
 0.4.3
 -----
     - Added possibility to bypass lazy tag parsing.
