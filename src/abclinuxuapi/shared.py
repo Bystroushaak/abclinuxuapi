@@ -148,7 +148,7 @@ def parse_timestamp(meta):
     # this is used in articles (article != blogpost)
     date = alt_izolator(meta)
     if date:
-        date = date[0].split()[0]
+        date = first(date).split()[0].replace("|", "")
         return date_to_timestamp(date + " 00:00")
 
     assert date, "Date not found!"

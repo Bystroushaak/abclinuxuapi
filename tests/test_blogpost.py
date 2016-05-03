@@ -154,3 +154,15 @@ def test_get_image_urls(bpost):
         "https://www.abclinuxu.cz/images/screenshots/0/9/"
         "210590-bolest-proxy-6017333664768008869.png"
     )
+
+
+def test_different_date_parsing():
+    abclinuxuapi.Blogpost(
+        "http://www.abclinuxu.cz/clanky/yubikey.-co-to-je-a-co-to-umi-1",
+        lazy=False
+    )
+
+    abclinuxuapi.Blogpost(
+        "http://www.abclinuxu.cz/clanky/bezpecnost/ssl-je-vase-bezpecne-pripojeni-opravdu-zabezpecene",
+        lazy=False
+    )
