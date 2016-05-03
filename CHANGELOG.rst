@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.4.5
+-----
+    - Added support for parsing of more obscure date formats used by articles on abclinuxu.
+
 0.4.4
 -----
     - Fixed bug in date parsing function.

@@ -263,7 +263,7 @@ class Blogpost(object):
 
         # this shit is not structured in tree, so the parsing is little bit
         # hard
-        h2_tag = first(content_tag.find("h2"))
+        h2_tag = first(content_tag.find("h2") + content_tag.find("h1"))
         rating_tag = first(content_tag.find("div", {"class": "rating"}))
 
         # throw everything until the h2_tag

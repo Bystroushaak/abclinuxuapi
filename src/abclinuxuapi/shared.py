@@ -4,6 +4,7 @@
 # Interpreter version: python 2.7
 #
 # Imports =====================================================================
+import re
 import time
 import types
 import datetime
@@ -95,7 +96,7 @@ def date_to_timestamp(date):
 
 def date_izolator(lines):
     """
-    Return all lines, that looks like it may be date in one of three
+    Return all lines, that looks like it may be date in one of many
     abclinuxu formats.
 
     Args:
@@ -110,6 +111,22 @@ def date_izolator(lines):
     ]
 
 
+def alt_izolator(lines):
+    """
+    Return all lines, that looks like it may be date "~~%d.%m. ~~" format.
+
+    Args:
+        lines (list): List of strings with lines which ma by dates.
+
+    Returns:
+        list: List of lines, which looks like they may contain dates.
+    """
+    return [
+        l for l in lines
+        if "." in l and re.match(r".*[0-9]{1,2}\.[0-9]{1,2}\..*", l)
+    ]
+
+
 def parse_timestamp(meta):
     """
     Parse numeric timestamp from the date representation.
@@ -121,12 +138,20 @@ def parse_timestamp(meta):
         int: Timestamp.
     """
     if type(meta) not in [list, tuple, types.GeneratorType]:
+        meta = meta.replace(". ", ".")  # 10. 10. 2003 -> 10.10.2003
         meta = str(meta).splitlines()
 
     date = date_izolator(meta)
-    assert date, "Date not found!"
+    if date:
+        return date_to_timestamp(first(date))
 
-    return date_to_timestamp(first(date))
+    # this is used in articles (article != blogpost)
+    date = alt_izolator(meta)
+    if date:
+        date = date[0].split()[0]
+        return date_to_timestamp(date + " 00:00")
+
+    assert date, "Date not found!"
 
 
 def ts_to_concept_date(timestamp):
