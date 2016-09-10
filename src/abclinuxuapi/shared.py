@@ -42,7 +42,13 @@ def download(url, params=None, method="GET", session=None, as_text=True,
     if session is None:
         session = SESSION
 
-    content = session.request(method, url, params=params, data=data)
+    content = session.request(
+        method,
+        url,
+        params=params,
+        data=data,
+        verify=False,
+    )
 
     return content.text.encode("utf-8") if as_text else content.content
 

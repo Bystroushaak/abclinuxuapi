@@ -205,7 +205,8 @@ class User(object):
                 "useHttps": "yes" if login_url.startswith("https") else "no",
                 "action": "login2",
                 "url": "http://www.abclinuxu.cz/"
-            }
+            },
+            verify=False,
         ).text.encode("utf-8")
 
         # test, whether the user is successfully logged in
@@ -354,7 +355,8 @@ class User(object):
                 "title": dhtmlparser.removeTags(title),
                 "delay": "Do konceptů",
                 "action": "add2"
-            }
+            },
+            verify=False,
         )
         data = data.text.encode("utf-8")
         check_error_div(data, '<div class="error" id="contentError">')
@@ -385,7 +387,8 @@ class User(object):
                 "category2": "",
                 "category3": "",
                 "action": "addBlog2",
-            }
+            },
+            verify=False,
         )
 
         # check for errors
