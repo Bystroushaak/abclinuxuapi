@@ -1,6 +1,11 @@
 Changelog
 =========
 
+0.4.7
+-----
+    - Added `verify=False`, because the SSL library pisses me off.
+    - Added another special case of parsing the date.
+
 0.4.6
 -----
     - Fixed another bug in date parsing function.

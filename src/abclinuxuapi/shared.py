@@ -89,6 +89,11 @@ def date_to_timestamp(date):
     today = time.strftime("%d.%m.%Y", time.localtime())
     yesterday = datetime.date.today() - datetime.timedelta(days=-1)
 
+    # 8.4.23:30
+    if re.match(r"[0-9]{1,2}\.[0-9]{1,2}\.[0-9]{1,2}\:[0-9]{1,2}", date):
+        date = "%d.%s" % (time.localtime().tm_year, date)
+        return time.mktime(time.strptime(date, "%Y.%d.%m.%H:%M"))
+
     date = date.replace("dnes", today)
     date = date.replace("včera", yesterday.strftime("%d.%m.%Y"))
     if "|" in date:  # "%H:%M |" -> "%d.%m.%Y %H:%M"
@@ -144,7 +149,7 @@ def parse_timestamp(meta):
         int: Timestamp.
     """
     if type(meta) not in [list, tuple, types.GeneratorType]:
-        meta = meta.replace(". ", ".")  # 10. 10. 2003 -> 10.10.2003
+        meta = meta.__str__().replace(". ", ".")  # 10. 10. 2003 -> 10.10.2003
         meta = str(meta).splitlines()
 
     date = date_izolator(meta)
