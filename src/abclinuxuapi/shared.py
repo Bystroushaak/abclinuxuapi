@@ -85,7 +85,9 @@ def date_to_timestamp(date):
         int: Timestamp.
     """
     date = date.strip()
+    date = date.__str__().replace(". ", ".")  # 10. 10. 2003 -> 10.10.2003
 
+    # references to today and yesterday
     today = time.strftime("%d.%m.%Y", time.localtime())
     yesterday = datetime.date.today() - datetime.timedelta(days=-1)
 

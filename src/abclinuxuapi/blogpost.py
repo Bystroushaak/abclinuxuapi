@@ -14,7 +14,6 @@ from shared import first
 from shared import download
 from shared import url_context
 from shared import parse_timestamp
-from shared import date_to_timestamp
 from comment import Comment
 
 
@@ -381,7 +380,7 @@ class Blogpost(object):
         modified_ts_line = [x for x in lines if "poslední úprava:" in x]
         if modified_ts_line:
             date_string = first(modified_ts_line).split(": ")[-1]
-            self.last_modified_ts = date_to_timestamp(date_string)
+            self.last_modified_ts = parse_timestamp(date_string)
 
         # parse number of reads
         reads_line = [x for x in lines if "Přečteno:" in x]
