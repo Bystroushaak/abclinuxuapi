@@ -171,3 +171,8 @@ def test_different_date_parsing():
         "http://www.abclinuxu.cz/blog/jarasa/2016/10/i-pejsek-musi-jist-kvalitne",
         lazy=False
     )
+
+    abclinuxuapi.Blogpost(
+        "http://www.abclinuxu.cz/blog/msk/2016/8/hlada-sa-linux-embedded-vyvojar",
+        lazy=False
+    )
