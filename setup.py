@@ -55,7 +55,8 @@ setup(
     install_requires=[
         "setuptools",
         "requests",
-        "pyDHTMLParser"
+        "pyDHTMLParser",
+        "repoze.lru",
     ],
     test_suite='py.test',
     tests_require=["pytest"],

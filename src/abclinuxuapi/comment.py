@@ -5,8 +5,10 @@
 #
 # Imports =====================================================================
 import copy
+from collections import namedtuple
 
 import dhtmlparser
+from repoze.lru import lru_cache
 
 from shared import first
 from shared import url_context
@@ -43,6 +45,8 @@ class Comment(object):
                     top of the comment tree.
     """
     def __init__(self):
+        self._id = None
+
         self.url = None
         self.text = None
         self.timestamp = None
@@ -55,12 +59,18 @@ class Comment(object):
         self.response_to = None
 
     @property
+    @lru_cache(1)
     def id(self):
         """
         Returns:
             str: Identification of the comment.
         """
-        return self.url.split("#")[-1]
+        # http://abclinuxu.cz/blog/msk/2016/8/hlada-sa-linux-embedded-vyvojar
+        # doesn't have urls in comments, for fucks sake
+        if self.url:
+            return self.url.split("#")[-1]
+
+        return self._id
 
     @staticmethod
     def _izolate_timestamp(head_tag):
@@ -121,7 +131,11 @@ class Comment(object):
             "a",
             fn=lambda x: x.getContent() == "Odpovědět"
         )
-        response_link = first(response_tag).params["href"]
+
+        try:
+            response_link = first(response_tag).params["href"]
+        except StopIteration:
+            return None
 
         # /blog/EditDiscussion/400959;jsessii... -> /blog/EditDiscussion/400959
         response_link = response_link.split(";")[0]
@@ -169,10 +183,16 @@ class Comment(object):
         return first(text_tag).getContent().strip(), censored
 
     @staticmethod
-    def _from_head_and_body(head_tag, body_tag):
+    def _from_head_and_body(head_tag, body_tag, uid=None):
+        """
+        uid is optional, because it's used only at pages without comment links.
+        See http://abclinuxu.cz/blog/msk/2016/8/hlada-sa-linux-embedded-vyvojar
+        for details.
+        """
         c = Comment()
 
         # fill object
+        c._id = uid
         c.url = Comment._parse_url(head_tag)
         c.text, c.censored = Comment._parse_text(body_tag)
         c.response_to = Comment._response_to(head_tag)
@@ -194,32 +214,35 @@ class Comment(object):
             list: List of :class:`Comment` instances linked also into trees \
                   using :attr:`response_to` and :attr:`responses` properties.
         """
-        dom = html
+        def cut_dom_to_area_of_interest(html):
+            dom = html
 
-        # make sure, that you don't modify `html` attribute
-        if not isinstance(html, dhtmlparser.HTMLElement):
-            dom = dhtmlparser.parseString(html)
-        else:
-            dom = copy.deepcopy(dom)
-        dhtmlparser.makeDoubleLinked(dom)
+            # make sure, that you don't modify `html` parameter
+            if not isinstance(html, dhtmlparser.HTMLElement):
+                dom = dhtmlparser.parseString(html)
+            else:
+                dom = copy.deepcopy(dom)
+            dhtmlparser.makeDoubleLinked(dom)
 
-        # comments are not stored in hierarchical structure, but in somehow
-        # flat-nested lists
+            # comments are not stored in hierarchical structure, but in somehow
+            # flat-nested lists
 
-        # locate end of article
-        ds_toolbox = dom.find("div", {"class": "ds_toolbox"})
+            # locate end of article
+            ds_toolbox = dom.find("div", {"class": "ds_toolbox"})
 
-        if not ds_toolbox:
-            raise ValueError("Couldn't locate ds_toolbox!")
+            if not ds_toolbox:
+                raise ValueError("Couldn't locate ds_toolbox!")
 
-        ds_toolbox = first(ds_toolbox)
-        dom = ds_toolbox.parent
+            ds_toolbox = first(ds_toolbox)
+            dom = ds_toolbox.parent
 
-        # ged rid of everything until end of the article
-        while dom.childs[0] != ds_toolbox:
+            # ged rid of everything until end of the article
+            while dom.childs[0] != ds_toolbox:
+                dom.childs.pop(0)
+
             dom.childs.pop(0)
 
-        dom.childs.pop(0)
+            return dom
 
         # pick all header divs
         def header_div_class(item):
@@ -230,11 +253,6 @@ class Comment(object):
             class_descr = item.params.get("class", "")
 
             return class_descr.startswith("ds_hlavicka")
-
-        head_dict = {
-            head_div.params["id"]: head_div
-            for head_div in dom.find("div", fn=header_div_class)
-        }
 
         def id_from_comment_div(comment_div):
             # <div id="comment3"> -> 3
@@ -253,14 +271,35 @@ class Comment(object):
         def comment_or_censored(tag):
             return tag.params.get("class", "") in ("ds_text", "cenzura")
 
-        # parse list of all comments on the page
-        comment_list = [
-            Comment._from_head_and_body(
-                head_dict[id_from_comment_div(comment_div)],
-                comment_div
+        def parse_comments(dom, head_dict):
+            IdBodyPair = namedtuple("IdBodyPairs", ["uid", "comment_div"])
+
+            # I need to use the ID two times in the next pass, thats why
+            id_body_pairs = (
+                IdBodyPair(
+                    uid=id_from_comment_div(comment_div),
+                    comment_div=comment_div,
+                )
+                for comment_div in dom.find("div", fn=comment_or_censored)
             )
-            for comment_div in dom.find("div", fn=comment_or_censored)
-        ]
+
+            return [
+                Comment._from_head_and_body(
+                    head_dict[uid],
+                    comment_div,
+                    uid,
+                )
+                for uid, comment_div in id_body_pairs
+            ]
+
+        dom = cut_dom_to_area_of_interest(html)
+
+        head_dict = {
+            head_div.params["id"]: head_div
+            for head_div in dom.find("div", fn=header_div_class)
+        }
+
+        comment_list = parse_comments(dom, head_dict)
 
         # {id: comment}
         comment_dict = {

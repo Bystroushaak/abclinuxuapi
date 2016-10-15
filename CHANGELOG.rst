@@ -1,11 +1,11 @@
 Changelog
 =========
 
-0.4.8
+0.4.9
 -----
-    - Fixed another problem with date formats.
+    - Fixed problem with parsing comments on the http://abclinuxu.cz/blog/msk/2016/8/hlada-sa-linux-embedded-vyvojar - there are no links to comments.
 
-0.4.0 - 0.4.7
+0.4.0 - 0.4.8
 -------------
     - Added badges to README.
     - ``Blogpost.comments`` are now by default blank list instead of None.
@@ -19,6 +19,7 @@ Changelog
     - Fixed another bug in date parsing function.
     - Added `verify=False`, because the SSL library pisses me off.
     - Added another special case of parsing the date.
+    - Fixed another problem with date formats.
 
 0.3.0 - 0.3.11
 -------------
