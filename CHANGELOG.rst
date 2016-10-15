@@ -1,58 +1,26 @@
 Changelog
 =========
 
-0.4.7
+0.4.8
 -----
-    - Added `verify=False`, because the SSL library pisses me off.
-    - Added another special case of parsing the date.
+    - Fixed another problem with date formats.
 
-0.4.6
------
-    - Fixed another bug in date parsing function.
-
-0.4.5
------
-    - Added support for parsing of more obscure date formats used by articles on abclinuxu.
-
-0.4.4
------
-    - Fixed bug in date parsing function.
-
-0.4.3
------
-    - Added possibility to bypass lazy tag parsing.
-
-0.4.2
------
+0.4.0 - 0.4.7
+-------------
+    - Added badges to README.
+    - ``Blogpost.comments`` are now by default blank list instead of None.
+    - Fixed bugs in uploader.
     - Parsing of the tags updated.
     - Added support for Blog.uid.
     - Fixed bugs in tests (new year parsing).
+    - Added possibility to bypass lazy tag parsing.
+    - Fixed bug in date parsing function.
+    - Added support for parsing of more obscure date formats used by articles on abclinuxu.
+    - Fixed another bug in date parsing function.
+    - Added `verify=False`, because the SSL library pisses me off.
+    - Added another special case of parsing the date.
 
-0.4.1
------
-    - Fixed bugs in uploader.
-
-0.4.0
------
-    - Added badges to README.
-    - ``Blogpost.comments`` are now by default blank list instead of None.
-
-0.3.11
-------
-    - Added a lot of documentation, fixed docstrings and so on.
-    - ``User.has_blog()`` changed to `bool` property ``User.has_blog``.
-    - ``Concept`` class refactored.
-    - Added new parameter ``data`` for ``shared.download()``.
-    - ``User.ts_to_concept_date`` moved to ``shared.ts_to_concept_date()``.
-
-0.3.7 - 0.3.10
---------------
-    - Fixed #7 - blogs with opening HTML comments in perex.
-    - Fixed bug in ``Blogpost._parse_content_tag()``.
-    - Another attempt to solve shit in old blogs. There are missing tags, crossed tags and a lot of other shitfucks.
-    - Fixed bug caused by http://abclinuxu.cz/blog/Mostly_IMDB/2008/6/radeon-hd-4850-a-tak-vubec#17
-
-0.3.0 - 0.3.6
+0.3.0 - 0.3.11
 -------------
     - Added parsing of comments under blogposts.
     - Fixed bugs.
@@ -69,6 +37,15 @@ Changelog
     - Fixed bug which skipped censored comments.
     - Fixed problems with old blogs (different HTML).
     - Implemented #6: ``.__repr__()`` for all important classes.
+    - Fixed #7 - blogs with opening HTML comments in perex.
+    - Fixed bug in ``Blogpost._parse_content_tag()``.
+    - Another attempt to solve shit in old blogs. There are missing tags, crossed tags and a lot of other shitfucks.
+    - Fixed bug caused by http://abclinuxu.cz/blog/Mostly_IMDB/2008/6/radeon-hd-4850-a-tak-vubec#17
+    - Added a lot of documentation, fixed docstrings and so on.
+    - ``User.has_blog()`` changed to `bool` property ``User.has_blog``.
+    - ``Concept`` class refactored.
+    - Added new parameter ``data`` for ``shared.download()``.
+    - ``User.ts_to_concept_date`` moved to ``shared.ts_to_concept_date()``.
 
 0.2.0
 -----
