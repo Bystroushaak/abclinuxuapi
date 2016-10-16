@@ -258,8 +258,8 @@ class Comment(object):
             # <div id="comment3"> -> 3
             id_str = comment_div.parent.params.get("id")
 
-            # see http://abclinuxu.cz/blog/Mostly_IMDB/2008/6/radeon-hd-4850-a\
-            # -tak-vubec#17 for details
+            # for details, see
+            # http://abclinuxu.cz/blog/Mostly_IMDB/2008/6/radeon-hd-4850-a-tak-vubec#17
             if not id_str:
                 id_str = comment_div.parent.parent.params.get("id")
 

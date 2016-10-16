@@ -1,16 +1,12 @@
 Changelog
 =========
 
-0.4.10
+0.4.11
 ------
-    - Fixed comment parsing in case of http://abclinuxu.cz/blog/leos/2007/2/prepis-diskusniho-fora-hw-sekce#31
+    - Added banlist for comment parsing on certain blogs (see HTML source on http://abclinuxu.cz/blog/Strider_BSD_koutek/2006/8/objevil-jsem-ameriku for details).
 
-0.4.9
------
-    - Fixed problem with parsing comments on the http://abclinuxu.cz/blog/msk/2016/8/hlada-sa-linux-embedded-vyvojar - there are no links to comments.
-
-0.4.0 - 0.4.8
--------------
+0.4.0 - 0.4.10
+--------------
     - Added badges to README.
     - ``Blogpost.comments`` are now by default blank list instead of None.
     - Fixed bugs in uploader.
@@ -24,6 +20,8 @@ Changelog
     - Added `verify=False`, because the SSL library pisses me off.
     - Added another special case of parsing the date.
     - Fixed another problem with date formats.
+    - Fixed problem with parsing comments on the http://abclinuxu.cz/blog/msk/2016/8/hlada-sa-linux-embedded-vyvojar - there are no links to comments.
+    - Fixed comment parsing in case of http://abclinuxu.cz/blog/leos/2007/2/prepis-diskusniho-fora-hw-sekce#31
 
 0.3.0 - 0.3.11
 -------------

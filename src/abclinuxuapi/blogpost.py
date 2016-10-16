@@ -9,12 +9,20 @@ import copy
 from collections import namedtuple
 
 import dhtmlparser
+from repoze.lru import lru_cache
 
 from shared import first
 from shared import download
 from shared import url_context
 from shared import parse_timestamp
 from comment import Comment
+
+
+# Variables ===================================================================
+# Blogs so fucket up, that they are not even parsable
+COMMENT_BANLIST = {
+    "/blog/Strider_BSD_koutek/2006/8/objevil-jsem-ameriku",
+}
 
 
 # Functions & objects =========================================================
@@ -405,6 +413,18 @@ class Blogpost(object):
         tags_xml = download(url_context(tags_url))
         return self.__class__._parse_tags(tags_xml)
 
+    @property
+    @lru_cache(1)
+    def relative_url(self):
+        # http://abcl.cz/blog/2006/8/bleh#2 -> abcl.cz/blog/2006/8/bleh#2
+        address = self.url.split("://")[-1]
+
+        # abcl.cz/blog/2006/8/bleh#2 -> blog/2006/8/bleh#2
+        relative_address = address.split("/", 1)[-1]
+
+        # blog/2006/8/bleh#2 -> /blog/2006/8/bleh
+        return "/" + relative_address.split("#")[0]
+
     def pull(self):
         """
         Download page with blogpost. Parse text, comments and everything else.
@@ -435,8 +455,10 @@ class Blogpost(object):
 
         self._tags = self._get_tags()
 
-        self.comments = Comment.comments_from_html(comments_data)
-        self.comments_n = len(self.comments)
+        # there are blogs with fucked up HTML which is basically unparsable
+        if self.relative_url not in COMMENT_BANLIST:
+            self.comments = Comment.comments_from_html(comments_data)
+            self.comments_n = len(self.comments)
 
         # memory cleanup - this saves a LOT of memory
         self._dom = None
