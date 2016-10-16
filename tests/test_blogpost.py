@@ -177,7 +177,8 @@ def test_different_date_parsing():
         lazy=False
     )
 
-    abclinuxuapi.Blogpost(
-        "https://abclinuxu.cz/blog/Strider_BSD_koutek/2006/8/objevil-jsem-ameriku",
+    blog = abclinuxuapi.Blogpost(
+        "http://abclinuxu.cz/blog/Strider_BSD_koutek/2006/8/objevil-jsem-ameriku",
         lazy=False
     )
+    assert len(blog.comments) == 0
