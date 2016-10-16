@@ -158,21 +158,26 @@ def test_get_image_urls(bpost):
 
 def test_different_date_parsing():
     abclinuxuapi.Blogpost(
-        "http://www.abclinuxu.cz/clanky/yubikey.-co-to-je-a-co-to-umi-1",
+        "http://abclinuxu.cz/clanky/yubikey.-co-to-je-a-co-to-umi-1",
         lazy=False
     )
 
     abclinuxuapi.Blogpost(
-        "http://www.abclinuxu.cz/clanky/bezpecnost/ssl-je-vase-bezpecne-pripojeni-opravdu-zabezpecene",
+        "http://abclinuxu.cz/clanky/bezpecnost/ssl-je-vase-bezpecne-pripojeni-opravdu-zabezpecene",
         lazy=False
     )
 
     abclinuxuapi.Blogpost(
-        "http://www.abclinuxu.cz/blog/jarasa/2016/10/i-pejsek-musi-jist-kvalitne",
+        "http://abclinuxu.cz/blog/jarasa/2016/10/i-pejsek-musi-jist-kvalitne",
         lazy=False
     )
 
     abclinuxuapi.Blogpost(
-        "http://www.abclinuxu.cz/blog/msk/2016/8/hlada-sa-linux-embedded-vyvojar",
+        "http://abclinuxu.cz/blog/msk/2016/8/hlada-sa-linux-embedded-vyvojar",
+        lazy=False
+    )
+
+    abclinuxuapi.Blogpost(
+        "https://abclinuxu.cz/blog/Strider_BSD_koutek/2006/8/objevil-jsem-ameriku",
         lazy=False
     )
