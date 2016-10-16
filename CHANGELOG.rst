@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.4.10
+------
+    - Fixed comment parsing in case of http://abclinuxu.cz/blog/leos/2007/2/prepis-diskusniho-fora-hw-sekce#31
+
 0.4.9
 -----
     - Fixed problem with parsing comments on the http://abclinuxu.cz/blog/msk/2016/8/hlada-sa-linux-embedded-vyvojar - there are no links to comments.

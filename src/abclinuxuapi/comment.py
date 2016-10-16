@@ -297,6 +297,9 @@ class Comment(object):
         head_dict = {
             head_div.params["id"]: head_div
             for head_div in dom.find("div", fn=header_div_class)
+            if "id" in head_div.params
+            # if condition because of
+            # /blog/leos/2007/2/prepis-diskusniho-fora-hw-sekce#31
         }
 
         comment_list = parse_comments(dom, head_dict)
