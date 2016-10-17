@@ -52,12 +52,7 @@ setup(
 
     include_package_data=True,
     zip_safe=False,
-    install_requires=[
-        "setuptools",
-        "requests",
-        "pyDHTMLParser",
-        "repoze.lru",
-    ],
+    install_requires=open("requirements.txt").read().splitlines(),
     test_suite='py.test',
     tests_require=["pytest"],
     extras_require={
