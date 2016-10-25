@@ -182,3 +182,8 @@ def test_different_date_parsing():
         lazy=False
     )
     assert len(blog.comments) == 0
+
+    blog = abclinuxuapi.Blogpost(
+        "http://www.abclinuxu.cz/blog/tucnak_viktor/2005/1/zdravim-nahodne-navstevniky",
+        lazy=False
+    )
