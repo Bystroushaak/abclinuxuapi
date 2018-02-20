@@ -187,3 +187,9 @@ def test_different_date_parsing():
         "http://www.abclinuxu.cz/blog/tucnak_viktor/2005/1/zdravim-nahodne-navstevniky",
         lazy=False
     )
+
+    blog = abclinuxuapi.Blogpost(
+        "https://www.abclinuxu.cz/blog/luv/2016/4/mockgeofix-mock-geolokace-kompatibilni-s-android-emulatorem",
+        lazy=False
+    )
+    assert len(blog.comments) == 0
