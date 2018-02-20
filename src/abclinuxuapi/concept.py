@@ -3,7 +3,6 @@
 #
 # Interpreter version: python 2.7
 #
-# Imports =====================================================================
 import dhtmlparser
 
 from shared import first
@@ -14,7 +13,6 @@ from shared import check_error_page
 from shared import ts_to_concept_date
 
 
-# Class definition ============================================================
 class Concept(object):
     """
     Attributes:

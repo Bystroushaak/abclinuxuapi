@@ -3,7 +3,6 @@
 #
 # Interpreter version: python 2.7
 #
-# Imports =====================================================================
 import time
 import copy
 from collections import namedtuple
@@ -18,14 +17,12 @@ from shared import parse_timestamp
 from comment import Comment
 
 
-# Variables ===================================================================
-# Blogs so fucket up, that they are not even parsable
+# Blogs so fucked up, that they are not even parsable
 COMMENT_BANLIST = {
     "/blog/Strider_BSD_koutek/2006/8/objevil-jsem-ameriku",
 }
 
 
-# Functions & objects =========================================================
 class Rating(namedtuple("Rating", ["rating", "base"])):
     """
     Container holding informations about rating.

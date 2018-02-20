@@ -3,7 +3,6 @@
 #
 # Interpreter version: python 2.7
 #
-# Imports =====================================================================
 import copy
 from collections import namedtuple
 
@@ -16,7 +15,6 @@ from shared import date_izolator
 from shared import parse_timestamp
 
 
-# Functions & classes =========================================================
 class Comment(object):
     """
     Comment representation.
