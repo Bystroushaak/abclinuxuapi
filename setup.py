@@ -25,7 +25,7 @@ setup(
     url='https://github.com/Bystroushaak/abclinuxuapi',
 
     author='Bystroushaak',
-    author_email='bystrousak[a]kitakitsune.org',
+    author_email='bystrousak@kitakitsune.org',
 
     classifiers=[
         "Development Status :: 3 - Alpha",
