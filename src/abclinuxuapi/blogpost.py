@@ -154,7 +154,11 @@ class Blogpost(object):
             int: Number of comments.
         """
         comments = meta.find("a")[-1].getContent()
-        comments = comments.split("&nbsp;")[1]
+
+        try:
+            comments = comments.split("&nbsp;")[1]
+        except IndexError:
+            return 0
 
         return int(comments)
 

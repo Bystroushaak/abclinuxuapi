@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.4.14
+------
+    - Fixed bug in parsing of number of comments from blog description.
+
 0.4.13
 ------
     - Fixed parsing of http://www.abclinuxu.cz/blog/luv/2016/4/mockgeofix-mock-geolokace-kompatibilni-s-android-emulatorem where there are no comments.
