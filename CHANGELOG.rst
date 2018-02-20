@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.4.13
+------
+    - Fixed parsing of http://www.abclinuxu.cz/blog/luv/2016/4/mockgeofix-mock-geolokace-kompatibilni-s-android-emulatorem where there are no comments.
+
 0.4.12
 ------
     - Added abclinxuapi.number_of_blog_pages() function to find out how many blogs is there.

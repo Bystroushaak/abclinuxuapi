@@ -213,6 +213,11 @@ class Comment(object):
                   using :attr:`response_to` and :attr:`responses` properties.
         """
         def cut_dom_to_area_of_interest(html):
+            """
+            Raises:
+                StopIteration: In case of no comments.
+                ValueError: In case that there is missing elements from HTML.
+            """
             dom = html
 
             # make sure, that you don't modify `html` parameter
@@ -229,6 +234,17 @@ class Comment(object):
             ds_toolbox = dom.find("div", {"class": "ds_toolbox"})
 
             if not ds_toolbox:
+                # blogposts without any comments
+                add_first_comment = dom.find(
+                    "a",
+                    fn=lambda x:
+                        "action=addDiz" in x.params.get("href", "") and
+                        x.getContent().strip() == "Vložit první komentář"
+                )
+
+                if add_first_comment:
+                    raise StopIteration("No comments yet.")
+
                 raise ValueError("Couldn't locate ds_toolbox!")
 
             ds_toolbox = first(ds_toolbox)
@@ -290,7 +306,10 @@ class Comment(object):
                 for uid, comment_div in id_body_pairs
             ]
 
-        dom = cut_dom_to_area_of_interest(html)
+        try:
+            dom = cut_dom_to_area_of_interest(html)
+        except StopIteration:
+            return []
 
         head_dict = {
             head_div.params["id"]: head_div
