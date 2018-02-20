@@ -33,3 +33,7 @@ def test_next_blog_url():
     assert next(page_gen) == "https://www.abclinuxu.cz/blog/?from=25"
 
     assert next(abclinuxuapi._next_blog_url(4)).endswith("u.cz/blog/?from=100")
+
+
+def test_number_of_blog_pages():
+    assert abclinuxuapi.number_of_blog_pages() >= 807

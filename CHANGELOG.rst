@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.4.12
+------
+    - Added abclinxuapi.number_of_blog_pages() function to find out how many blogs is there.
+
 0.4.11
 ------
     - Added banlist for comment parsing on certain blogs (see HTML source on http://abclinuxu.cz/blog/Strider_BSD_koutek/2006/8/objevil-jsem-ameriku for details).
