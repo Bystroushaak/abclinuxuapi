@@ -3,14 +3,15 @@ Introduction
 
 .. image:: https://badge.fury.io/py/abclinuxuapi.png
     :target: https://pypi.python.org/pypi/abclinuxuapi
-
-.. image:: https://img.shields.io/pypi/dm/abclinuxuapi.svg
+    
+.. image:: https://img.shields.io/pypi/pyversions/abclinuxuapi.svg
     :target: https://pypi.python.org/pypi/abclinuxuapi
+
+.. image:: https://img.shields.io/pypi/l/abclinuxuapi.svg
+    :target: https://github.com/Bystroushaak/abclinuxuapi/blob/master/LICENSE.txt
 
 .. image:: https://readthedocs.org/projects/abclinuxuapi/badge/?version=latest
     :target: http://abclinuxuapi.readthedocs.org/
-
-.. image:: https://img.shields.io/pypi/l/abclinuxuapi.svg
 
 .. image:: https://img.shields.io/github/issues/Bystroushaak/abclinuxuapi.svg
     :target: https://github.com/Bystroushaak/abclinuxuapi/issues
