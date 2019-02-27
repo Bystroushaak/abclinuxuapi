@@ -360,6 +360,7 @@ class User(object):
         )
         data = data.text.encode("utf-8")
         check_error_div(data, '<div class="error" id="contentError">')
+        check_error_div(data, '<div class="error" id="titleError">')
 
     def register_blog(self, blog_name):
         """

@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.4.15
+------
+    - Added better error detection when too long title is used.
+
 0.4.14
 ------
     - Fixed bug in parsing of number of comments from blog description.
