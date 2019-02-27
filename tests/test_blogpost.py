@@ -3,7 +3,6 @@
 #
 # Interpreter version: python 2.7
 #
-# Imports =====================================================================
 import os.path
 import pytest
 
@@ -11,7 +10,6 @@ import abclinuxuapi
 from abclinuxuapi import shared
 
 
-# Fixtures ====================================================================
 @pytest.fixture
 def bp_url():
     return "http://www.abclinuxu.cz/blog/bystroushaak/2015/2/bolest-proxy"
@@ -47,7 +45,6 @@ def bpost():
     return BPOST
 
 
-# Tests =======================================================================
 def test_constructor(bp_url):
     bp = abclinuxuapi.Blogpost(bp_url)
 

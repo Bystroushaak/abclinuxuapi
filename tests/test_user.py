@@ -84,6 +84,11 @@ def test_add_concept(user):
     assert "Text of the new concept" in content
 
 
+def test_concept_with_long_title(user):
+    with pytest.raises(ValueError):
+        user.add_concept("Text of the new concept", "Prostředí a programovací jazyk Selfu (díl čtvrtý; komunita, historie, budoucnost a metafyzika)")
+
+
 def test_get_user_id(user):
     user.login()
 
