@@ -1,6 +1,11 @@
 Changelog
 =========
 
+0.4.16
+------
+    - abclinuxu_uploader.py; detect images bigger than 1MB. Added --url parameter to handle these.
+    - concept.py; Detect upload of images bigger than 1MB and raise ValueError in such cases.
+
 0.4.15
 ------
     - Added better error detection when too long title is used.

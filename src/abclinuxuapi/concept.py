@@ -1,8 +1,9 @@
-#! /usr/bin/env python
 # -*- coding: utf-8 -*-
 #
 # Interpreter version: python 2.7
 #
+import os
+
 import dhtmlparser
 
 from shared import first
@@ -75,11 +76,18 @@ class Concept(object):
         Add picture to the Concept.
 
         Args:
-            opened_file (file): opened file object
+            opened_file (file): Opened file object.
+
+        Raises:
+            ValueError: When trying to upload images bigger than 1MB.
         """
         # init meta
         if not self._meta:
             self._init_metadata()
+
+        image_size = os.fstat(opened_file.fileno()).st_size
+        if image_size >= 1024 * 1024 - 1:
+            raise ValueError("Image `%s` size too big (abclinuxu allows only 1MB) %s" % (opened_file.name, opened_file))
 
         # get link to pic form
         data = download(
