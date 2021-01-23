@@ -45,7 +45,7 @@ Changelog
     - Fixed comment parsing in case of http://abclinuxu.cz/blog/leos/2007/2/prepis-diskusniho-fora-hw-sekce#31
 
 0.3.0 - 0.3.11
--------------
+--------------
     - Added parsing of comments under blogposts.
     - Fixed bugs.
     - Fixed bugs in user.py.
